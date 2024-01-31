@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "rootDir": "./src", 
+    "outDir": "./dist",
+    "removeComments": false,
+    "importsNotUsedAsValues": "remove",
+    "stripInternal": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "typeRoots": ["./src/types"],
+  },
+  "include": ["./.eslintrc.js", "./src", "lib/try.ts"]
+}
