@@ -1,0 +1,1 @@
+ALTER TABLE "faction" ALTER COLUMN "points" SET NOT NULL;

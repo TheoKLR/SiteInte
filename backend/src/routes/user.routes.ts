@@ -1,9 +1,12 @@
 import express from 'express';
-import { getAllUsers, addUser } from '../controllers/user.controllers';
+import  * as sc  from '../controllers/user.controller';
+import { isAdmin } from '../middlewares/permissions';
 
 const userRouter = express.Router();
 
-userRouter.get('/add/:name', addUser);
-userRouter.get('/all', getAllUsers);
+userRouter.get('/all', isAdmin, sc.getAllUsers);
+userRouter.get('', isAdmin, sc.getUser);
+userRouter.delete('', isAdmin, sc.deleteUser);
+userRouter.post('/addtoteam', isAdmin, sc.addToTeam);
 
 export default userRouter;

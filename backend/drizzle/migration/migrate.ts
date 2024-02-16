@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config()
 
 const pool = new Pool({
-  connectionString: process.env.MIGRATION_DATABASE_URL,
+  connectionString: process.env.OUTSIDE_DATABASE_URL,
 });
 
 
