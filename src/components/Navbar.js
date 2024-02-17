@@ -13,7 +13,7 @@ class Navbar extends Component{
         return(
             <>
                 <nav>
-                    <a href="/"><img src="ressources/integration.png" alt="Logo" width="75"></img></a>
+                    <a href="/Home"><img src="ressources/integration.png" alt="Logo" width="75"></img></a>
     
                     <div>
                         <ul id="navbar" className={this.state.clicked ? "#navbar active" : "#navbar"}>

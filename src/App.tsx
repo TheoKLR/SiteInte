@@ -8,12 +8,14 @@ import { Mails } from './screens/Mails';
 import { Parrainage } from './screens/Parrainage';
 import { Events } from './screens/Events';
 import { Wei } from './screens/Wei';
+import { Login } from './screens/Login';
 
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path='/' element={<Home/>}/>
+        <Route path='/' element={<Login/>}/>
+        <Route path='/Home' element={<Home/>}/>
         <Route path='/Acces' element={<Acces/>}/>
         <Route path='/Defis' element={<Defis/>}/>
         <Route path='/Factions' element={<Factions/>}/>
@@ -21,7 +23,6 @@ function App() {
         <Route path='/Parrainage' element={<Parrainage/>}/>
         <Route path='/Events' element={<Events/>}/>
         <Route path='/Wei' element={<Wei/>}/>
-
       </Routes>
     </div>
   );
