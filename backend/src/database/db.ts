@@ -1,11 +1,9 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Client } from "pg";
-import dotenv from "dotenv";
-
-dotenv.config()
+import { dev_db_url } from '../utils/secret';
 
 const client = new Client({
-  connectionString: process.env.OUTSIDE_DATABASE_URL,
+  connectionString: dev_db_url,
 });
 
 client.connect();

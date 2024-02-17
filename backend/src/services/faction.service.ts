@@ -30,12 +30,6 @@ export const addPoints = async (id: number, current: number, points: number ) =>
       .where(eq(factionSchema.id, id));
 }
 
-export const removePoints = async (id: number, current: number, points: number ) => {
-    await db.update(factionSchema)
-      .set({ points: current - points })
-      .where(eq(factionSchema.id, id));
-}
-
 export const deleteFaction = async (id: number) => {
      await db.delete(factionSchema).where(eq(factionSchema.id, id));
 }

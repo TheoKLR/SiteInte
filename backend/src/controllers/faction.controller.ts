@@ -13,7 +13,7 @@ export const getAllFactions = async (req: Request, res: Response) => {
 }
 
 export const getFaction = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.body;
   const idNumber = parseInt(id, 10);
 
   if (isNaN(idNumber)) { errorResponse(res, { msg: "Bad ID format" }) };
@@ -27,7 +27,7 @@ export const getFaction = async (req: Request, res: Response) => {
 };
 
 export const createFaction = async (req: Request, res: Response) => {
-  const { name } = req.params;
+  const { name } = req.body;
 
   name ?? errorResponse(res, { msg: "No name" });
 
@@ -40,13 +40,10 @@ export const createFaction = async (req: Request, res: Response) => {
 };
 
 export const deleteFaction = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const idNumber = parseInt(id, 10);
-
-  if (isNaN(idNumber)) { errorResponse(res, { msg: "Bad ID format" }) };
+  const { id } = req.body;
 
   try {
-    await service.deleteFaction(idNumber);
+    await service.deleteFaction(id);
     okResponse(res, { msg: "Faction deleted" });
   } catch (error) {
     errorResponse(res, { error });
@@ -54,15 +51,13 @@ export const deleteFaction = async (req: Request, res: Response) => {
 };
 
 export const renameFaction = async (req: Request, res: Response) => {
-  const { id, name } = req.params;
-  const idNumber = parseInt(id, 10);
+  const { id, name } = req.body;
 
   name ?? errorResponse(res, { msg: "No name" });
 
-  if (isNaN(idNumber)) { errorResponse(res, { msg: "Bad ID format" }) };
 
   try {
-    await service.renameFaction(name, idNumber);
+    await service.renameFaction(name, id);
     okResponse(res, { msg: "Faction renamed" });
   } catch (error) {
     errorResponse(res, { error });
@@ -70,38 +65,13 @@ export const renameFaction = async (req: Request, res: Response) => {
 };
 
 export const addPoints = async (req: Request, res: Response) => {
-  const { id, points } = req.params;
-  const idNumber = parseInt(id, 10);
-  const pointsNumber = parseInt(points, 10);
-
-  if (isNaN(idNumber)) { errorResponse(res, { msg: "Bad ID format" }) };
-
-  if (isNaN(pointsNumber)) { errorResponse(res, { msg: "Bad points format" }) };
+  const { id, points } = req.body;
 
   try {
-    const currentPoints = await service.getPoints(idNumber);
-    service.addPoints(idNumber, currentPoints, pointsNumber);
+    const currentPoints = await service.getPoints(id);
+    service.addPoints(id, currentPoints, points);
     okResponse(res, { msg: "Faction modified" });
   } catch (error) {
     errorResponse(res, { error });
   }
 };
-
-export const removePoints = async (req: Request, res: Response) => {
-  const { id, points } = req.params;
-  const idNumber = parseInt(id, 10);
-  const pointsNumber = parseInt(points, 10);
-
-  if (isNaN(idNumber)) { errorResponse(res, { msg: "Bad ID format" }) };
-
-  if (isNaN(pointsNumber)) { errorResponse(res, { msg: "Bad points format" }) };
-
-  try {
-    const currentPoints = await service.getPoints(idNumber);
-    service.removePoints(idNumber, currentPoints, pointsNumber);
-    okResponse(res, { msg: "Faction modified" });
-  } catch (error) {
-    errorResponse(res, { error });
-  }
-};
-

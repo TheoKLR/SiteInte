@@ -15,7 +15,8 @@ export const register = async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
-        await service.createUser(first_name, last_name, email, hashedPassword, RoleType.NewStudent);
+        let role = (await service.getAllUsers()).length === 0 ? RoleType.Admin : RoleType.NewStudent;
+        await service.createUser(first_name, last_name, email, hashedPassword, role);
         createResponse(res, {})
     } catch (error) {
         errorResponse(res, { error });

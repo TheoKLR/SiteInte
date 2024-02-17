@@ -33,3 +33,15 @@ export const addToTeam = async (UserId: number, TeamId: number) => {
 export const getRole = async (id: number) => {
     return await db.select({role: userSchema.role}).from(userSchema).where(eq(userSchema.id, id));
 }
+
+export const grantUser = async (id: number) => {
+    return await db.update(userSchema)
+        .set({ role: RoleType.Admin })
+        .where(eq(userSchema.id, id));
+}
+
+export const revokeUser = async (id: number) => {
+    return await db.update(userSchema)
+        .set({ role: RoleType.Student })
+        .where(eq(userSchema.id, id));
+}
