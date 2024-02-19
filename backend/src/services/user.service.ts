@@ -7,11 +7,21 @@ export const getAllUsers = async () => {
 }
 
 export const getUser = async (id: number) => {
-    return await db.select().from(userSchema).where(eq(userSchema.id, id));
+    const user = await db.select().from(userSchema).where(eq(userSchema.id, id));
+    
+    if (user.length === 0) {
+        return null;
+    }
+    return user[0];
 }
 
 export const getUserByEmail = async (email: string) => {
-    return await db.select().from(userSchema).where(eq(userSchema.email, email));
+    const user = await db.select().from(userSchema).where(eq(userSchema.email, email));
+
+    if (user.length === 0) {
+        return null;
+    }
+    return user[0];
 }
 
 export const createUser = async (first_name: string, last_name: string, email: string, password: string, role: RoleType) => {

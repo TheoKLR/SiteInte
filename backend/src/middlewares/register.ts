@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import validator from 'validator';
 import { getUserByEmail } from '../services/user.service';
+import { errorResponse } from '../utils/responses';
 
 export const registerMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
@@ -9,10 +10,10 @@ export const registerMiddleware = async (req: Request, res: Response, next: Next
         return res.status(400).json({ message: 'Invalid email address' });
     }
 
-    const result = await getUserByEmail(email);
+    const user = await getUserByEmail(email);
 
-    if (result.length !== 0) {
-        return res.status(400).json({ message: 'User already exists' });
+    if (user !== null) {
+        return errorResponse(res, { msg: "User already exists" });
     }
 
     if (password.length < 8) {

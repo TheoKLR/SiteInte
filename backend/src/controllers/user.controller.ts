@@ -48,9 +48,15 @@ export const addToTeam = async (req: Request, res: Response) => {
 export const grantUser = async (req: Request, res: Response) => {
   const { id } = req.body;
 
+  
+
   try {
     const user = await service.getUser(id);
-    if (user[0].role === RoleType.NewStudent) {
+
+    if (user === null) {
+      return errorResponse(res, { msg: "user doesn't exists" });
+  }
+    if (user.role === RoleType.NewStudent) {
       return errorResponse(res, {msg: "you can't grant new student"});
     }
     await service.grantUser(id)
@@ -65,7 +71,11 @@ export const revokeUser = async (req: Request, res: Response) => {
 
   try {
     const user = await service.getUser(id);
-    if (user[0].role === RoleType.NewStudent || user[0].role === RoleType.Student) {
+
+    if (user === null) {
+      return errorResponse(res, { msg: "user doesn't exists" });
+  }
+    if (user.role === RoleType.NewStudent || user.role === RoleType.Student) {
       return errorResponse(res, {msg: "you can't revoke student or new student"});
     }
     await service.revokeUser(id)

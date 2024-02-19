@@ -28,17 +28,15 @@ export const login = async (req: Request, res: Response) => {
 
     try {
         const user = await service.getUserByEmail(email);
-        if (user.length !== 1) {
+        if (user === null) {
             return errorResponse(res, { msg: "user doesn't exists" });
         }
 
-        const passwordMatch = await bcrypt.compare(password, user[0].password);
+        const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
             return errorResponse(res, { msg: "password erroned" });
         }
-
-        const role = user[0].role
-        const token = sign({ email, role }, jwtSecret, { expiresIn: '1h' });
+        const token = sign({ email }, jwtSecret, { expiresIn: '1h' });
         okResponse(res, { data: token })
     } catch (error) {
         errorResponse(res, { error });
