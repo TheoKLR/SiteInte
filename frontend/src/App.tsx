@@ -1,6 +1,6 @@
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
-import { Home } from './screens/Home';
+import Home from './screens/Home';
 import { Acces } from './screens/Acces';
 import { Defis } from './screens/Defis';
 import { Factions } from './screens/Factions';
@@ -9,6 +9,7 @@ import { Parrainage } from './screens/Parrainage';
 import { Events } from './screens/Events';
 import { Wei } from './screens/Wei';
 import { Login } from './screens/Login';
+import { Souhait } from './screens/Souhait';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path='/Parrainage' element={<Parrainage/>}/>
         <Route path='/Events' element={<Events/>}/>
         <Route path='/Wei' element={<Wei/>}/>
+        <Route path='/Souhait' element={<Souhait/>}/>
       </Routes>
     </div>
   );

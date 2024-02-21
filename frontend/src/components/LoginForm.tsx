@@ -3,7 +3,7 @@ import './LoginFormStyle.css';
 import { FaUser, FaLock } from "react-icons/fa";
 import { useRef, useState, useEffect, useContext } from "react";
 import AuthContext from "../context/AuthProvider";
-import axiosAPI from '../api/axiosAPI';
+import {api} from '../api/axiosAPI';
 import axios from 'axios';
 const LOGIN_URL = '/auth/login';
 
@@ -39,42 +39,30 @@ export const LoginForm = () => {
     const handleSubmit = async (e : React.FormEvent) => {
         e.preventDefault();
 
-        // axios.post('/auth/register', {
-        //     first_name: "Theo",
-        //     last_name: "Koehler",
-        //     email: "theo.koehler@utt.fr",
-        //     password: "12345678"
-        //   })
-        //     .then(function (response) {
-        //       console.log('Utilisateur enregistré avec succès');
-        //       // Vous pouvez effectuer des actions supplémentaires ici après l'enregistrement réussi
-        //     })
-        //     .catch(function (error) {
-        //       console.error('Erreur lors de l\'enregistrement de l\'utilisateur :', error);
-        //     });
-
-
-        // axios.post('/auth/login', {
-        //     email: user,
-        //     password: pwd
-        //    })
-        //     .then(function (response) {
-        //       console.log('Token reçu :', response.data.data);
-        //       // Vous pouvez utiliser le token reçu ici
-        //      })
-        //      .catch(function (error) {
-        //        console.error('Erreur lors de la connexion :', error);
-        //      });
+         api.post('/auth/register', {
+             first_name: "student",
+             last_name: "student",
+             email: "student@utt.fr",
+             password: "12345678"
+           })
+             .then(function (response) {
+               console.log('Utilisateur enregistré avec succès');
+             })
+          .catch(function (error) {
+               console.error('Erreur lors de l\'enregistrement de l\'utilisateur :', error);
+             });
 
 
         try {
              console.log(user, pwd);
-             const response = await axiosAPI.post(LOGIN_URL,
+             const response = await api.post(LOGIN_URL,
                 {email:user, password:pwd}
         );
-             console.log(response.data);
-             const accessToken = response?.data?.Token;
-             setAuth({user, pwd, accessToken});
+             console.log(response.data.data);
+             const accessToken = response?.data?.data;
+             console.log(typeof(accessToken))
+             setAuth({ accessToken });
+             localStorage.setItem("authToken",accessToken);
              setUser('');
              setPwd('');
              setSuccess(true);

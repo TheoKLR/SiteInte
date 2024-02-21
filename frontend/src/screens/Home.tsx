@@ -1,16 +1,38 @@
-import Footer from "../components/Footer"
-import { Navbar } from "../components/Navbar"
-import { Rubrique } from "../components/Rubrique"
-import { RubriqueJoinUs } from "../components/RubriqueJoinUs"
-import { RubriqueWelcome } from "../components/RubriqueWelcome"
+import React, { useState, useEffect } from 'react';
+import { Navbar } from "../components/Navbar";
+import { Rubrique } from "../components/Rubrique";
+import { RubriqueJoinUs } from "../components/RubriqueJoinUs";
+import { RubriqueWelcome } from "../components/RubriqueWelcome";
+import { api } from '../api/axiosAPI';
 
-export const Home = () => {
+const Home = () => {
+    const [role, setRole] = useState(null);
+    const [error, setError] = useState(null);
 
-    return (
-        <div className="Home">
-            <Navbar role = "New"/> 
-            <Rubrique titre = "Bienvenue sur le site de l'intégration" contenu={RubriqueWelcome}></Rubrique>
-            <Rubrique titre = "Rejoignez-nous !" contenu={RubriqueJoinUs}></Rubrique>
-        </div>
-    )
+    useEffect(() => {
+        api.get('/auth/role')
+            .then(function(response) {
+                const role = response.data.data;
+                setRole(role);
+            })
+            .catch(function(error) {
+                setError(error);
+            });
+    }, []);
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    } else if (!role) {
+        return <div>Loading...</div>;
+    } else {
+        return (
+            <div className="Home">
+                <Navbar role={role} /> 
+                <Rubrique titre="Bienvenue sur le site de l'intégration" contenu={RubriqueWelcome} />
+                <Rubrique titre="Rejoignez-nous !" contenu={RubriqueJoinUs} />
+            </div>
+        );
+    }
 }
+
+export default Home;
