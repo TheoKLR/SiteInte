@@ -1,4 +1,4 @@
-import { integer, pgTable, serial, text, uuid } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 
 export const factionSchema = pgTable('faction', {
     id: serial('id').primaryKey(),

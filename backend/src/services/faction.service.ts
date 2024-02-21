@@ -6,9 +6,17 @@ export const getAllFactions = async () => {
     return await db.select().from(factionSchema);
 }
 
+export const getFaction = async (id: number) => {
+    await db.select().from(factionSchema).where(eq(factionSchema.id, id));
+}
+
 export const createFaction = async (name: string) => {
     const newFaction: Faction = { name, points: 0 };
     return await db.insert(factionSchema).values(newFaction)
+}
+
+export const deleteFaction = async (id: number) => {
+    await db.delete(factionSchema).where(eq(factionSchema.id, id));
 }
 
 export const renameFaction = async (name: string, id: number) => {
@@ -24,22 +32,9 @@ export const getPoints = async (id: number) => {
     return faction[0]?.points;
 }
 
-export const addPoints = async (id: number, current: number, points: number ) => {
+export const addPoints = async (id: number, current: number, points: number) => {
     await db.update(factionSchema)
-      .set({ points: current + points })
-      .where(eq(factionSchema.id, id));
+        .set({ points: current + points })
+        .where(eq(factionSchema.id, id));
 }
 
-export const removePoints = async (id: number, current: number, points: number ) => {
-    await db.update(factionSchema)
-      .set({ points: current - points })
-      .where(eq(factionSchema.id, id));
-}
-
-export const deleteFaction = async (id: number) => {
-     await db.delete(factionSchema).where(eq(factionSchema.id, id));
-}
-
-export const getFaction = async (id: number) => {
-    await db.select().from(factionSchema).where(eq(factionSchema.id, id));
-}

@@ -13,10 +13,13 @@ export const getAllTeams = async (req: Request, res: Response) => {
 }
 
 export const getTeam = async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const { id } = req.params;
+  const idNumber = parseInt(id, 10);
+
+  if (isNaN(idNumber)) return errorResponse(res, { msg : 'could not parse Id' });
 
   try {
-    const data = await service.getTeam(id);
+    const data = await service.getTeam(idNumber);
     okResponse(res, { data });
   } catch (error) {
     errorResponse(res, { error });
@@ -37,24 +40,14 @@ export const createTeam = async (req: Request, res: Response) => {
 };
 
 export const deleteTeam = async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const { id } = req.params;
+  const idNumber = parseInt(id, 10);
+
+  if (isNaN(idNumber)) return errorResponse(res, { msg : 'could not parse Id' });
 
   try {
-    await service.deleteTeam(id);
+    await service.deleteTeam(idNumber);
     okResponse(res, { msg: "Team deleted" });
-  } catch (error) {
-    errorResponse(res, { error });
-  }
-};
-
-export const renameTeam = async (req: Request, res: Response) => {
-  const { id, name } = req.body;
-
-  name ?? errorResponse(res, { msg: "No name" });
-
-  try {
-    await service.renameTeam(name, id);
-    okResponse(res, { msg: "Team renamed" });
   } catch (error) {
     errorResponse(res, { error });
   }

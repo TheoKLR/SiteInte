@@ -7,6 +7,6 @@ const userRouter = express.Router();
 userRouter.get('/all', isAdmin, sc.getAllUsers);
 userRouter.get('', isAdmin, sc.getUser);
 userRouter.delete('', isAdmin, sc.deleteUser);
-userRouter.post('/addtoteam', isAdmin, sc.addToTeam);
+userRouter.put('/addtoteam', isAdmin, sc.addToTeam);
 
 export default userRouter;

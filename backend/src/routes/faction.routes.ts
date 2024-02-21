@@ -1,14 +1,13 @@
 import express from 'express';
 import  * as fc  from '../controllers/faction.controller';
+import { isAdmin } from '../middlewares/permissions';
 
 const factionRouter = express.Router();
 
-factionRouter.post('/:name', fc.createFaction);
-factionRouter.get('', fc.getAllFactions);
-factionRouter.get('/:id', fc.getFaction);
-factionRouter.delete('/:id', fc.deleteFaction);
-factionRouter.post('/rename/:id/:name', fc.renameFaction);
-factionRouter.post('/add/:id/:points', fc.addPoints);
-factionRouter.post('/rmv/:id/:points', fc.removePoints);
+factionRouter.post('', isAdmin, fc.createFaction);
+factionRouter.get('/all', isAdmin, fc.getAllFactions);
+factionRouter.get('/:id', isAdmin, fc.getFaction);
+factionRouter.delete('/:id', isAdmin, fc.deleteFaction);
+factionRouter.put('/addpoints', isAdmin, fc.addPoints);
 
 export default factionRouter;
