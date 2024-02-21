@@ -8,5 +8,4 @@ authRouter.post('/register', registerMiddleware, ac.register);
 authRouter.post('/login', ac.login);
 authRouter.get('/role', ac.getRole);
 
-
 export default authRouter;
