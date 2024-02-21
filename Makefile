@@ -1,11 +1,17 @@
-backend_dev: 
+db:
 	docker-compose -f backend/docker-compose.yml up -d --build 
+	sleep 2
+	cd backend && npm run db:deploy
+
+api:
+	cd backend && npm run start:dev
+
+api_prod:
 	cd backend && npm run start:dev &
 
-frontend_dev:
+front:
 	cd frontend && npm start &
 
-dev: backend_dev frontend_dev
+prod: db api_prod front
 
-deploy:
-	cd backend && npm run db:deploy
+

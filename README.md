@@ -2,8 +2,13 @@
 
 In the project directory, you can run:
 
-### `make dev`
-Runs the backend and the frontend in dev mode, if it is the first time, your db will not be initialize
+**Warning:** These commands works in linux, in windows you need to install Make
 
-### `make deploy`
-Initialize the database (launch the command after `make dev`)
+### `make prod`
+Runs the backend and the frontend, initialise the db. You only need this to launch all.
+
+### `make db`
+Deploy the database, use this if you want to dev the backend
+
+### `make api`
+Deploy the api in dev mode (nodemon) launch this command after `make db`

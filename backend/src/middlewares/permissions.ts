@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { verify, JsonWebTokenError } from 'jsonwebtoken';
 import { RoleType } from '../schemas/user.schema';
 import { jwtSecret } from '../utils/secret';
-import { errorResponse, okResponse } from '../utils/responses';
+import { errorResponse } from '../utils/responses';
 import { getUserByEmail } from '../services/user.service';
 
 export const decodeToken = (req: Request, res: Response): any => {
@@ -42,17 +42,3 @@ export const isAdmin = async (req: Request, res: Response, next: NextFunction) =
     }
 };
 
-export const getRole = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const decodedToken = decodeToken(req, res);
-        const user = await getUserByEmail(decodedToken.email);
-
-        if (user === null) {
-            return errorResponse(res, { msg: "user doesn't exists" });
-        }
-        (req as any).role = user.role;
-        next();
-    } catch (error) {
-        errorResponse(res, {error})
-    }
-};
