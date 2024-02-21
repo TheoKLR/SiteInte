@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { errorResponse, createResponse, okResponse } from '../utils/responses';
 import { sign } from 'jsonwebtoken';
 import { jwtSecret } from '../utils/secret';
+import { decodeToken } from '../middlewares/permissions';
 
 export const register = async (req: Request, res: Response) => {
     const { first_name, last_name, email, password } = req.body;
@@ -42,3 +43,19 @@ export const login = async (req: Request, res: Response) => {
         errorResponse(res, { error });
     }
 }
+
+
+
+export const getRole = async (req: Request, res: Response) => {
+    try {
+        const decodedToken = decodeToken(req, res);
+        const user = await service.getUserByEmail(decodedToken.email);
+
+        if (user === null) {
+            return errorResponse(res, { msg: "user doesn't exists" });
+        }
+        okResponse(res, { data: user.role })
+    } catch (error) {
+        errorResponse(res, {error})
+    }
+};
