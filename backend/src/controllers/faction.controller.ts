@@ -13,10 +13,10 @@ export const getAllFactions = async (req: Request, res: Response) => {
 }
 
 export const getFaction = async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const { id } = req.params;
   const idNumber = parseInt(id, 10);
 
-  if (isNaN(idNumber)) { errorResponse(res, { msg: "Bad ID format" }) };
+  if (isNaN(idNumber)) return errorResponse(res, { msg : 'could not parse Id' });
 
   try {
     const data = await service.getFaction(idNumber);
@@ -40,25 +40,14 @@ export const createFaction = async (req: Request, res: Response) => {
 };
 
 export const deleteFaction = async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const { id } = req.params;
+  const idNumber = parseInt(id, 10);
+
+  if (isNaN(idNumber)) return errorResponse(res, { msg : 'could not parse Id' });
 
   try {
-    await service.deleteFaction(id);
+    await service.deleteFaction(idNumber);
     okResponse(res, { msg: "Faction deleted" });
-  } catch (error) {
-    errorResponse(res, { error });
-  }
-};
-
-export const renameFaction = async (req: Request, res: Response) => {
-  const { id, name } = req.body;
-
-  name ?? errorResponse(res, { msg: "No name" });
-
-
-  try {
-    await service.renameFaction(name, id);
-    okResponse(res, { msg: "Faction renamed" });
   } catch (error) {
     errorResponse(res, { error });
   }

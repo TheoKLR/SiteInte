@@ -8,8 +8,7 @@ teamRouter.post('', isAdmin, tc.createTeam);
 teamRouter.get('/all', isAdmin, tc.getAllTeams);
 teamRouter.get('', isAdmin, tc.getTeam);
 teamRouter.delete('', isAdmin, tc.deleteTeam);
-teamRouter.post('/rename', isAdmin, tc.renameTeam);
-teamRouter.post('/addtofac', isAdmin, tc.addTeamToFaction);
+teamRouter.put('/addtofac', isAdmin, tc.addTeamToFaction);
 
 
 export default teamRouter;

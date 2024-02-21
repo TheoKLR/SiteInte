@@ -29,6 +29,20 @@
       "when": 1708099532170,
       "tag": "0003_abandoned_epoch",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1708349786398,
+      "tag": "0004_blue_master_mold",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1708439701417,
+      "tag": "0005_freezing_paibok",
+      "breakpoints": true
     }
   ]
 }

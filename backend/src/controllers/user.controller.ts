@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as service from '../services/user.service';
-import { errorResponse, createResponse, okResponse } from '../utils/responses';
+import { errorResponse, okResponse } from '../utils/responses';
 import { RoleType } from '../schemas/user.schema';
 
 export const getAllUsers = async (req: Request, res: Response) => {
@@ -13,10 +13,13 @@ export const getAllUsers = async (req: Request, res: Response) => {
 }
 
 export const getUser = async (req: Request, res: Response) => {
-    const { id } = req.body;
+  const { id } = req.params;
+  const idNumber = parseInt(id, 10);
+
+  if (isNaN(idNumber)) return errorResponse(res, { msg : 'could not parse Id' });
 
   try {
-    const data = await service.getUser(id);
+    const data = await service.getUser(idNumber);
     okResponse(res, {data});
   } catch (error) {
     errorResponse(res, {error});
@@ -24,10 +27,13 @@ export const getUser = async (req: Request, res: Response) => {
 };
 
 export const deleteUser = async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const { id } = req.params;
+  const idNumber = parseInt(id, 10);
+
+  if (isNaN(idNumber)) return errorResponse(res, { msg : 'could not parse Id' });
 
   try {
-    await service.deleteUser(id);
+    await service.deleteUser(idNumber);
     okResponse(res, {msg: "User deleted"});
   } catch (error) {
     errorResponse(res, {error});
@@ -47,9 +53,7 @@ export const addToTeam = async (req: Request, res: Response) => {
 
 export const grantUser = async (req: Request, res: Response) => {
   const { id } = req.body;
-
   
-
   try {
     const user = await service.getUser(id);
 
