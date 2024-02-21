@@ -1,11 +1,11 @@
 import Footer from "../components/Footer"
-import Navbar from "../components/Navbar"
+import { Navbar } from "../components/Navbar"
 
 export const Events = () => {
 
     return (
         <div className="Events">
-            <Navbar/> 
+            <Navbar role = "New"/>  
             <h1>Events</h1>
             <Footer/>
         </div>

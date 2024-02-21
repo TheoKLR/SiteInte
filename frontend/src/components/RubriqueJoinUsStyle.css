@@ -1,0 +1,40 @@
+
+.containerJoinUs{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.socials{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+
+.containerJoinUs li{
+    list-style: none;
+    margin-right: 40%;
+    margin-left: 40%;
+}
+
+.containerJoinUs li a{
+    text-decoration: none;
+    font-size: 1.7rem;
+    font-weight: 300;
+    color: black;
+    transition: 0.3s ease-in-out;
+}
+
+.containerJoinUs i{
+    color: #1b2430;
+    font-size: 1.5rem;
+}
+
+.containerJoinUs li a:hover{
+    color: #e84260;
+}
+
+.containerJoinUs p{
+    font-weight: bold;
+}

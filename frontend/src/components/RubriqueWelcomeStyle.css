@@ -1,0 +1,19 @@
+.containerWelcome img{
+    height: 100%;
+    width: 20%;
+    margin: 0 2.5%;
+}
+
+.containerWelcome{
+    display: flex;
+}
+
+.texte {
+    width: 75%;
+    text-align: justify;
+}
+
+h3{
+   font-weight: bold;
+   line-height: 30px; 
+}
