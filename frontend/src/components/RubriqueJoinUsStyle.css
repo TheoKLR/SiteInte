@@ -11,6 +11,10 @@
     justify-content: space-evenly;
 }
 
+.fa {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
 
 .containerJoinUs li{
     list-style: none;

@@ -8,7 +8,6 @@ export const RubriqueChoix = () => {
                 <p>L'inté a besoin de beaucoup de gens dans de nombreux domaines. Choisis ton rôle afin d'aider au mieux!</p><br />
                 <ul></ul>
             </div>
-
         </>
     )
 }

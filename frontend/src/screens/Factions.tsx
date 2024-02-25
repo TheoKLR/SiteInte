@@ -1,4 +1,3 @@
-import Footer from "../components/Footer"
 import { Navbar } from "../components/Navbar"
 
 export const Factions = () => {
@@ -7,7 +6,6 @@ export const Factions = () => {
         <div className="Factions">
             <Navbar role = "New"/>  
             <h1>Factions</h1>
-            <Footer/>
         </div>
     )
 }

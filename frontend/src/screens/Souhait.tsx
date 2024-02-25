@@ -1,4 +1,3 @@
-import Footer from "../components/Footer"
 import { Navbar } from "../components/Navbar"
 import { Rubrique } from "../components/Rubrique"
 import { RubriqueChoix } from "../components/RubriqueChoix"

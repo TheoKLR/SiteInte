@@ -1,4 +1,3 @@
-import Footer from "../components/Footer"
 import { Navbar } from "../components/Navbar"
 
 export const Events = () => {
@@ -7,7 +6,6 @@ export const Events = () => {
         <div className="Events">
             <Navbar role = "New"/>  
             <h1>Events</h1>
-            <Footer/>
         </div>
     )
 }
