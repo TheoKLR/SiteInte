@@ -11,10 +11,6 @@
     justify-content: space-evenly;
 }
 
-.fa {
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
 
 .containerJoinUs li{
     list-style: none;
@@ -41,4 +37,11 @@
 
 .containerJoinUs p{
     font-weight: bold;
+}
+
+@media screen and (max-width: 769px) {
+    .containerJoinUs li{
+        margin-right: 20%;
+        margin-left: 20%;
+    }
 }
