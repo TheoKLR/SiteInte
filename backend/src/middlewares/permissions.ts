@@ -4,24 +4,11 @@ import { RoleType } from '../schemas/user.schema';
 import { jwtSecret } from '../utils/secret';
 import { errorResponse } from '../utils/responses';
 import { getUserByEmail } from '../services/user.service';
-
-export const decodeToken = (req: Request, res: Response): any => {
-    const token = req.headers['authorization']?.split(' ')[1];
-
-    if (!token) {
-        throw new Error('Unauthorized: Missing token');
-    }
-
-    try {
-        return verify(token, jwtSecret);
-    } catch (error) {
-        throw error;
-    }
-};
+import { decodeToken } from '../utils/token';
 
 export const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const decodedToken = decodeToken(req, res);
+        const decodedToken = decodeToken(req);
         const user = await getUserByEmail(decodedToken.email);
 
         if (user === null) {

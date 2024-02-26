@@ -1,4 +1,4 @@
-import './RubriqueWelcomeStyle.css';
+import './WelcomeStyle.css';
 
 export const RubriqueWelcome = () => {
 

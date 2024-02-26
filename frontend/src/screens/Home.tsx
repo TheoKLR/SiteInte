@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from "../components/Navbar";
 import { Rubrique } from "../components/Rubrique";
-import { RubriqueJoinUs } from "../components/RubriqueJoinUs";
-import { RubriqueWelcome } from "../components/RubriqueWelcome";
-import { api } from '../api/axiosAPI';
+import { RubriqueJoinUs } from "../components/rubriques/JoinUs";
+import { RubriqueWelcome } from "../components/rubriques/Welcome";
+import { api } from '../services/api';
 
 const Home = () => {
     const [role, setRole] = useState(null);

@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import * as service from '../services/desire.service';
+import * as userService from '../services/user.service';
 import { errorResponse, createResponse, okResponse } from '../utils/responses';
+import { decodeToken } from '../utils/token';
 
 
 export const getAllDesires = async (req: Request, res: Response) => {
@@ -55,9 +57,16 @@ export const deleteDesire = async (req: Request, res: Response) => {
 };
 
 export const submitDesires = async (req: Request, res: Response) => {
-  const { userId, desireIds } = req.body;
+  const { desireIds } = req.body;
+
+  const email = decodeToken(req)
+
+  if (email.isNull) {
+    errorResponse(res, { msg: 'No email' });
+  }
 
   try {
+    const userId = await userService.getIdWithEmail(email)
     await service.submitDesires(userId, desireIds);
     okResponse(res, { msg: "Desires submitted" });
   } catch (error) {

@@ -2,7 +2,7 @@
 import './LoginFormStyle.css';
 import { FaUser, FaLock } from "react-icons/fa";
 import { useRef, useState, useEffect, useContext } from "react";
-import { api } from '../api/axiosAPI';
+import { api } from '../services/api';
 import axios from 'axios';
 const LOGIN_URL = '/auth/login';
 

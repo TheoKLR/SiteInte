@@ -1,4 +1,4 @@
-import './RubriqueChoixStyle.css';
+import './ChoiceStyle.css';
 
 export const RubriqueChoix = () => {
 

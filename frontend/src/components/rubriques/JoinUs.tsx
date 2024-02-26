@@ -1,4 +1,4 @@
-import './RubriqueJoinUsStyle.css';
+import './JoinUsStyle.css';
 
 export const RubriqueJoinUs = () => {
 

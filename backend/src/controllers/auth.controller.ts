@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { errorResponse, createResponse, okResponse } from '../utils/responses';
 import { sign } from 'jsonwebtoken';
 import { jwtSecret } from '../utils/secret';
-import { decodeToken } from '../middlewares/permissions';
+import { decodeToken } from '../utils/token';
 
 export const register = async (req: Request, res: Response) => {
     const { first_name, last_name, email, password } = req.body;
