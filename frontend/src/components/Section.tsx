@@ -1,4 +1,4 @@
-import './RubriqueStyle.css';
+import './SectionStyle.css';
 
 interface RubriqueProps {
     titre: string;

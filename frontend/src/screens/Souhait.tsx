@@ -1,6 +1,6 @@
 import { Navbar } from "../components/Navbar"
-import { Rubrique } from "../components/Rubrique"
-import { Choice } from "../components/rubriques/Choice"
+import { Rubrique } from "../components/Section"
+import { Choice } from "../components/sections/Choice"
 
 export const Souhait = () => {
 

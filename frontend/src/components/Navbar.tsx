@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { useState } from "react";
-import "./NavbarStyles.css";
+import "./NavbarStyle.css";
 
 interface NavProps {
     role: string;

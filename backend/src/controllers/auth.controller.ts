@@ -37,7 +37,8 @@ export const login = async (req: Request, res: Response) => {
         if (!passwordMatch) {
             return errorResponse(res, { msg: "password erroned" });
         }
-        const token = sign({ email }, jwtSecret, { expiresIn: '1h' });
+        const id = user.id
+        const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' });
         okResponse(res, { data: token })
     } catch (error) {
         errorResponse(res, { error });
@@ -48,7 +49,7 @@ export const login = async (req: Request, res: Response) => {
 
 export const getRole = async (req: Request, res: Response) => {
     try {
-        const decodedToken = decodeToken(req, res);
+        const decodedToken = decodeToken(req);
         const user = await service.getUserByEmail(decodedToken.email);
 
         if (user === null) {

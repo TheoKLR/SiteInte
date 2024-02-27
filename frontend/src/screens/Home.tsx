@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from "../components/Navbar";
-import { Rubrique } from "../components/Rubrique";
-import { RubriqueJoinUs } from "../components/rubriques/JoinUs";
-import { RubriqueWelcome } from "../components/rubriques/Welcome";
+import { Rubrique } from "../components/Section";
+import { RubriqueJoinUs } from "../components/sections/JoinUs";
+import { RubriqueWelcome } from "../components/sections/Welcome";
 import { api } from '../services/api';
 
 const Home = () => {
