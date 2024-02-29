@@ -27,6 +27,7 @@ export const Navbar:React.FC<NavProps> = ({role}) => {
                             {role === 'Admin' && <li><a href="/Mails">Mails</a></li>}
                             {role === 'Admin' && <li><a href="/Parrainage">Parrainage</a></li>}
                             {role === 'Admin' && <li><a href="/Wei">WEI</a></li>}
+                            {role === 'Admin' && <li><a href="Souhait">Souhait</a></li>}
                             
                             {role === 'newStudent' && <li><a href="Souhait">Souhait</a></li>}
                         </ul>

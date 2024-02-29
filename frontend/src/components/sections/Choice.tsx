@@ -57,9 +57,10 @@ export const Choice = () => {
                 <div className='inputs'>
                 {desires.map((desire, index) => (
                     <div key={index}>
-                        <input type="checkbox" value={desire.id} onChange={handleChange}/> {desire.name}
+                        <input type="checkbox" value={desire.id} onChange={handleChange}/> {desire.name} : {desire.description}
                     </div>
                 ))}
+                <br />
                     <button onClick={handleSubmit}>Valider</button>
                 </div>
             </div>
