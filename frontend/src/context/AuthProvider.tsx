@@ -1,3 +1,6 @@
+// nécessité d'avoir un AuthProvider pour gérer le systême de login du site
+// Gestion de l'état de l'utilisateur connecté en récupérant son token
+
 import { createContext, useState } from "react";
 
 interface AuthType {

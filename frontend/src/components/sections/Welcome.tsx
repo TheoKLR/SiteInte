@@ -1,7 +1,9 @@
 import './WelcomeStyle.css';
 
+// Rubrique explicative de ce qu'est l'inté
 export const RubriqueWelcome = () => {
 
+    //Frontend
     return (
         <>
             <div className='containerWelcome'>

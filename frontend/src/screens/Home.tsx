@@ -5,10 +5,14 @@ import { RubriqueJoinUs } from "../components/sections/JoinUs";
 import { RubriqueWelcome } from "../components/sections/Welcome";
 import { api } from '../services/api';
 
+//Page d'accueil du site une fois l'utilisateur connecté
 const Home = () => {
+
+    //gestion du role de l'utilsateur et d'une potentielle erreur de chargement
     const [role, setRole] = useState(null);
     const [error, setError] = useState(null);
 
+    //requête axios pour récupérer le rôle de l'utilisateur
     useEffect(() => {
         api.get('/auth/role')
             .then(function(response) {
@@ -20,6 +24,7 @@ const Home = () => {
             });
     }, []);
 
+    //Frontend gérant l'erreur potentielle de chargement
     if (error) {
         return <div>Error: {error}</div>;
     } else if (!role) {

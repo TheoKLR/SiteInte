@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
-import './ChoiceStyle.css';
-import { createDesire, getAllDesires, getAllUsers, submitChoices } from '../../services/requests';
+import { getAllDesires, submitChoices } from '../../services/requests';
 
-
+// Formulaire pour que les étudiants de l'utt puissent choisir les rôles qui les intérresseraient pour l'inté
 export const Choice = () => {
 
-    const [checkedValues, setCheckedValues] = useState<number[]>([])
+    const [checkedValues, setCheckedValues] = useState<number[]>([]);
+    const [desires, setDesires] = useState<any[]>([]);
 
+    // Appelé à chaque cochage/décochage d'une checkbox
+    // Récupère les id des choix cochés et les stocke dans un array d'entiers
     function handleChange(event: React.FormEvent){
         const {value, checked} = event.target as HTMLInputElement;
         setCheckedValues( pre => {
@@ -18,6 +20,7 @@ export const Choice = () => {
         })        
     }
 
+    // Soumission du formulaire
     function handleSubmit(event: React.FormEvent){
         console.log(checkedValues);
         const token = localStorage.getItem("authToken");
@@ -27,18 +30,7 @@ export const Choice = () => {
         }
     }
 
-    // const getrole = async() => {
-    //     let response = await api.get('/auth/role')
-    //     return response.data
-    // }
-
-    // const role = getrole();
-    // console.log(role);
-    // const response = createDesire('Dev', 'Comme Théo et Lou');
-    // console.log(response)
-
-    const [desires, setDesires] = useState<any[]>([]);
-
+    // récupération des choix de rôle existants dans la db
     useEffect(() => {
         getAllDesires()
         .then(res => {
@@ -50,11 +42,13 @@ export const Choice = () => {
         });
     }, [])    
 
+    // Frontend
+    // Création des checkbox automatique en fonction des rôles existants dans la db
     return (
         <>
             <div className='containerChoix'>
                 <p>L'inté a besoin de beaucoup de gens dans de nombreux domaines. Choisis ton rôle afin d'aider au mieux!</p><br />
-                <div className='inputs'>
+                <div className='inputs'>   
                 {desires.map((desire, index) => (
                     <div key={index}>
                         <input type="checkbox" value={desire.id} onChange={handleChange}/> {desire.name} : {desire.description}

@@ -1,21 +1,12 @@
-
 import './LoginFormStyle.css';
 import { FaUser, FaLock } from "react-icons/fa";
-import { useRef, useState, useEffect, useContext } from "react";
-import { api } from '../services/api';
-import axios from 'axios';
-const LOGIN_URL = '/auth/login';
+import { useRef, useState, useEffect } from "react";
+import { loginUser } from '../services/requests';
 
+// Formulaire de Login présent sur la page d'acceuil du site
 export const LoginForm = () => {
     const userRef = useRef<HTMLInputElement>(null);
     const errRef = useRef<HTMLInputElement>(null);
-
-    const client_id = '50505771275';
-    const client_secret = '3631ddfe9365f640041167a3ffd34193';
-    const authorization_code = '<authorization_code>'; // You may get this from $_GET['code']
-    const baseURL = 'https://etu.utt.fr/';
-    const tokenEndpoint = '/api/oauth/token';
-
 
     const [user, setUser] = useState('');
     const [pwd, setPwd] = useState('');
@@ -33,29 +24,12 @@ export const LoginForm = () => {
         setErrMsg('');
     }, [user, pwd])
 
+    // Gestion de la connexion en appuyant sur le bouton Login
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        api.post('/auth/register', {
-            first_name: "student",
-            last_name: "student",
-            email: "student@utt.fr",
-            password: "12345678"
-        })
-            .then(function (response) {
-                console.log('Utilisateur enregistré avec succès');
-            })
-            .catch(function (error) {
-                console.error('Erreur lors de l\'enregistrement de l\'utilisateur :', error);
-            });
-
-
+        // Requête axios pour la connexion + gestion erreurs possibles
         try {
-            const response = await api.post(LOGIN_URL,
-                { email: user, password: pwd }
-            );
-            const accessToken = response?.data?.data;
-            localStorage.setItem("authToken", accessToken);
+            loginUser(user, pwd);
             setUser('');
             setPwd('');
             setSuccess(true);
@@ -80,36 +54,17 @@ export const LoginForm = () => {
         setState(!state);
     }
 
-    const handleClick2 = () => {
-        const client = axios.create({
-            baseURL: baseURL,
-            auth: {
-                username: client_id,
-                password: client_secret
-            }
-        });
-
-        client.post(tokenEndpoint, {
-            grant_type: 'authorization_code',
-            authorization_code: authorization_code
-        })
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.error(error.response.data);
-            });
-    }
-
+    // Frontend
     return (
         <>
             {success ? (
                 window.location.href = "/Home"
             ) : (
                 <div id="container" className={state ? "#container active" : "#container"}>
+
                     <h1>Bienvenue!</h1>
                     <button onClick={handleClick}>Je suis nouveau</button>
-                    <button onClick={handleClick2}>Je suis étudiant à l'UTT</button>
+                    <button onClick={handleClick}>Je suis étudiant à l'UTT</button>
 
                     <div id="formNouveau" className={state ? "#formNouveau active" : "#formNouveau"}>
                         <form onSubmit={handleSubmit}>
@@ -126,12 +81,10 @@ export const LoginForm = () => {
                             </div>
                             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                             <button type="submit">Login</button>
-
                         </form>
-
-
                         <button onClick={handleClick}>Back</button>
                     </div>
+
                 </div>
             )}
         </>

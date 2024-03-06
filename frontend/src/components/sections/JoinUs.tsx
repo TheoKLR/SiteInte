@@ -1,7 +1,9 @@
 import './JoinUsStyle.css';
 
+// Rubrique contenant les liens vers le serveur discord de l'inté et les différents réseaux de l'utt
 export const RubriqueJoinUs = () => {
 
+    // Frontend
     return (
         <>
             <div className='containerJoinUs'>
