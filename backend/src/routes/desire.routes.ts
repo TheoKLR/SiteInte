@@ -9,6 +9,6 @@ desireRouter.get('/all', dc.getAllDesires);
 desireRouter.get('/:id', dc.getDesire);
 desireRouter.delete('/:id', isAdmin, dc.deleteDesire);
 desireRouter.post('/submit', dc.submitDesires);
-desireRouter.get('/user/:id', isAdmin, dc.getUserDesires);
+desireRouter.get('/:id/users', isAdmin, dc.getDesireUsers);
 
 export default desireRouter;

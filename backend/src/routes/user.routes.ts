@@ -5,8 +5,10 @@ import { isAdmin } from '../middlewares/permissions';
 const userRouter = express.Router();
 
 userRouter.get('/all', isAdmin, sc.getAllUsers);
-userRouter.get('', isAdmin, sc.getUser);
-userRouter.delete('', isAdmin, sc.deleteUser);
+userRouter.get(':id', isAdmin, sc.getUser);
+userRouter.delete(':id', isAdmin, sc.deleteUser);
 userRouter.put('/addtoteam', isAdmin, sc.addToTeam);
+userRouter.get('/:id/desires', isAdmin, sc.getUserDesires);
+
 
 export default userRouter;

@@ -21,6 +21,10 @@ export const deleteDesire = async (id: number) => {
     await db.delete(desireSchema).where(eq(desireSchema.id, id));
 }
 
+export const deleteUserDesires = async (id: number) => {
+    await db.delete(userToDesireSchema).where(eq(userToDesireSchema.userId, id));
+}
+
 export const submitDesires = async (userId: number, desireIds: number[]) => {
     for (let i of desireIds) {
         createUserToDesire(userId, i)
@@ -32,10 +36,10 @@ const createUserToDesire = async (userId: number, desireId: number) => {
     return await db.insert(userToDesireSchema).values(newUserToDesire)
 }
 
-export const getUserDesires = async (id: number) => {
-    return db.select({desires : desireSchema})
+export const getDesireUsers = async (id: number) => {
+    return db.select({ users: userSchema })
         .from(userToDesireSchema)
         .rightJoin(desireSchema, eq(userToDesireSchema.desireId, desireSchema.id))
         .leftJoin(userSchema, eq(userToDesireSchema.userId, userSchema.id))
-        .where(eq(userSchema.id, id));
+        .where(eq(desireSchema.id, id));
 }
