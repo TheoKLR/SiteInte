@@ -51,6 +51,17 @@ export const addToTeam = async (req: Request, res: Response) => {
   }
 };
 
+export const addContact = async (req: Request, res: Response) => {
+  const { userId, contact } = req.body;
+
+  try {
+    await service.addContact(userId, contact);
+    okResponse(res, {msg: "User modified"});
+  } catch (error) {
+    errorResponse(res, {error});
+  }
+};
+
 export const getUserDesires = async (req: Request, res: Response) => {
   const { id } = req.params;
   const idNumber = parseInt(id, 10);
@@ -62,43 +73,5 @@ export const getUserDesires = async (req: Request, res: Response) => {
     okResponse(res, {data});
   } catch (error) {
     errorResponse(res, { error });
-  }
-};
-
-export const grantUser = async (req: Request, res: Response) => {
-  const { id } = req.body;
-  
-  try {
-    const user = await service.getUser(id);
-
-    if (user === null) {
-      return errorResponse(res, { msg: "user doesn't exists" });
-  }
-    if (user.role === RoleType.NewStudent) {
-      return errorResponse(res, {msg: "you can't grant new student"});
-    }
-    await service.grantUser(id)
-    okResponse(res, {msg: "User modified"});
-  } catch (error) {
-    errorResponse(res, {error});
-  }
-};
-
-export const revokeUser = async (req: Request, res: Response) => {
-  const { id } = req.body;
-
-  try {
-    const user = await service.getUser(id);
-
-    if (user === null) {
-      return errorResponse(res, { msg: "user doesn't exists" });
-  }
-    if (user.role === RoleType.NewStudent || user.role === RoleType.Student) {
-      return errorResponse(res, {msg: "you can't revoke student or new student"});
-    }
-    await service.revokeUser(id)
-    okResponse(res, {msg: "User modified"});
-  } catch (error) {
-    errorResponse(res, {error});
   }
 };

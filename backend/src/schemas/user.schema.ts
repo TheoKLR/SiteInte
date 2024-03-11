@@ -15,6 +15,7 @@ export const userSchema = pgTable("user", {
   first_name: text("first_name").notNull(),
   last_name: text("last_name").notNull(),
   email: text("email").notNull().unique(),
+  contact: text("contact"),
   password: text("password").notNull(),
   role: role('role').notNull(),
   team: integer('team').references(() => teamSchema.id)
