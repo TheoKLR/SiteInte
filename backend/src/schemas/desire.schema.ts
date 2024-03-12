@@ -4,7 +4,7 @@ import { userSchema } from "./user.schema";
 export const desireSchema = pgTable('desire', {
     id: serial('id').primaryKey(),
     name: text('desire_name').notNull().unique(),
-    description: text('desire_desc').notNull().unique(),
+    description: text('desire_desc').notNull(),
 });
 
 export type Desire = typeof desireSchema.$inferInsert;
