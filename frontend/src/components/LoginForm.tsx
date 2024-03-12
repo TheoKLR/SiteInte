@@ -29,23 +29,18 @@ export const LoginForm = () => {
         e.preventDefault();
         // Requête axios pour la connexion + gestion erreurs possibles
         try {
-            loginUser(user, pwd);
-            setUser('');
-            setPwd('');
-            setSuccess(true);
+            const token = await loginUser(user, pwd);
+            if (token !== null) {
+                localStorage.setItem("authToken", token);
+                setSuccess(true);
+            }
         } catch (err: any) {
-            if (!err?.response) {
-                setErrMsg('No server response')
-            } else if (err.response?.status === 400) {
-                setErrMsg('E-mail ou Mot de passe erroné(s)');
-            } else if (err.response?.status === 401) {
-                setErrMsg('Unauthorized');
-            } else {
-                setErrMsg('Login failed');
-            }
-            if (errRef.current) {
-                errRef.current.focus();
-            }
+            if (!err?.response) setErrMsg('No server response')
+            else if (err.response?.status === 400) setErrMsg('E-mail ou Mot de passe erroné(s)')
+            else if (err.response?.status === 401) setErrMsg('Unauthorized');
+            else setErrMsg('Login failed');
+
+            if (errRef.current) errRef.current.focus();
         }
 
     }

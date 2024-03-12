@@ -66,9 +66,7 @@ export const loginUser = async (email: string, pwd: string) => {
     const response = await api.post('/auth/login',
         { email, password: pwd }
     );
-    const accessToken = response?.data?.data;
-    console.log(accessToken)
-    localStorage.setItem("authToken", accessToken);
+    return response?.data?.data;
 }
 
 // Obtention du rôle de l'étudiant
