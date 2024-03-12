@@ -38,7 +38,7 @@ export const getUserByEmail = async (email: string) => {
 
 
 export const createUser = async (first_name: string, last_name: string, email: string, password: string, role: RoleType) => {
-    const newUser: User = { first_name, last_name, email, password, role, team: null }
+    const newUser: User = { first_name, last_name, email, contact: null, password, role, team: null }
     await db.insert(userSchema).values(newUser)
 }
 

@@ -43,6 +43,13 @@
       "when": 1708439701417,
       "tag": "0005_freezing_paibok",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1710265698475,
+      "tag": "0006_military_overlord",
+      "breakpoints": true
     }
   ]
 }

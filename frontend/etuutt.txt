@@ -12,7 +12,7 @@
     const code = getCode(window.location.href);
     console.log("code =" +code);
 
-    async function recuperateToken() {
+    async function getToken() {
         console.log("Récupération token en cours");
         const code = getCode(window.location.href);
         if (code !== null) {
@@ -28,7 +28,7 @@
         }
     }
 
-    recuperateToken()
+    getToken()
 
 //dans loginForme.tsx
 const handleClickEtudiant = () => {

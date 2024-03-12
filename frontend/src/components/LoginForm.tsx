@@ -1,7 +1,7 @@
 import './LoginFormStyle.css';
 import { FaUser, FaLock } from "react-icons/fa";
 import { useRef, useState, useEffect } from "react";
-import { getToken, loginUser } from '../services/requests';
+import { loginUser } from '../services/requests';
 
 // Formulaire de Login présent sur la page d'acceuil du site
 export const LoginForm = () => {
@@ -55,11 +55,8 @@ export const LoginForm = () => {
     }
 
     const handleClickEtudiant = () => {
-        
-    }
-  
 
-    
+    }
 
     // Frontend
     return (
