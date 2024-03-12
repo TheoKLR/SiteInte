@@ -4,6 +4,7 @@ import { Rubrique } from "../components/Section";
 import { RubriqueJoinUs } from "../components/sections/JoinUs";
 import { RubriqueWelcome } from "../components/sections/Welcome";
 import { api } from '../services/api';
+import { getToken } from '../services/requests';
 
 //Page d'accueil du site une fois l'utilisateur connecté
 const Home = () => {
@@ -23,6 +24,9 @@ const Home = () => {
                 setError(error);
             });
     }, []);
+
+
+    
 
     //Frontend gérant l'erreur potentielle de chargement
     if (error) {

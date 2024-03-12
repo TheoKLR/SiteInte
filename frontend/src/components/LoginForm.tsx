@@ -1,7 +1,7 @@
 import './LoginFormStyle.css';
 import { FaUser, FaLock } from "react-icons/fa";
 import { useRef, useState, useEffect } from "react";
-import { loginUser } from '../services/requests';
+import { getToken, loginUser } from '../services/requests';
 
 // Formulaire de Login présent sur la page d'acceuil du site
 export const LoginForm = () => {
@@ -54,6 +54,13 @@ export const LoginForm = () => {
         setState(!state);
     }
 
+    const handleClickEtudiant = () => {
+        
+    }
+  
+
+    
+
     // Frontend
     return (
         <>
@@ -64,13 +71,13 @@ export const LoginForm = () => {
 
                     <h1>Bienvenue!</h1>
                     <button onClick={handleClick}>Je suis nouveau</button>
-                    <button onClick={handleClick}>Je suis étudiant à l'UTT</button>
+                    <button onClick={handleClickEtudiant}>Je suis étudiant à l'UTT</button>
 
                     <div id="formNouveau" className={state ? "#formNouveau active" : "#formNouveau"}>
                         <form onSubmit={handleSubmit}>
                             <h1>Login</h1>
                             <h4>Tu as normalement reçu ton mot de passe par e-mail sur l'adresse que tu as fournie à l'UTT.</h4>
-                            <p>Pas de mail ? Contacte-nous à l'adresse mail inte@utt.fr</p>
+                            <p>Pas de mail ? Contacte-nous à l'adresse mail integration@utt.fr</p>
                             <div className="input-box">
                                 <input type="text" placeholder="E-mail" ref={userRef} autoComplete="off" onChange={(e) => setUser(e.target.value)} value={user} required />
                                 <FaUser className="icon" />

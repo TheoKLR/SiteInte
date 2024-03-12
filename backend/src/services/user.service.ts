@@ -1,3 +1,4 @@
+import { desireSchema, Desire, userToDesireSchema } from "../schemas/desire.schema";
 import { userSchema, User, RoleType } from "../schemas/user.schema";
 import { db } from "../database/db";
 import { eq } from 'drizzle-orm';
@@ -47,6 +48,14 @@ export const addToTeam = async (UserId: number, TeamId: number) => {
 
 export const getRole = async (id: number) => {
     return await db.select({role: userSchema.role}).from(userSchema).where(eq(userSchema.id, id));
+}
+
+export const getUserDesires = async (id: number) => {
+    return db.select({ desires: desireSchema })
+        .from(userToDesireSchema)
+        .rightJoin(desireSchema, eq(userToDesireSchema.desireId, desireSchema.id))
+        .leftJoin(userSchema, eq(userToDesireSchema.userId, userSchema.id))
+        .where(eq(userSchema.id, id));
 }
 
 export const grantUser = async (id: number) => {

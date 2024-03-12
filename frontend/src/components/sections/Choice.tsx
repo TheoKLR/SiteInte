@@ -1,11 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getAllDesires, submitChoices } from '../../services/requests';
+import './ChoiceStyle.css';
 
 // Formulaire pour que les étudiants de l'utt puissent choisir les rôles qui les intérresseraient pour l'inté
 export const Choice = () => {
 
+    const errRef = useRef<HTMLInputElement>(null);
+
     const [checkedValues, setCheckedValues] = useState<number[]>([]);
     const [desires, setDesires] = useState<any[]>([]);
+    const [success, setSuccess] = useState(false);
+    const [errMsg, setErrMsg] = useState('');
+    const [successMsg, setSuccessMsg] = useState('');
 
     // Appelé à chaque cochage/décochage d'une checkbox
     // Récupère les id des choix cochés et les stocke dans un array d'entiers
@@ -22,12 +28,20 @@ export const Choice = () => {
 
     // Soumission du formulaire
     function handleSubmit(event: React.FormEvent){
-        console.log(checkedValues);
-        const token = localStorage.getItem("authToken");
-        if (token !== null){
-            console.log("Token :" + token);
-            submitChoices(checkedValues);
+        try {
+            console.log(checkedValues);
+            const token = localStorage.getItem("authToken");
+            if (token !== null){
+                console.log("Token :" + token);
+                submitChoices(checkedValues);
+                setSuccess(true);
+                setSuccessMsg("Choix envoyés avec succès")
+            }
+        } catch (error) {
+            console.error(error)
+            setErrMsg("Problème rencontré lors de l'envoi des choix");
         }
+        
     }
 
     // récupération des choix de rôle existants dans la db
@@ -56,6 +70,8 @@ export const Choice = () => {
                 ))}
                 <br />
                     <button onClick={handleSubmit}>Valider</button>
+                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+                    <p className={success ? "success" : "offscreen"} aria-live="assertive">{successMsg}</p>
                 </div>
             </div>
         </>

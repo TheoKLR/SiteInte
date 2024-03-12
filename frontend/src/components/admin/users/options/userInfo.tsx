@@ -50,8 +50,7 @@ const UserInfo = () => {
             {optionsWithDesires.map((user, index) => (
                     <div key={index}>
                       <br />
-                        <p>{user.label} : {user.desires.length > 0 ? user.desires[0].name : 'Aucun désir'}</p>
-                        
+                        <p>{user.label} : {user.desires.length > 0 ? user.desires.map((desire: any) => desire.desires.name).join(', ') : 'Aucun désir'}</p> 
                     </div>
                 ))}
 

@@ -51,6 +51,20 @@ export const addToTeam = async (req: Request, res: Response) => {
   }
 };
 
+export const getUserDesires = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const idNumber = parseInt(id, 10);
+
+  if (isNaN(idNumber)) return errorResponse(res, { msg : 'could not parse Id' });
+
+  try {
+    const data = await service.getUserDesires(idNumber);
+    okResponse(res, {data});
+  } catch (error) {
+    errorResponse(res, { error });
+  }
+};
+
 export const grantUser = async (req: Request, res: Response) => {
   const { id } = req.body;
   

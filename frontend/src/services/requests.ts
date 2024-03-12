@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from './api';
+import axios from 'axios';
 
 // Ensemble des requêtes axios
 
@@ -75,16 +76,48 @@ export const getrole = async() => {
     return response.data
 }
 
-
+// Obtention de tous les roles demandés par un utilisateur précis
 export const getUserDesiresById = async(userId:string) => {
     try {
-        console.log('/desire/user/'+userId)
-        const response = await api.get('/desire/user/'+userId
-            );
-            console.log(response?.data?.data)
+        const response = await api.get('/user/'+userId+'/desires');
             return response?.data.data;
     } catch (error) {
         console.error("Erreur lors de la récupération des desires de l'utilisateur " + userId)
     }
     
 }
+
+// Obtention de tous les utilisateurs ayant demandé un role précis
+export const getDesiresUsersById = async(desireId:string) => {
+    try {
+        const response = await api.get('/desire/'+desireId+'/users');
+            return response?.data.data;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des utilisateurs correspondants au désire " + desireId)
+    }
+    
+}
+
+export const getToken = async (code: string) => {
+    try {
+        const response = await axios.post(
+            'https://etu.utt.fr/api/oauth/token',
+            {
+                grant_type: 'authorization_code',
+                authorization_code: code,
+            },
+            {
+                auth: {
+                    username: '<client_id>',
+                    password: '<client_secret>',
+                },
+            }
+        );
+
+        console.log(response.data); // Log the response data
+        return response.data; // Return the token data
+    } catch (error) {
+        console.error('Error fetching token:', error);
+        throw error; // Rethrow the error to handle it elsewhere if needed
+    }
+};
