@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+export {}
+
+/*import { useEffect, useState } from 'react';
 import Select from 'react-select';
-import { getAllUsers, getUserDesiresById } from '../../../../services/requests';
-import { User } from '../../../../services/interfaces';
+import { getAllUsers, getUserDesiresById } from '../../../services/requests';
+import { User } from '../../../services/interfaces';
 
 const UserInfo = () => {
 
@@ -58,4 +60,4 @@ const UserInfo = () => {
     );
 };
 
-export default UserInfo;
+export default UserInfo;*/

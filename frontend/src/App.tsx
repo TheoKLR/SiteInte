@@ -1,7 +1,7 @@
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import Home from './screens/Home';
-import { Acces } from './screens/Acces';
+import { Admin } from './screens/Admin';
 import { Defis } from './screens/Defis';
 import { Factions } from './screens/Factions';
 import { Mails } from './screens/Mails';
@@ -17,7 +17,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Login/>}/>
         <Route path='/Home' element={<Home/>}/>
-        <Route path='/Acces' element={<Acces/>}/>
+        <Route path='/Admin' element={<Admin/>}/>
         <Route path='/Defis' element={<Defis/>}/>
         <Route path='/Factions' element={<Factions/>}/>
         <Route path='/Mails' element={<Mails/>}/>

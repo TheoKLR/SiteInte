@@ -1,4 +1,4 @@
-nav{
+nav {
     backdrop-filter: blur(10px);
     display: flex;
     align-items: center;
@@ -6,40 +6,40 @@ nav{
     background: rgba(218, 76, 114, 0.82);
     backdrop-filter: blur(10px);
     padding: 10px 10px 10px 30px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
     position: sticky;
     top: 0;
 }
 
-#navbar{
+#navbar {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-#navbar li{
+#navbar li {
     list-style: none;
     padding: 0 15px;
     position: relative;
 }
 
-#navbar li a{
+#navbar li a {
     text-decoration: none;
-    font-size: 1.2rem;
-    font-weight: 300;
+    font-size: 1.1rem;
+    font-weight: 400;
     color: #fff;
     transition: 0.3s ease-in-out;
 }
 
-#navbar li a:hover{
-    color: #e84260;
+#navbar li a:hover {
+    color: rgb(179, 179, 179);
 }
 
-#navbar li a:hover::after{
+#navbar li a:hover::after {
     content: "";
     width: 30%;
     height: 2px;
-    background: #e84260;
+    background: rgb(179, 179, 179);
     position: absolute;
     bottom: -4px;
     left: 20px;
@@ -49,9 +49,22 @@ nav{
     display: none;
 }
 
-#burger i{
+#burger i {
     color: #fff;
     align-items: center;
+}
+
+.logo {
+    width: 45px;
+    transition: transform 0.4s ease;
+}
+
+.logo:hover {
+    transform: rotate(45deg);
+}
+
+.logo:not(:hover) {
+    transform: rotate(-10deg);
 }
 
 @media screen and (max-width: 769px) {
@@ -66,8 +79,8 @@ nav{
         right: 0px;
         width: 0px;
         height: 100vh;
-        background-color: #e84260;
-        box-shadow: 0 40px 60px rgba(0,0,0,0.1);
+        background-color: rgb(179, 179, 179);
+        box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
         padding: 40px 0 0 10px;
         transition: 0.3s ease-in-out;
     }
@@ -86,18 +99,17 @@ nav{
         display: block;
     }
 
-    #burger i{
+    #burger i {
         font-size: 24px;
         cursor: pointer;
     }
 
-    #navbar li a:hover{
-        color: #1b2430;
+    #navbar li a:hover {
+        color: rgb(179, 179, 179);
     }
 
-    #navbar li a:hover::after{
-        background: #1b2430;
+    #navbar li a:hover::after {
+        background: rgb(179, 179, 179);
         left: 15px;
     }
 }
-

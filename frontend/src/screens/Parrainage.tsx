@@ -4,8 +4,7 @@ export const Parrainage = () => {
 
     return (
         <div className="Parrainage">
-            <Navbar role = "New"/> 
-            <h1>Parrainage</h1>
+            <Navbar/> 
         </div>
     )
 }

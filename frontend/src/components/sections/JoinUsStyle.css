@@ -9,6 +9,7 @@
 .socials{
     display: flex;
     justify-content: space-evenly;
+    margin: 2%;
 }
 
 
@@ -18,12 +19,9 @@
     margin-left: 40%;
 }
 
-.containerJoinUs li a{
-    text-decoration: none;
-    font-size: 1.7rem;
-    font-weight: 300;
-    color: black;
-    transition: 0.3s ease-in-out;
+
+.containerJoinUs a{
+    margin: 1.5%;
 }
 
 .containerJoinUs i{

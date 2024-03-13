@@ -32,7 +32,7 @@ const Home = () => {
     } else {
         return (
             <div className="Home">
-                <Navbar role={role} /> 
+                <Navbar/> 
                 <Rubrique titre="Bienvenue sur le site de l'intégration" contenu={RubriqueWelcome} />
                 <Rubrique titre="Rejoignez-nous !" contenu={RubriqueJoinUs} />
             </div>

@@ -9,10 +9,8 @@ export const decodeToken = (req: Request): any => {
     }
 
     try {
-        console.log(token)
         return verify(token, jwtSecret);
     } catch (error) {
-        console.log('eijrgnrjn')
         return null
     }
 };

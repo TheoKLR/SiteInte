@@ -1,7 +1,9 @@
-import { useState} from 'react';
+export {}
+
+/*import { useState} from 'react';
 import './users.css';
-import UserInfo from './options/userInfo';
-import Role from './options/role';
+import UserInfo from '../users/actions/userInfo';
+import Role from '../users/actions/role';
 
 export const TraitementDesires = () => {
 
@@ -24,4 +26,4 @@ export const TraitementDesires = () => {
     </>
   )
 
-}
+}*/

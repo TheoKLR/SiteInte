@@ -1,7 +1,7 @@
 import './LoginFormStyle.css';
 import { FaUser, FaLock } from "react-icons/fa";
 import { useRef, useState, useEffect } from "react";
-import { loginUser } from '../services/requests';
+import { loginUser, getRole } from '../services/requests';
 
 // Formulaire de Login présent sur la page d'acceuil du site
 export const LoginForm = () => {
@@ -31,9 +31,12 @@ export const LoginForm = () => {
         try {
             const token = await loginUser(user, pwd);
             if (token !== null) {
+                const role = await getRole();
+                localStorage.setItem("role", role);
                 localStorage.setItem("authToken", token);
                 setSuccess(true);
             }
+
         } catch (err: any) {
             if (!err?.response) setErrMsg('No server response')
             else if (err.response?.status === 400) setErrMsg('E-mail ou Mot de passe erroné(s)')

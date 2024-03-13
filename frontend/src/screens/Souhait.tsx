@@ -1,16 +1,17 @@
 import { Navbar } from "../components/Navbar"
 import { Rubrique } from "../components/Section"
-import Users from "../components/admin/users/users"
+import Users from "../components/admin/users/UserAdminSection"
 import { Choice } from "../components/sections/Choice"
-import {TraitementDesires} from "../components/admin/users/traitementDesires"
+//import {TraitementDesires} from "../components/admin/desires/traitementDesires"
 
 export const Souhait = () => {
 
     return (
         <div className="Souhait">
-            <Navbar role = "New"/> 
+            <Navbar/> 
             <Rubrique titre="Choisis ton rôle dans l'inté" contenu={Choice}/>
-            <Rubrique titre="Traitement des résultats" contenu={TraitementDesires} />
         </div>
     )
 }
+
+//            <Rubrique titre="Traitement des résultats" contenu={TraitementDesires} />

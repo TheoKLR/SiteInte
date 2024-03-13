@@ -1,0 +1,35 @@
+.container2 {
+  margin-top: 20px;
+  display: flex;
+}
+
+.action-button {
+  background-color: white;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 20px;
+  font-size: 1em;
+  font-weight: 600;
+}
+
+.action-button:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+.form {
+  flex: 1;
+  margin-left: 5%;
+  margin-top: 10px;
+}
+
+.select-container {
+  display: flex;
+}
+
+.css-b62m3t-container {
+  width: 100%;
+  margin: 0 10px;
+}

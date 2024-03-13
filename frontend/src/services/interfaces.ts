@@ -9,10 +9,6 @@ export interface Team {
     name: string;
 }
 
-export interface NavProps {
-    role: string;
-}
-
 export interface RubriqueProps {
     titre: string;
     contenu : React.FunctionComponent;

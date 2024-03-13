@@ -72,7 +72,7 @@ export const loginUser = async (email: string, pwd: string) => {
 // Obtention du rôle de l'étudiant
 export const getRole = async () => {
     let response = await api.get('/auth/role')
-    return response.data
+    return response?.data?.data
 }
 
 // Obtention de tous les roles demandés par un utilisateur précis
