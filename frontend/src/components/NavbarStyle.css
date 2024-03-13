@@ -47,6 +47,7 @@ nav {
 
 #burger {
     display: none;
+    margin-right: 15px;
 }
 
 #burger i {
@@ -75,7 +76,7 @@ nav {
         align-items: flex-start;
         justify-content: flex-start;
         position: fixed;
-        top: 74px;
+        top: 69px;
         right: 0px;
         width: 0px;
         height: 100vh;
