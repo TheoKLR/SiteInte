@@ -3,10 +3,14 @@
   display: flex;
 }
 
+.action-menu {
+  width: 20%;
+}
+
 .action-button {
   background-color: white;
   border: none;
-  text-align: left;
+  text-align: right;
   cursor: pointer;
   display: block;
   width: 100%;
@@ -22,7 +26,6 @@
 .form {
   flex: 1;
   margin-left: 5%;
-  margin-top: 10px;
 }
 
 .select-container {
@@ -32,4 +35,20 @@
 .css-b62m3t-container {
   width: 100%;
   margin: 0 10px;
+}
+
+input {
+  height: 35px;
+  border: solid lightgray 1px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+input:hover {
+  border: solid gray 1px;
+}
+
+p {
+  margin-bottom: 8px;
 }

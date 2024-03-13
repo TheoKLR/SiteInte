@@ -31,9 +31,9 @@ export const LoginForm = () => {
         try {
             const token = await loginUser(user, pwd);
             if (token !== null) {
+                localStorage.setItem("authToken", token);
                 const role = await getRole();
                 localStorage.setItem("role", role);
-                localStorage.setItem("authToken", token);
                 setSuccess(true);
             }
 

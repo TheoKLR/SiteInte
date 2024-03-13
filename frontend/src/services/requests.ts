@@ -16,6 +16,11 @@ export const getAllTeams = async () => {
     return response.data
 }
 
+export const getAllFactions = async () => {
+    const response = await api.get('faction/all')
+    return response.data
+}
+
 // Obtention de la liste des rôles pouvant être tenus par les étudiants de l'UTT lors de l'Inté
 export const getAllDesires = async () => {
     let response = await api.get('desire/all')

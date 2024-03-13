@@ -1,7 +1,6 @@
 import React from 'react';
 import AdminSection from '../AdminSection';
-import AddToTeam from './actions/team';
-import Delete from './actions/delete';
+import {AddToTeam, Delete}from './Actions';
 import { AdminAction } from '../AdminSection';
 
 const UserAdminSection: React.FC = () => {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Select from 'react-select';
-import { User } from '../../../services/interfaces';
+import { Team } from '../../../services/interfaces';
 import { getAllTeams } from '../../../services/requests';
 
 const SelectTeam = ({ isMulti = false }) => {
@@ -10,9 +10,9 @@ const SelectTeam = ({ isMulti = false }) => {
     const fetchData = async () => {
       try {
         const response = await getAllTeams();
-        const usersOptions = response.data.map((user: User) => ({
-          value: user.id,
-          label: `${user.first_name} ${user.last_name}`,
+        const usersOptions = response.data.map((team: Team) => ({
+          value: team.id,
+          label: `${team.name}`,
         }));
         setOptions(usersOptions);
       } catch (error) {

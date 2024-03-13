@@ -9,9 +9,10 @@ export interface Team {
     name: string;
 }
 
-export interface RubriqueProps {
-    titre: string;
-    contenu : React.FunctionComponent;
+export interface Faction {
+    id: number;
+    name: string;
+    points: number;
 }
 
 export interface Desire {
@@ -19,3 +20,9 @@ export interface Desire {
     name: string;
     description: string;
 }
+
+export interface RubriqueProps {
+    titre: string;
+    contenu : React.FunctionComponent;
+}
+
