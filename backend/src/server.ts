@@ -5,16 +5,20 @@ import teamRouter from './routes/team.routes';
 import factionRouter from './routes/faction.routes';
 import authRouter from './routes/auth.routes';
 import desireRouter from './routes/desire.routes';
+import { isTokenValid } from './middlewares/permissions'; 
 
 const app = express();
 
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use('/auth', authRouter);
+app.use(isTokenValid);
+
 app.use('/user', userRouter);
 app.use('/team', teamRouter);
 app.use('/faction', factionRouter);
-app.use('/auth', authRouter);
 app.use('/desire', desireRouter);
 
 app.listen(8000, () => {

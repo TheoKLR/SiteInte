@@ -7,7 +7,6 @@ export const decodeToken = (req: Request): any => {
     if (!token) {
         return null
     }
-
     try {
         return verify(token, jwtSecret);
     } catch (error) {

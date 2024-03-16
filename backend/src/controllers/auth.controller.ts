@@ -1,62 +1,87 @@
-import { Request, Response } from 'express';
-import { RoleType } from '../schemas/user.schema';
-import * as service from '../services/user.service';
-import * as bcrypt from 'bcrypt';
-import { errorResponse, createResponse, okResponse } from '../utils/responses';
-import { sign } from 'jsonwebtoken';
-import { jwtSecret } from '../utils/secret';
-import { decodeToken } from '../utils/token';
+import { Request, Response, NextFunction } from 'express'
+import { RoleType } from '../schemas/user.schema'
+import * as service from '../services/user.service'
+import * as bcrypt from 'bcrypt'
+import { Error, Created, Ok } from '../utils/responses'
+import { sign } from 'jsonwebtoken'
+import { jwtSecret } from '../utils/secret'
+import { decodeToken } from '../utils/token'
+import { getToken, getUserData } from '../utils/api_etu'
+import axios from 'axios'
 
 export const register = async (req: Request, res: Response) => {
-    const { first_name, last_name, email, password } = req.body;
+    const { first_name, last_name, email, password } = req.body
 
-    first_name ?? errorResponse(res, { msg: "No firt name" });
-    last_name ?? errorResponse(res, { msg: "No last name" });
+    first_name ?? Error(res, { msg: "No first name" })
+    last_name ?? Error(res, { msg: "No last name" })
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10)
 
     try {
-        let role = (await service.getAllUsers()).length === 0 ? RoleType.Admin : RoleType.NewStudent;
-        await service.createUser(first_name, last_name, email, hashedPassword, role);
-        createResponse(res, {})
+        await service.createUser(first_name, last_name, email, hashedPassword, RoleType.NewStudent)
+        Created(res, {})
     } catch (error) {
-        errorResponse(res, { error });
+        Error(res, { error })
     }
 }
 
-export const login = async (req: Request, res: Response) => {
-    const { email, password } = req.body;
+export const newStudentLogin = async (req: Request, res: Response) => {
+    const { email, password } = req.body
 
     try {
-        const user = await service.getUserByEmail(email);
+        const user = await service.getNewStudentByEmail(email)
         if (user === null) {
-            return errorResponse(res, { msg: "user doesn't exists" });
+            return Error(res, { msg: "user doesn't exists" })
         }
 
-        const passwordMatch = await bcrypt.compare(password, user.password);
+        const passwordMatch = await bcrypt.compare(password, user.password)
         if (!passwordMatch) {
-            return errorResponse(res, { msg: "password erroned" });
+            return Error(res, { msg: "password erroned" })
         }
         const id = user.id
-        const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' });
-        okResponse(res, { data: token })
+        const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
+        Ok(res, { data: token })
     } catch (error) {
-        errorResponse(res, { error });
+        Error(res, { error })
     }
 }
 
+export const studentLogin = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const etu_token = await getToken()
+        const user_data = await getUserData(etu_token)
 
+        if (user_data === null) {
+            Error(res, {})
+            return
+        }
+
+        const { email, firstName, lastName } = user_data
+        let user = await service.getUserByEmail(email)
+
+        if (user === null) {
+            await service.createUser(firstName, lastName, email, "default", RoleType.Student)
+            user = await service.getUserByEmail(email)
+        }
+
+        const id = user?.id
+        const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
+        Ok(res, { data: { token } })
+    } catch (error) {
+        Error(res, { error })
+    }
+}
 
 export const getRole = async (req: Request, res: Response) => {
     try {
-        const decodedToken = decodeToken(req);
-        const user = await service.getUserByEmail(decodedToken.email);
+        const decodedToken = decodeToken(req)
+        const user = await service.getUserByEmail(decodedToken.email)
 
         if (user === null) {
-            return errorResponse(res, { msg: "user doesn't exists" });
+            return Error(res, { msg: "user doesn't exists" })
         }
-        okResponse(res, { data: user.role })
+        Ok(res, { data: user.role })
     } catch (error) {
-        errorResponse(res, {error})
+        Error(res, { error })
     }
-};
+}

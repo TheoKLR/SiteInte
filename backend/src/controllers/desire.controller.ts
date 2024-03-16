@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
 import * as service from '../services/desire.service';
-import { errorResponse, createResponse, okResponse } from '../utils/responses';
+import { Error, Created, Ok } from '../utils/responses';
 import { decodeToken } from '../utils/token';
 
 export const getAllDesires = async (req: Request, res: Response) => {
   try {
     const data = await service.getAllDesires();
-    okResponse(res, { data });
+    Ok(res, { data });
   } catch (error) {
-    errorResponse(res, { error });
+    Error(res, { error });
   }
 }
 
@@ -16,27 +16,27 @@ export const getDesire = async (req: Request, res: Response) => {
   const { id } = req.params;
   const idNumber = parseInt(id, 10);
 
-  if (isNaN(idNumber)) return errorResponse(res, { msg : 'could not parse Id' });
+  if (isNaN(idNumber)) return Error(res, { msg : 'could not parse Id' });
 
   try {
     const data = await service.getDesire(idNumber);
-    okResponse(res, { data });
+    Ok(res, { data });
   } catch (error) {
-    errorResponse(res, { error });
+    Error(res, { error });
   }
 };
 
 export const createDesire = async (req: Request, res: Response) => {
   const { name, desc } = req.body;
 
-  name ?? errorResponse(res, { msg: "No name" });
-  desc ?? errorResponse(res, { msg: "No description" });
+  name ?? Error(res, { msg: "No name" });
+  desc ?? Error(res, { msg: "No description" });
 
   try {
     await service.createDesire(name, desc);
-    createResponse(res, {})
+    Created(res, {})
   } catch (error) {
-    errorResponse(res, { error });
+    Error(res, { error });
   }
 };
 
@@ -44,13 +44,13 @@ export const deleteDesire = async (req: Request, res: Response) => {
   const { id } = req.params;
   const idNumber = parseInt(id, 10);
 
-  if (isNaN(idNumber)) return errorResponse(res, { msg : 'could not parse Id' });
+  if (isNaN(idNumber)) return Error(res, { msg : 'could not parse Id' });
 
   try {
     await service.deleteDesire(idNumber);
-    okResponse(res, { msg: "Desire deleted" });
+    Ok(res, { msg: "Desire deleted" });
   } catch (error) {
-    errorResponse(res, { error });
+    Error(res, { error });
   }
 };
 
@@ -60,15 +60,15 @@ export const submitDesires = async (req: Request, res: Response) => {
   const token = decodeToken(req)
 
   if (token === null) {
-    return errorResponse(res, { msg: 'No email' });
+    return Error(res, { msg: 'No email' });
   }
 
   try {
     await service.deleteUserDesires(token.id);
     await service.submitDesires(token.id, desireIds);
-    okResponse(res, { msg: "Desires submitted" });
+    Ok(res, { msg: "Desires submitted" });
   } catch (error) {
-    errorResponse(res, { error });
+    Error(res, { error });
   }
 };
 
@@ -76,12 +76,12 @@ export const getDesireUsers = async (req: Request, res: Response) => {
   const { id } = req.params;
   const idNumber = parseInt(id, 10);
 
-  if (isNaN(idNumber)) return errorResponse(res, { msg : 'could not parse Id' });
+  if (isNaN(idNumber)) return Error(res, { msg : 'could not parse Id' });
 
   try {
     const data = await service.getDesireUsers(idNumber);
-    okResponse(res, {data});
+    Ok(res, {data});
   } catch (error) {
-    errorResponse(res, { error });
+    Error(res, { error });
   }
 };

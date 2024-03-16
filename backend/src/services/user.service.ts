@@ -2,7 +2,7 @@
 import { desireSchema, Desire, userToDesireSchema } from "../schemas/desire.schema"
 import { userSchema, User, RoleType } from "../schemas/user.schema"
 import { db } from "../database/db"
-import { eq } from 'drizzle-orm'
+import { eq, and } from 'drizzle-orm'
 
 export const getAllUsers = async () => {
     return await db.select({
@@ -29,6 +29,17 @@ export const getUser = async (id: number) => {
     return user[0]
 }
 
+export const getNewStudentByEmail = async (email: string) => {
+    const user = await db.select().from(userSchema).where(
+        and(
+            eq(userSchema.email, email),
+            //eq(userSchema.role, "newStudent")
+        )
+    )
+    if (user.length === 0) return null
+    return user[0]
+}
+
 export const getUserByEmail = async (email: string) => {
     const user = await db.select().from(userSchema).where(eq(userSchema.email, email))
 
@@ -38,6 +49,9 @@ export const getUserByEmail = async (email: string) => {
 
 
 export const createUser = async (first_name: string, last_name: string, email: string, password: string, role: RoleType) => {
+    const allUser = await getAllUsers()
+    if (allUser.length === 0) role = RoleType.Admin
+
     const newUser: User = { first_name, last_name, email, contact: null, password, role, team: null }
     await db.insert(userSchema).values(newUser)
 }

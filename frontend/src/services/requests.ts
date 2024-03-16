@@ -1,8 +1,4 @@
-import { useEffect, useState } from 'react';
 import { api } from './api';
-import axios from 'axios';
-
-// Ensemble des requêtes axios
 
 // Obtention de la liste des Utilisateurs enregistrés dans la db
 export const getAllUsers = async () => {
@@ -57,27 +53,29 @@ export const registerStudent = async (fName: string, lName: string, mail: string
         last_name: lName,
         email: mail,
         password: mdp
-    })
-        .then(function (response) {
-            console.log('Utilisateur enregistré avec succès');
-        })
-        .catch(function (error) {
-            console.error('Erreur lors de l\'enregistrement de l\'utilisateur :', error);
-        });
+    }).then(function (response) {
+        console.log('Utilisateur enregistré avec succès');
+    }).catch(function (error) {
+        console.error('Erreur lors de l\'enregistrement de l\'utilisateur :', error);
+    });
 }
 
-
-export const loginUser = async (email: string, pwd: string) => {
-    const response = await api.post('/auth/login',
+export const newStudentLogin = async (email: string, pwd: string) => {
+    const response = await api.post('/auth/newStudentLogin',
         { email, password: pwd }
     );
     return response?.data?.data;
 }
 
+export const studentLogin = async () => {
+    const response = await api.get('/auth/studentLogin');
+    return response?.data?.data.token;
+}
+
 // Obtention du rôle de l'étudiant
 export const getRole = async () => {
-    let response = await api.get('/auth/role')
-    return response?.data?.data
+    const response = await api.get('/auth/role')
+    return response?.data.data
 }
 
 // Obtention de tous les roles demandés par un utilisateur précis
@@ -99,29 +97,4 @@ export const getDesiresUsersById = async (desireId: string) => {
     } catch (error) {
         console.error("Erreur lors de la récupération des utilisateurs correspondants au désire " + desireId)
     }
-
 }
-
-export const getToken = async (code: string) => {
-    try {
-        const response = await axios.post(
-            'https://etu.utt.fr/api/oauth/token',
-            {
-                grant_type: 'authorization_code',
-                authorization_code: code,
-            },
-            {
-                auth: {
-                    username: '<client_id>',
-                    password: '<client_secret>',
-                },
-            }
-        );
-
-        console.log(response.data); // Log the response data
-        return response.data; // Return the token data
-    } catch (error) {
-        console.error('Error fetching token:', error);
-        throw error; // Rethrow the error to handle it elsewhere if needed
-    }
-};

@@ -1,10 +1,10 @@
-import { Navbar } from "../components/Navbar"
+import { Navbar } from "../components/shared/Navbar"
 import UserAdminSection from '../components/admin/users/UserAdminSection';
 import TeamAdminSection from '../components/admin/teams/TeamAdminSection';
 import FactionAdminSection from '../components/admin/factions/FactionAdminSection';
 import DesireAdminSection from '../components/admin/desires/DesireAdminSection';
 
-import { Rubrique } from "../components/Section";
+import { Rubrique } from "../components/shared/Section";
 
 export const Admin = () => {
 

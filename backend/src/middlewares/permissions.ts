@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { verify, JsonWebTokenError } from 'jsonwebtoken';
+import { JsonWebTokenError } from 'jsonwebtoken';
 import { RoleType } from '../schemas/user.schema';
-import { jwtSecret } from '../utils/secret';
-import { errorResponse } from '../utils/responses';
+import { Error, Unauthorized } from '../utils/responses';
 import { getUserByEmail } from '../services/user.service';
 import { decodeToken } from '../utils/token';
 
@@ -12,20 +11,29 @@ export const isAdmin = async (req: Request, res: Response, next: NextFunction) =
         const user = await getUserByEmail(decodedToken.email);
 
         if (user === null) {
-            return errorResponse(res, { msg: "user doesn't exists" });
+            return Error(res, { msg: "user doesn't exists" });
         }
 
         if (user.role !== RoleType.NewStudent && user.role !== RoleType.Student) {
             next();
         } else {
-            errorResponse(res, { msg: 'Forbidden: Insufficient permissions' });
+            Error(res, { msg: 'Forbidden: Insufficient permissions' });
         }
     } catch (error) {
-        if (error instanceof JsonWebTokenError) {
-            return errorResponse(res, { msg: 'Unauthorized: Invalid token' });
-        } else {
-            return errorResponse(res, { msg: 'Unauthorized: Missing token' });
-        }
+        return Error(res, { msg: 'Unauthorized: Invalid token' });
     }
 };
 
+export const isTokenValid = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const decodedToken = decodeToken(req);
+
+        const currentTime = Math.floor(Date.now() / 1000);
+        if (decodedToken.exp < currentTime) {
+            return Unauthorized(res, { msg: 'Unauthorized: Token has expired' });
+        }
+        next();
+    } catch (error) {
+        return Error(res, { msg: 'Unauthorized: Invalid token' });
+    }
+};

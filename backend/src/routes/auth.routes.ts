@@ -5,7 +5,8 @@ import { registerMiddleware } from '../middlewares/register';
 const authRouter = express.Router();
 
 authRouter.post('/register', registerMiddleware, ac.register);
-authRouter.post('/login', ac.login);
+authRouter.post('/newStudentLogin', ac.newStudentLogin);
+authRouter.get('/studentLogin', ac.studentLogin);
 authRouter.get('/role', ac.getRole);
 
 export default authRouter;
