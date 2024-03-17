@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosError } from 'axios';
 
 export const api = axios.create({
   baseURL: "http://localhost:8000"
@@ -13,6 +13,18 @@ api.interceptors.request.use(
       return config;
   },
   (error) => Promise.reject(error)
+);
+
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error: AxiosError) => {
+    if (error.response && error.response.status === 401) {
+      window.location.href = '/';
+    }
+    return Promise.reject(error);
+  }
 );
 
 export default axios;

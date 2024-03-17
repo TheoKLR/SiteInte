@@ -7,7 +7,6 @@ import { sign } from 'jsonwebtoken'
 import { jwtSecret } from '../utils/secret'
 import { decodeToken } from '../utils/token'
 import { getToken, getUserData } from '../utils/api_etu'
-import axios from 'axios'
 
 export const register = async (req: Request, res: Response) => {
     const { first_name, last_name, email, password } = req.body
@@ -39,7 +38,7 @@ export const newStudentLogin = async (req: Request, res: Response) => {
             return Error(res, { msg: "password erroned" })
         }
         const id = user.id
-        const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
+        const token = sign({ id, email }, jwtSecret, { expiresIn: '1m' })
         Ok(res, { data: token })
     } catch (error) {
         Error(res, { error })
@@ -65,7 +64,8 @@ export const studentLogin = async (req: Request, res: Response, next: NextFuncti
         }
 
         const id = user?.id
-        const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
+        const token = sign({ id, email }, jwtSecret, { expiresIn: '1m' })
+        console.log(token)
         Ok(res, { data: { token } })
     } catch (error) {
         Error(res, { error })

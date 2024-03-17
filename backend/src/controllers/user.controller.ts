@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as service from '../services/user.service';
 import { Error, Ok } from '../utils/responses';
-import { RoleType } from '../schemas/user.schema';
+import { decodeToken } from '../utils/token';
 
 export const getAllUsers = async (req: Request, res: Response) => {
     try {
@@ -25,6 +25,16 @@ export const getUser = async (req: Request, res: Response) => {
         Error(res, { error });
     }
 };
+
+export const getCurentUser = async (req: Request, res: Response) => {
+    try {
+        const decodedToken = decodeToken(req)
+        const data = await service.getUser(decodedToken.id);
+        Ok(res, { data });
+    } catch (error) {
+        Error(res, { error });
+    }
+}
 
 export const deleteUser = async (req: Request, res: Response) => {
     const { id } = req.params;

@@ -74,8 +74,13 @@ export const studentLogin = async () => {
 
 // Obtention du rôle de l'étudiant
 export const getRole = async () => {
-    const response = await api.get('/auth/role')
-    return response?.data.data
+    const response = await api.get('/user/current')
+    return response?.data?.data?.role
+}
+
+export const getCurrentUser = async () => {
+    const response = await api.get('/user/current')
+    return response?.data?.data
 }
 
 // Obtention de tous les roles demandés par un utilisateur précis

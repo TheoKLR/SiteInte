@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { JsonWebTokenError } from 'jsonwebtoken';
 import { RoleType } from '../schemas/user.schema';
 import { Error, Unauthorized } from '../utils/responses';
 import { getUserByEmail } from '../services/user.service';
@@ -26,10 +25,13 @@ export const isAdmin = async (req: Request, res: Response, next: NextFunction) =
 
 export const isTokenValid = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const decodedToken = decodeToken(req);
 
-        const currentTime = Math.floor(Date.now() / 1000);
-        if (decodedToken.exp < currentTime) {
+        const token = req.headers['authorization']?.split(' ')[1];
+        if (!token) {
+            return Error(res, { msg: 'Unauthorized: Invalid token' });
+        }
+        const decodedToken = decodeToken(req);
+        if (!decodedToken) {
             return Unauthorized(res, { msg: 'Unauthorized: Token has expired' });
         }
         next();

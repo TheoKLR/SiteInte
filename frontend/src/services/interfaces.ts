@@ -21,8 +21,3 @@ export interface Desire {
     description: string;
 }
 
-export interface RubriqueProps {
-    titre: string;
-    contenu : React.FunctionComponent;
-}
-

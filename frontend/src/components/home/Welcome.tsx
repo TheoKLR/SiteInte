@@ -1,7 +1,8 @@
 import './Welcome.css';
 
 // Rubrique explicative de ce qu'est l'inté
-export const RubriqueWelcome = () => {
+export const Welcome = () => {
+
     //Frontend
     return (
         <>

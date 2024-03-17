@@ -1,17 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from "../components/shared/Navbar";
-import { Rubrique } from "../components/shared/Section";
-import { RubriqueJoinUs } from "../components/home/JoinUs";
-import { RubriqueWelcome } from "../components/home/Welcome";
-import { api } from '../services/api';
+import { Section } from "../components/shared/Section";
+import { JoinUs } from "../components/home/JoinUs";
+import { Welcome } from "../components/home/Welcome";
+import { getCurrentUser } from '../services/requests';
 
 //Page d'accueil du site une fois l'utilisateur connecté
 const Home = () => {
+    const [title, setTitle] = useState<string>("");
+    
+    useEffect(() => {
+        const fetchName = async () => {
+            try {
+                const user = await getCurrentUser();
+                if (!user) {
+                    window.location.href = '/Login';
+                    return null;
+                }
+                setTitle("Bienvenue " + user.first_name +" !");
+            } catch (error) {
+                console.error('Error fetching role:', error);
+            }
+        };
+
+        fetchName();
+    }, []);
+
     return (
         <div className="Home">
             <Navbar />
-            <Rubrique titre="Bienvenue sur le site de l'intégration" contenu={RubriqueWelcome} />
-            <Rubrique titre="Rejoignez-nous !" contenu={RubriqueJoinUs} />
+            <Section titre={title} contenu={Welcome} />
+            <Section titre="Rejoignez-nous !" contenu={JoinUs} />
         </div>
     );
 }
