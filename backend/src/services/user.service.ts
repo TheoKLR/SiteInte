@@ -8,7 +8,7 @@ export const getAllUsers = async () => {
     return await db.select({
         id: userSchema.id,
         first_name: userSchema.first_name,
-        last_name: userSchema.id,
+        last_name: userSchema.last_name,
         email: userSchema.email,
         role: userSchema.role,
         team_id: userSchema.team,

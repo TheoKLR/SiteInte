@@ -1,13 +1,19 @@
-import SelectTeam from '../utils/SelectTeam';
-import SelectFaction from '../utils/SelectFaction';
+import { Teams, Factions } from '../utils/Select';
 import { StringInput } from "../utils/Inputs";
+import Select from 'react-select';
 
 export const AddToFaction = () => {
     return <div className={"select-container"}>
-      <SelectTeam isMulti={true} />
-      <SelectFaction />
+      <Select
+        closeMenuOnSelect={false}
+        isMulti
+        options={Teams()}
+      />
+      <Select
+        options={Factions()}
+      />
     </div>
-};
+}
 
 
 export const CreateTeam = () => {
@@ -15,12 +21,16 @@ export const CreateTeam = () => {
         <div className={"input-container"}>
             <StringInput label="Name" />
         </div>
-    );
-};
+    )
+}
 
 
 export const Delete = () => {
     return <div>
-      <SelectTeam isMulti={true} />
+      <Select
+        closeMenuOnSelect={false}
+        isMulti
+        options={Teams()}
+      />
     </div>
-};
+}
