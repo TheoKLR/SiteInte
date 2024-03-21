@@ -27,6 +27,7 @@ const AdminSection: React.FC<SectionProps> = ({ actions }) => {
             </button>
           </div>
         ))}
+        <button className="button-9" role="button">Soumettre</button>
       </div>
       <div className="form">
         {selectedAction && (
