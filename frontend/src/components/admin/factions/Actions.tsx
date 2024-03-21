@@ -1,5 +1,6 @@
 import { StringInput } from "../utils/Inputs";
-import SelectFaction from '../utils/SelectFaction';
+import { Factions } from '../utils/Select';
+import Select from 'react-select';
 
 export const Create = () => {
     return (
@@ -11,6 +12,10 @@ export const Create = () => {
 
 export const Delete = () => {
     return <div>
-      <SelectFaction isMulti={true} />
+      <Select
+        closeMenuOnSelect={false}
+        isMulti
+        options={Factions()}
+      />
     </div>
 };

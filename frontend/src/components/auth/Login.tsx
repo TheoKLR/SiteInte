@@ -39,13 +39,13 @@ const LoginForm = () => {
     }
 
     const TryLogin = async () => {
+        localStorage.setItem("tryLogin", "false");
         try {
-            localStorage.setItem("tryLogin", "false");
             const token = await studentLogin();
             localStorage.setItem("authToken", token);
             window.location.href = "/Home"
         } catch (err: any) {
-            ETUconnection();
+            console.log(err)
         }
     }
 
@@ -63,7 +63,7 @@ const LoginForm = () => {
         <div id="container" className={state ? "#container active" : "#container"}>
             <h1>Bienvenue!</h1>
             <button className="login-button" onClick={handleClick}>Je suis nouveau</button>
-            <button className="login-button" onClick={TryLogin}>Je suis étudiant à l'UTT</button>
+            <button className="login-button" onClick={ETUconnection}>Je suis étudiant à l'UTT</button>
             <div id="formNouveau" className={state ? "#formNouveau active" : "#formNouveau"}>
                 <form onSubmit={NSLogin}>
                     <h1>Connection</h1>

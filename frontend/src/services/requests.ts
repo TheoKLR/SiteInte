@@ -1,4 +1,5 @@
 import { api } from './api';
+import { Delete } from '../components/admin/users/Actions';
 
 // Obtention de la liste des Utilisateurs enregistrés dans la db
 export const getAllUsers = async () => {
@@ -81,6 +82,11 @@ export const getRole = async () => {
 export const getCurrentUser = async () => {
     const response = await api.get('/user/current')
     return response?.data?.data
+}
+
+export const DeleteUsers = async (users: number[]) => {
+    const response = await api.delete('/user')
+    return response
 }
 
 // Obtention de tous les roles demandés par un utilisateur précis

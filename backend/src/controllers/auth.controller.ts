@@ -38,7 +38,7 @@ export const newStudentLogin = async (req: Request, res: Response) => {
             return Error(res, { msg: "password erroned" })
         }
         const id = user.id
-        const token = sign({ id, email }, jwtSecret, { expiresIn: '1m' })
+        const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
         Ok(res, { data: token })
     } catch (error) {
         Error(res, { error })
@@ -64,7 +64,7 @@ export const studentLogin = async (req: Request, res: Response, next: NextFuncti
         }
 
         const id = user?.id
-        const token = sign({ id, email }, jwtSecret, { expiresIn: '1m' })
+        const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
         console.log(token)
         Ok(res, { data: { token } })
     } catch (error) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import AdminSection from '../AdminSection';
 import { AdminAction } from '../AdminSection';
-import {SearchByUser, SearchByDesire, Create, Delete}  from './Actions';
+import { Create, Delete}  from './Actions';
 
 
 
@@ -11,14 +11,6 @@ const DesireAdminSection: React.FC = () => {
     {
       title: 'Créer un souhait',
       form: Create,
-    },
-    {
-      title: 'Chercher par utilisateur',
-      form: SearchByUser,
-    },
-    {
-      title: 'Chercher par souhait',
-      form: SearchByDesire,
     },
     {
       title: 'Supprimer des souhaits',
