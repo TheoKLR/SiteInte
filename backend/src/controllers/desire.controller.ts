@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/desire.service';
 import { Error, Created, Ok } from '../utils/responses';
 import { decodeToken } from '../utils/token';
 
-export const getAllDesires = async (req: Request, res: Response) => {
+export const getAllDesires = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await service.getAllDesires();
     Ok(res, { data });
@@ -12,7 +12,7 @@ export const getAllDesires = async (req: Request, res: Response) => {
   }
 }
 
-export const getDesire = async (req: Request, res: Response) => {
+export const getDesire = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const idNumber = parseInt(id, 10);
 
@@ -26,7 +26,7 @@ export const getDesire = async (req: Request, res: Response) => {
   }
 };
 
-export const createDesire = async (req: Request, res: Response) => {
+export const createDesire = async (req: Request, res: Response, next: NextFunction) => {
   const { name, desc } = req.body;
 
   name ?? Error(res, { msg: "No name" });
@@ -40,7 +40,7 @@ export const createDesire = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteDesire = async (req: Request, res: Response) => {
+export const deleteDesire = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const idNumber = parseInt(id, 10);
 
@@ -54,7 +54,7 @@ export const deleteDesire = async (req: Request, res: Response) => {
   }
 };
 
-export const submitDesires = async (req: Request, res: Response) => {
+export const submitDesires = async (req: Request, res: Response, next: NextFunction) => {
   const { desireIds } = req.body;
 
   const token = decodeToken(req)
@@ -72,7 +72,7 @@ export const submitDesires = async (req: Request, res: Response) => {
   }
 };
 
-export const getDesireUsers = async (req: Request, res: Response) => {
+export const getDesireUsers = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const idNumber = parseInt(id, 10);
 

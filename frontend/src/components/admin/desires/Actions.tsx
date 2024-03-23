@@ -1,7 +1,6 @@
-import { StringInput } from "../utils/Inputs";
 import { Desires } from '../utils/Select';
 import Select from 'react-select';
-
+/*
 export const Create = () => {
     return (
         <div className={"input-container"}>
@@ -20,3 +19,4 @@ export const Delete = () => {
       />
     </div>
 }
+*/

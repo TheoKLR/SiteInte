@@ -8,7 +8,7 @@ import { jwtSecret } from '../utils/secret'
 import { decodeToken } from '../utils/token'
 import { getToken, getUserData } from '../utils/api_etu'
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response, next: NextFunction) => {
     const { first_name, last_name, email, password } = req.body
 
     first_name ?? Error(res, { msg: "No first name" })
@@ -24,7 +24,7 @@ export const register = async (req: Request, res: Response) => {
     }
 }
 
-export const newStudentLogin = async (req: Request, res: Response) => {
+export const newStudentLogin = async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body
 
     try {
@@ -65,7 +65,6 @@ export const studentLogin = async (req: Request, res: Response, next: NextFuncti
 
         const id = user?.id
         const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
-        console.log(token)
         Ok(res, { data: { token } })
     } catch (error) {
         Error(res, { error })

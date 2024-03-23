@@ -6,12 +6,7 @@ db:
 api:
 	cd backend && npm run start:dev
 
-api_prod:
-	cd backend && npm run start:dev &
-
 front:
-	cd frontend && npm start &
-
-prod: db api_prod front
+	cd frontend && npm start
 
 

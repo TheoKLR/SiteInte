@@ -7,7 +7,7 @@ export const getAllFactions = async () => {
 }
 
 export const getFaction = async (id: number) => {
-    await db.select().from(factionSchema).where(eq(factionSchema.id, id));
+    return await db.select().from(factionSchema).where(eq(factionSchema.id, id));
 }
 
 export const createFaction = async (name: string) => {
@@ -17,12 +17,6 @@ export const createFaction = async (name: string) => {
 
 export const deleteFaction = async (id: number) => {
     await db.delete(factionSchema).where(eq(factionSchema.id, id));
-}
-
-export const renameFaction = async (name: string, id: number) => {
-    return await db.update(factionSchema)
-        .set({ name: name })
-        .where(eq(factionSchema.id, id));
 }
 
 export const getPoints = async (id: number) => {

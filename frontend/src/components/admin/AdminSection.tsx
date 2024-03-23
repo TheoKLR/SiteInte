@@ -3,7 +3,7 @@ import "./AdminSection.css";
 
 export interface AdminAction {
   title: string;
-  form: React.FunctionComponent;
+  form: JSX.Element;
 }
 
 export interface SectionProps {
@@ -27,11 +27,10 @@ const AdminSection: React.FC<SectionProps> = ({ actions }) => {
             </button>
           </div>
         ))}
-        <button className="button-9" role="button">Soumettre</button>
       </div>
       <div className="form">
         {selectedAction && (
-          <selectedAction.form />
+          selectedAction.form
         )}
       </div>
     </div>

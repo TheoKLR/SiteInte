@@ -19,7 +19,6 @@ export const Section: React.FC<SectionProps> = ({titre, contenu: Contenu}) => {
                     <Contenu/>
                 </div>
             </div>
-
         </>
     )
 }

@@ -3,6 +3,7 @@ import UserAdminSection from '../components/admin/users/UserAdminSection';
 import TeamAdminSection from '../components/admin/teams/TeamAdminSection';
 import FactionAdminSection from '../components/admin/factions/FactionAdminSection';
 import DesireAdminSection from '../components/admin/desires/DesireAdminSection';
+import EventsAdminSection from '../components/admin/events/EventsAdminSection'
 import { Section } from "../components/shared/Section";
 import { useEffect } from "react";
 import { getRole } from "../services/requests";
@@ -31,6 +32,7 @@ export const Admin = () => {
             <Section titre="Equipes" contenu={TeamAdminSection} />
             <Section titre="Factions" contenu={FactionAdminSection} />
             <Section titre="Souhaits" contenu={DesireAdminSection} />
+            <Section titre="Events" contenu={EventsAdminSection} />
         </div>
     )
 }

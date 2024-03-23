@@ -21,3 +21,8 @@ export interface Desire {
     description: string;
 }
 
+export interface Event {
+    id: number;
+    name: string;
+}
+

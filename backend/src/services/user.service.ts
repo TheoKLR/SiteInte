@@ -33,7 +33,7 @@ export const getNewStudentByEmail = async (email: string) => {
     const user = await db.select().from(userSchema).where(
         and(
             eq(userSchema.email, email),
-            //eq(userSchema.role, "newStudent")
+            eq(userSchema.role, "newStudent")
         )
     )
     if (user.length === 0) return null
@@ -61,10 +61,12 @@ export const deleteUser = async (id: number) => {
     await db.delete(userSchema).where(eq(userSchema.id, id))
 }
 
-export const addToTeam = async (UserId: number, TeamId: number) => {
-    await db.update(userSchema)
-        .set({ team: TeamId })
-        .where(eq(userSchema.id, UserId))
+export const addToTeam = async (UserIds: number[], TeamId: number) => {
+    for (const id of UserIds) {
+        await db.update(userSchema)
+            .set({ team: TeamId })
+            .where(eq(userSchema.id, id));
+    }
 }
 
 export const addContact = async (id: number, contact: string) => {

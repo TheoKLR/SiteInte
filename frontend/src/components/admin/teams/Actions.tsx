@@ -1,36 +1,81 @@
-import { Teams, Factions } from '../utils/Select';
-import { StringInput } from "../utils/Inputs";
-import Select from 'react-select';
-
-export const AddToFaction = () => {
-    return <div className={"select-container"}>
-      <Select
-        closeMenuOnSelect={false}
-        isMulti
-        options={Teams()}
-      />
-      <Select
-        options={Factions()}
-      />
-    </div>
-}
-
+import { useState } from 'react';
+import Select from 'react-select'
+import { createTeam, addToFaction, deleteTeam } from '../../../services/requests/teams';
+import { toArray, toId, handleError } from '../utils/Submit'
+import { Teams, Factions } from '../utils/Select'
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 export const CreateTeam = () => {
-    return (
-        <div className={"input-container"}>
-            <StringInput label="Name" />
-        </div>
-    )
+  const [name, setName] = useState('');
+
+  const handleSubmit = () => {
+    if (name !== '') createTeam(name)
+  };
+
+  const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const test = evt.target.value
+    setName(test)
+  };
+
+  return (
+    <div>
+      <div>
+        <p>Nom</p>
+        <input type="text" onChange={handleChange} />
+      </div>
+      <button className="" onClick={handleSubmit}>Soumettre</button>
+    </div>
+  );
+};
+
+export const AddToFaction = () => {
+  const [faction, setFaction] = useState([] as any)
+  const [teams, setTeams] = useState({} as any)
+
+  const Submit = () => {
+    addToFaction(toArray(teams), toId(faction))
+  }
+
+  return (
+    <div>
+      <div className="select-container">
+        <Select
+          closeMenuOnSelect={false}
+          isMulti
+          options={Teams()}
+          onChange={teams => setTeams(teams)}
+        />
+        <Select
+          options={Factions()}
+          onChange={faction => setFaction(faction)}
+        />
+      </div>
+      <button className="submit-button" onClick={Submit}>Soumettre</button>
+    </div>
+  )
 }
 
+export const DeleteTeam = () => {
+  const [team, setTeam] = useState({} as any)
 
-export const Delete = () => {
-    return <div>
-      <Select
-        closeMenuOnSelect={false}
-        isMulti
-        options={Teams()}
+  const Submit = async () => {
+    const id = toId(team)
+    await handleError(deleteTeam, id)
+  }
+
+  return (
+    <div>
+      <div className="select-container">
+        <Select
+          options={Teams()}
+          onChange={team => setTeam(team)}
+        />
+      </div>
+      <button className="submit-button" onClick={Submit}>Soumettre</button>
+      <ToastContainer
+        position="bottom-right"
       />
     </div>
+  )
 }

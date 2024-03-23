@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -13,17 +13,14 @@ body {
   background-color: rgb(246, 246, 246);
 }
 
-h2{
+h2 {
   font-family: "Montserrat", serif;
   font-weight: 600;
   font-style: normal;
 }
 
-p{
+p {
   font-family: "Montserrat", serif;
   font-weight: 500;
   font-style: normal;
 }
-
-
-

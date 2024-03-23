@@ -6,8 +6,8 @@ const teamRouter = express.Router();
 
 teamRouter.post('', isAdmin, tc.createTeam);
 teamRouter.get('/all', isAdmin, tc.getAllTeams);
-teamRouter.get(':id', isAdmin, tc.getTeam);
-teamRouter.delete(':id', isAdmin, tc.deleteTeam);
-teamRouter.put('/addtofac', isAdmin, tc.addTeamToFaction);
+teamRouter.get('/:id', isAdmin, tc.getTeam);
+teamRouter.delete('/:id', isAdmin, tc.deleteTeam);
+teamRouter.put('/addtofaction', isAdmin, tc.addToFaction);
 
 export default teamRouter;

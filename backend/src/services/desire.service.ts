@@ -14,7 +14,7 @@ export const getDesire = async (id: number) => {
 
 export const createDesire = async (name: string, description: string) => {
     const newDesire: Desire = { name, description };
-    return await db.insert(desireSchema).values(newDesire)
+    await db.insert(desireSchema).values(newDesire)
 }
 
 export const deleteDesire = async (id: number) => {

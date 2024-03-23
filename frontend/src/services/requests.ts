@@ -1,5 +1,4 @@
 import { api } from './api';
-import { Delete } from '../components/admin/users/Actions';
 
 // Obtention de la liste des Utilisateurs enregistrés dans la db
 export const getAllUsers = async () => {
