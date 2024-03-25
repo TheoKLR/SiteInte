@@ -26,5 +26,3 @@ export const setActiveEvent = async (id: number) => {
 export const setInactiveEvent = async (id: number) => {
     return await api.put('/event/finish', { id });
 }
-
-

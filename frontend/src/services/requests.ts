@@ -61,8 +61,8 @@ export const newStudentLogin = async (email: string, pwd: string) => {
     return response?.data?.data;
 }
 
-export const studentLogin = async () => {
-    const response = await api.get('/auth/studentLogin');
+export const studentLogin = async (code:string) => {
+    const response = await api.get('/auth/studentLogin/' + code);
     return response?.data?.data.token;
 }
 

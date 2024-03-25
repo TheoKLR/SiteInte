@@ -1,7 +1,7 @@
-import { Users, Teams } from '../utils/Select'
+import { Users, Teams } from '../../utils/Select'
 import Select from 'react-select'
 import { useState } from 'react'
-import { toArray, toId } from '../utils/Submit'
+import { toArray, toId } from '../../utils/Submit'
 import { addToTeam } from '../../../services/requests/users'
 
 

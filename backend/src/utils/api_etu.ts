@@ -1,17 +1,25 @@
 import axios from "axios";
 import querystring from 'querystring';
+import { api_client, api_secret } from "./secret";
 
-export const getToken = async () => {
+const client = axios.create({
+    baseURL: 'https://etu.utt.fr/',
+    auth: {
+        username: api_client,
+        password: api_secret,
+    }
+})
+
+export const getToken = async (authorization_code: string) => {
     try {
-        const app_connection = await axios.post('https://etu.utt.fr/api/oauth/token', querystring.stringify({
-            grant_type: 'client_credentials',
-            client_id: '15906313225',
-            client_secret: '253cca3d8c575e5796feff25df261056',
-            scopes: 'public'
+        console.log(authorization_code)
+        const app_connection = await client.post('https://etu.utt.fr/api/oauth/token', querystring.stringify({
+            grant_type: 'authorization_code',
+            authorization_code: authorization_code
         }));
         return app_connection.data.access_token
-    } catch {
-        return null
+    } catch (err) {
+        return ""
     }
 }
 

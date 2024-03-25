@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Select from 'react-select'
 import { createTeam, addToFaction, deleteTeam } from '../../../services/requests/teams';
-import { toArray, toId, handleError } from '../utils/Submit'
-import { Teams, Factions } from '../utils/Select'
+import { toArray, toId, handleError } from '../../utils/Submit'
+import { Teams, Factions } from '../../utils/Select'
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
@@ -60,7 +60,8 @@ export const DeleteTeam = () => {
 
   const Submit = async () => {
     const id = toId(team)
-    await handleError(deleteTeam, id)
+    deleteTeam(id)
+    await handleError("Equipe supprimée !", "Une erreur est survenue", deleteTeam, id)
   }
 
   return (

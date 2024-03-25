@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Select from 'react-select'
 import { createRole, deleteRole } from '../../../services/requests/roles';
-import { toId, handleError } from '../utils/Submit'
-import { Roles } from '../utils/Select'
+import { toId, handleError } from '../../utils/Submit'
+import { Roles } from '../../utils/Select'
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
@@ -40,7 +40,7 @@ export const DeleteRole = () => {
 
   const Submit = async () => {
     const id = toId(Role)
-    await handleError(deleteRole, id)
+    await handleError("Rôle suprimé", "Une erreur est survenue", deleteRole, id)
   }
 
   return (

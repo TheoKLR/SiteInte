@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
-import { Role, Faction, User, Team, Event } from '../../../services/interfaces'
-import { getAllFactions, getAllTeams, getAllUsers } from '../../../services/requests'
-import { getAllRoles } from "../../../services/requests/roles"
-import { getActiveEvents, getInactiveEvents } from "../../../services/requests/events"
+import { Role, Faction, User, Team, Event } from '../../services/interfaces'
+import { getAllFactions, getAllTeams, getAllUsers } from '../../services/requests'
+import { getAllRoles } from "../../services/requests/roles"
+import { getActiveEvents, getInactiveEvents } from "../../services/requests/events"
 
 export const Roles = () => {
   const [options, setOptions] = useState([])

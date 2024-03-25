@@ -7,7 +7,7 @@ export const getAllTeams = async () => {
 }
 
 export const createTeam = async (name: string) => {
-    const newTeam: Team = { name, faction: null }
+    const newTeam: Team = { name, isOfficial: false, faction: null }
     return await db.insert(teamSchema).values(newTeam)
 }
 

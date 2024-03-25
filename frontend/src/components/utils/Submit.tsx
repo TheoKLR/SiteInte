@@ -14,15 +14,15 @@ export const toId = (json: any) => {
     return json.value
 }
 
-export const handleError = async (func: Function, ...args: any[]) => {
+export const handleError = async (success_msg: string, error_msg: string, func: Function, ...args: any[]) => {
     try {
         const response = await func(...args);
-        if (response.status !== 200) {
-            return toast.error("Failed Notification !");
+        if (response.status !== 200 || !response) {
+            return toast.error(error_msg);
         } 
-        return toast.success("Success Notification !");
+        return toast.success(success_msg);
     } catch (err) {
         console.error(err)
-        return toast.error("Failed Notification !");
+        return toast.error(error_msg);
     }
 }

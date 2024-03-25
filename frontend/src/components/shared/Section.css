@@ -1,4 +1,4 @@
-
+vw
 .container{
     width: 75vw;
     background: #fff;
@@ -26,6 +26,15 @@ hr{
 .contenu {
     padding: 20px;
 }
+
+@media screen and (max-width: 769px) {
+    .container {
+        width: 90vw;
+    }
+}
+
+
+
 
 
 

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { createFaction, deleteFaction } from '../../../services/requests/factions';
 import Select from 'react-select'
-import { toId } from '../utils/Submit'
-import { Factions } from '../utils/Select'
+import { toId } from '../../utils/Submit'
+import { Factions } from '../../utils/Select'
 
 
 export const CreateFaction = () => {

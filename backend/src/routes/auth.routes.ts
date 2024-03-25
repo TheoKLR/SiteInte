@@ -6,7 +6,7 @@ const authRouter = express.Router();
 
 authRouter.post('/register', registerMiddleware, ac.register);
 authRouter.post('/newStudentLogin', ac.newStudentLogin);
-authRouter.get('/studentLogin', ac.studentLogin);
+authRouter.get('/studentLogin/:authorization_code', ac.studentLogin);
 authRouter.get('/role', ac.getRole);
 
 export default authRouter;

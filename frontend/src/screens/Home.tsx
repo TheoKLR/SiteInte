@@ -13,7 +13,6 @@ const Home = () => {
         const fetchName = async () => {
             try {
                 const user = await getCurrentUser();
-                console.log(user);
                 if (!user) {
                     window.location.href = '/Login';
                     return null;

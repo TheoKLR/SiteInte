@@ -38,12 +38,23 @@ const LoginForm = () => {
         }
     }
 
+    const getAuthCode = () => {
+        const url = new URL(window.location.href);
+        const code = url.searchParams.get("authorization_code");
+        console.log(code);
+        return code
+    }
+
     const TryLogin = async () => {
         localStorage.setItem("tryLogin", "false");
+
         try {
-            const token = await studentLogin();
-            localStorage.setItem("authToken", token);
-            window.location.href = "/Home"
+            const code = getAuthCode();
+            if (code !== null){
+                const token = await studentLogin(code);
+                localStorage.setItem("authToken", token);
+                window.location.href = "/Home"
+            }
         } catch (err: any) {
             console.log(err)
         }

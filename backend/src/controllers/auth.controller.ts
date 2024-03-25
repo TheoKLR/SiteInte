@@ -47,7 +47,11 @@ export const newStudentLogin = async (req: Request, res: Response, next: NextFun
 
 export const studentLogin = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const etu_token = await getToken()
+        const { authorization_code } = req.params
+
+        if (!authorization_code) return Error(res, { msg : 'no auth code provided' });
+
+        const etu_token = await getToken(authorization_code)
         const user_data = await getUserData(etu_token)
 
         if (user_data === null) {

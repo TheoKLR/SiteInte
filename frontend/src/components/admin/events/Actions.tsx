@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { createFaction } from '../../../services/requests/factions';
 import { getActiveEvents, setActiveEvent, setInactiveEvent} from '../../../services/requests/events';
 import Select from 'react-select'
-import { InactiveEvents, ActiveEvents } from '../utils/Select';
-import { toId } from '../utils/Submit';
+import { InactiveEvents, ActiveEvents } from '../../utils/Select';
+import { toId } from '../../utils/Submit';
 
 export const StartEvent = () => {
     const [event, setEvent] = useState({} as any)
