@@ -17,12 +17,6 @@ export const getAllFactions = async () => {
     return response.data
 }
 
-// Obtention de la liste des rôles pouvant être tenus par les étudiants de l'UTT lors de l'Inté
-export const getAllDesires = async () => {
-    let response = await api.get('desire/all')
-    return response.data
-}
-
 // Création d'un rôle pouvant être tenu par les étudiants de l'UTT lors de l'Inté
 export const createDesire = async (name: string, desc: string) => {
     try {
@@ -74,8 +68,9 @@ export const studentLogin = async () => {
 
 // Obtention du rôle de l'étudiant
 export const getRole = async () => {
-    const response = await api.get('/user/current')
-    return response?.data?.data?.role
+    const response = await api.get('/auth/role')
+    console.log(response?.data?.data)
+    return response?.data?.data
 }
 
 export const getCurrentUser = async () => {

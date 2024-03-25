@@ -1,18 +1,19 @@
 import { useState, useEffect } from "react"
-import { Desire, Faction, User, Team, Event } from '../../../services/interfaces'
-import { getAllDesires, getAllFactions, getAllTeams, getAllUsers } from '../../../services/requests'
+import { Role, Faction, User, Team, Event } from '../../../services/interfaces'
+import { getAllFactions, getAllTeams, getAllUsers } from '../../../services/requests'
+import { getAllRoles } from "../../../services/requests/roles"
 import { getActiveEvents, getInactiveEvents } from "../../../services/requests/events"
 
-export const Desires = () => {
+export const Roles = () => {
   const [options, setOptions] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getAllDesires()
-        const usersOptions = response.data.map((desire: Desire) => ({
-          value: desire.id,
-          label: `${desire.name}`,
+        const response = await getAllRoles()
+        const usersOptions = response.data.map((role: Role) => ({
+          value: role.id,
+          label: `${role.name}`,
         }))
         setOptions(usersOptions)
       } catch (error) {

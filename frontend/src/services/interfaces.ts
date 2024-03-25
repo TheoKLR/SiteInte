@@ -15,7 +15,7 @@ export interface Faction {
     points: number;
 }
 
-export interface Desire {
+export interface Role {
     id: number;
     name: string;
     description: string;

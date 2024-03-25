@@ -6,7 +6,7 @@ import { Barbecue } from "../components/events/Barbecue";
 import { ShotgunPerm } from "../components/events/ShotgunPerm";
 import { Section } from "../components/shared/Section";
 import { getActiveEvents } from "../services/requests/events";
-import { toIdArray } from "../utils/utlis";
+import { toIdArray } from "../utils/utils";
 
 export const Events =  () => {
     const [activeEvents, setEvent] = useState<number[]>([]); 
@@ -22,11 +22,8 @@ export const Events =  () => {
                     window.location.href = '/Login';
                     return null;
                 }
-                console.log(activeEvents);
                 const activeEventsArray = toIdArray(activeEvents);
-                
                 setEventArray(activeEventsArray)
-                console.log(activeEventsArray);
                 return activeEventsArray;
             } catch (error) {
                 console.error('Error fetching role:', error);

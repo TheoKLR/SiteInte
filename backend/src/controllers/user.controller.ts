@@ -71,7 +71,7 @@ export const addContact = async (req: Request, res: Response, next: NextFunction
         Error(res, { error });
     }
 };
-
+/*
 export const getUserDesires = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const idNumber = parseInt(id, 10);
@@ -84,4 +84,4 @@ export const getUserDesires = async (req: Request, res: Response, next: NextFunc
     } catch (error) {
         Error(res, { error });
     }
-};
+}*/

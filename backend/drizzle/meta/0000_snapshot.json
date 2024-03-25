@@ -1,9 +1,136 @@
 {
-  "id": "37969ee0-f516-4a75-aea0-8ad84a64afca",
+  "id": "157fe96f-0376-4899-be1d-ecd846d9c793",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
   "tables": {
+    "challenge": {
+      "name": "challenge",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "challenge_name": {
+          "name": "challenge_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "challenge_desc": {
+          "name": "challenge_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "points": {
+          "name": "points",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "challenge_challenge_name_unique": {
+          "name": "challenge_challenge_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "challenge_name"
+          ]
+        }
+      }
+    },
+    "factionTochallenge": {
+      "name": "factionTochallenge",
+      "schema": "",
+      "columns": {
+        "faction_id": {
+          "name": "faction_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "challenge_id": {
+          "name": "challenge_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "factionTochallenge_faction_id_faction_id_fk": {
+          "name": "factionTochallenge_faction_id_faction_id_fk",
+          "tableFrom": "factionTochallenge",
+          "tableTo": "faction",
+          "columnsFrom": [
+            "faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "factionTochallenge_challenge_id_challenge_id_fk": {
+          "name": "factionTochallenge_challenge_id_challenge_id_fk",
+          "tableFrom": "factionTochallenge",
+          "tableTo": "challenge",
+          "columnsFrom": [
+            "challenge_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "event": {
+      "name": "event",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "event_name": {
+          "name": "event_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "state": {
+          "name": "state",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "event_event_name_unique": {
+          "name": "event_event_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "event_name"
+          ]
+        }
+      }
+    },
     "faction": {
       "name": "faction",
       "schema": "",
@@ -24,11 +151,110 @@
           "name": "points",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "faction_team_name_unique": {
+          "name": "faction_team_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "team_name"
+          ]
+        }
+      }
+    },
+    "role": {
+      "name": "role",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "role_name": {
+          "name": "role_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role_desc": {
+          "name": "role_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "role_role_name_unique": {
+          "name": "role_role_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "role_name"
+          ]
+        }
+      }
+    },
+    "userToRole": {
+      "name": "userToRole",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role_id": {
+          "name": "role_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isWish": {
+          "name": "isWish",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userToRole_user_id_user_id_fk": {
+          "name": "userToRole_user_id_user_id_fk",
+          "tableFrom": "userToRole",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userToRole_role_id_role_id_fk": {
+          "name": "userToRole_role_id_role_id_fk",
+          "tableFrom": "userToRole",
+          "tableTo": "role",
+          "columnsFrom": [
+            "role_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -72,7 +298,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "team_team_name_unique": {
+          "name": "team_team_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "team_name"
+          ]
+        }
+      }
     },
     "user": {
       "name": "user",
@@ -102,17 +336,23 @@
           "primaryKey": false,
           "notNull": true
         },
-        "password": {
-          "name": "password",
+        "contact": {
+          "name": "contact",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "role": {
-          "name": "role",
-          "type": "role",
+        "permission": {
+          "name": "permission",
+          "type": "permission",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         },
         "team": {
           "name": "team",
@@ -138,16 +378,27 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "user_email_unique": {
+          "name": "user_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      }
     }
   },
   "enums": {
-    "role": {
-      "name": "role",
+    "permission": {
+      "name": "permission",
       "values": {
-        "new_student": "new_student",
-        "student": "student",
-        "admin": "admin"
+        "newStudent": "newStudent",
+        "Student": "Student",
+        "Admin": "Admin",
+        "RespoCE": "RespoCE",
+        "Respo": "Respo",
+        "Anim": "Anim"
       }
     }
   },

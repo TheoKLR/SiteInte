@@ -1,6 +1,6 @@
 import { Navbar } from "../components/shared/Navbar"
 import { Section } from "../components/shared/Section"
-import { Choice } from "../components/choices/Choice"
+//import { Choice } from "../components/choices/Choice"
 import { useEffect } from "react";
 import { getRole } from "../services/requests";
 
@@ -24,7 +24,7 @@ export const Souhait = () => {
     return (
         <div className="Souhait">
             <Navbar />
-            <Section titre="Choisis ton rôle dans l'inté" contenu={Choice} />
         </div>
     )
 }
+//            <Section titre="Choisis ton rôle dans l'inté" contenu={Choice} />

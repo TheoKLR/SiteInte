@@ -15,8 +15,7 @@ export const CreateFaction = () => {
   };
 
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const test = evt.target.value
-    setName(test)
+    setName(evt.target.value)
   };
 
   return (

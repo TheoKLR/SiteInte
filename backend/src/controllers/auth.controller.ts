@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { RoleType } from '../schemas/user.schema'
+import { PermType } from '../schemas/user.schema'
 import * as service from '../services/user.service'
 import * as bcrypt from 'bcrypt'
 import { Error, Created, Ok } from '../utils/responses'
@@ -17,7 +17,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     const hashedPassword = await bcrypt.hash(password, 10)
 
     try {
-        await service.createUser(first_name, last_name, email, hashedPassword, RoleType.NewStudent)
+        await service.createUser(first_name, last_name, email, hashedPassword, PermType.NewStudent)
         Created(res, {})
     } catch (error) {
         Error(res, { error })
@@ -59,7 +59,7 @@ export const studentLogin = async (req: Request, res: Response, next: NextFuncti
         let user = await service.getUserByEmail(email)
 
         if (user === null) {
-            await service.createUser(firstName, lastName, email, "default", RoleType.Student)
+            await service.createUser(firstName, lastName, email, "default", PermType.Student)
             user = await service.getUserByEmail(email)
         }
 
@@ -79,7 +79,7 @@ export const getRole = async (req: Request, res: Response) => {
         if (user === null) {
             return Error(res, { msg: "user doesn't exists" })
         }
-        Ok(res, { data: user.role })
+        Ok(res, { data: user.permission })
     } catch (error) {
         Error(res, { error })
     }

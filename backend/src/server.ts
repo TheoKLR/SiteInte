@@ -20,7 +20,7 @@ app.use(isTokenValid);
 app.use('/user', userRouter);
 app.use('/team', teamRouter);
 app.use('/faction', factionRouter);
-app.use('/desire', desireRouter);
+app.use('/role', desireRouter);
 app.use('/event', eventRouter);
 
 app.listen(8000, () => {

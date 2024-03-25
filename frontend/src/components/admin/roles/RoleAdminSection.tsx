@@ -1,20 +1,21 @@
 import React from 'react';
 import AdminSection from '../AdminSection';
 import { AdminAction } from '../AdminSection';
+import { CreateRole, DeleteRole } from './Actions';
 
 
 
 
 const DesireAdminSection: React.FC = () => {
   const actions: AdminAction[] = [
-    /*{
-      title: 'Créer un souhait',
-      form: Create,
+    {
+      title: 'Créer un rôle',
+      form: <CreateRole/>,
     },
     {
-      title: 'Supprimer des souhaits',
-      form: Delete,
-    },*/
+      title: 'Supprimer un rôle',
+      form: <DeleteRole/>,
+    },
 ];
 
   return (

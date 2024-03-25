@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { getAllDesires, submitChoices } from '../../services/requests';
+import { useState } from 'react';
 
 
 // Formulaire pour que les étudiants de l'utt puissent choisir les rôles qui les intérresseraient pour l'inté
