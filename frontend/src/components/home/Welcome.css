@@ -18,3 +18,15 @@ h3{
    line-height: 30px; 
    margin-bottom: 10px;
 }
+
+@media screen and (max-width: 769px) {
+    .containerWelcome img{
+        width: 0;
+    }
+
+    .texte{
+        width: 90%;
+        margin: auto;
+    }
+
+}

@@ -55,7 +55,7 @@ const LoginForm = () => {
 
     const ETUconnection = () => {
         localStorage.setItem("tryLogin", "true");
-        window.location.href = "https://etu.utt.fr/api/oauth/authorize?client_id=50505771275&scope=public&response_type=code&state=xyz";
+        window.location.href = "https://etu.utt.fr/api/oauth/authorize?client_id=15906313225&scope=public&response_type=code&state=xyz";
     }
 
     // Frontend
