@@ -1,21 +1,53 @@
-import { StringInput } from "../utils/Inputs";
-import { Factions } from '../utils/Select';
-import Select from 'react-select';
+import { useState } from 'react';
+import { createFaction, deleteFaction } from '../../../services/requests/factions';
+import Select from 'react-select'
+import { toId } from '../utils/Submit'
+import { Factions } from '../utils/Select'
 
-export const Create = () => {
-    return (
-        <div className={"input-container"}>
-            <StringInput label="Name" />
-        </div>
-    );
-};
 
-export const Delete = () => {
-    return <div>
-      <Select
-        closeMenuOnSelect={false}
-        isMulti
-        options={Factions()}
-      />
+export const CreateFaction = () => {
+  const [name, setName] = useState('');
+
+  const handleSubmit = () => {
+    if (name !== '') {
+      createFaction(name);
+    }
+  };
+
+  const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setName(evt.target.value)
+  };
+
+  return (
+    <div>
+      <div>
+        <p>Nom</p>
+        <input type="text" onChange={handleChange} />
+      </div>
+      <button className="" onClick={handleSubmit}>Soumettre</button>
     </div>
+  );
 };
+
+export const DeleteFaction = () => {
+  const [faction, setFaction] = useState({} as any)
+
+  const Submit = () => {
+    const id = toId(faction)
+    if (id) {
+      deleteFaction(toId(faction))
+    }
+  }
+
+  return (
+    <div>
+      <div className="select-container">
+        <Select
+          options={Factions()}
+          onChange={faction => setFaction(faction)}
+        />
+      </div>
+      <button className="submit-button" onClick={Submit}>Soumettre</button>
+    </div>
+  )
+}

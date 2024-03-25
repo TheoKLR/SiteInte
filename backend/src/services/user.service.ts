@@ -1,6 +1,5 @@
 
-import { desireSchema, Desire, userToDesireSchema } from "../schemas/desire.schema"
-import { userSchema, User, RoleType } from "../schemas/user.schema"
+import { userSchema, User, PermType } from '../schemas/user.schema';
 import { db } from "../database/db"
 import { eq, and } from 'drizzle-orm'
 
@@ -10,7 +9,7 @@ export const getAllUsers = async () => {
         first_name: userSchema.first_name,
         last_name: userSchema.last_name,
         email: userSchema.email,
-        role: userSchema.role,
+        permission: userSchema.permission,
         team_id: userSchema.team,
     }).from(userSchema)
 }
@@ -21,7 +20,6 @@ export const getUser = async (id: number) => {
         first_name: userSchema.first_name,
         last_name: userSchema.id,
         email: userSchema.email,
-        role: userSchema.role,
         team_id: userSchema.team,
     }).from(userSchema).where(eq(userSchema.id, id))
 
@@ -33,7 +31,7 @@ export const getNewStudentByEmail = async (email: string) => {
     const user = await db.select().from(userSchema).where(
         and(
             eq(userSchema.email, email),
-            //eq(userSchema.role, "newStudent")
+            eq(userSchema.permission, PermType.NewStudent)
         )
     )
     if (user.length === 0) return null
@@ -48,11 +46,11 @@ export const getUserByEmail = async (email: string) => {
 }
 
 
-export const createUser = async (first_name: string, last_name: string, email: string, password: string, role: RoleType) => {
+export const createUser = async (first_name: string, last_name: string, email: string, password: string, permission: PermType) => {
     const allUser = await getAllUsers()
-    if (allUser.length === 0) role = RoleType.Admin
+    if (allUser.length === 0) permission = PermType.Admin
 
-    const newUser: User = { first_name, last_name, email, contact: null, password, role, team: null }
+    const newUser: User = { first_name, last_name, email, contact: null, permission, password, team: null }
     await db.insert(userSchema).values(newUser)
 }
 
@@ -61,10 +59,12 @@ export const deleteUser = async (id: number) => {
     await db.delete(userSchema).where(eq(userSchema.id, id))
 }
 
-export const addToTeam = async (UserId: number, TeamId: number) => {
-    await db.update(userSchema)
-        .set({ team: TeamId })
-        .where(eq(userSchema.id, UserId))
+export const addToTeam = async (UserIds: number[], TeamId: number) => {
+    for (const id of UserIds) {
+        await db.update(userSchema)
+            .set({ team: TeamId })
+            .where(eq(userSchema.id, id));
+    }
 }
 
 export const addContact = async (id: number, contact: string) => {
@@ -72,7 +72,7 @@ export const addContact = async (id: number, contact: string) => {
         .set({ contact: contact })
         .where(eq(userSchema.id, id))
 }
-
+/*
 export const getRole = async (id: number) => {
     return await db.select({ role: userSchema.role }).from(userSchema).where(eq(userSchema.id, id))
 }
@@ -83,4 +83,4 @@ export const getUserDesires = async (id: number) => {
         .rightJoin(desireSchema, eq(userToDesireSchema.desireId, desireSchema.id))
         .leftJoin(userSchema, eq(userToDesireSchema.userId, userSchema.id))
         .where(eq(userSchema.id, id))
-}
+}*/

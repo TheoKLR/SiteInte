@@ -1,42 +1,33 @@
-import { Users, Teams } from '../utils/Select';
-import "../utils/SubmitButton.css"
-import Select from 'react-select';
-import { useState } from 'react';
+import { Users, Teams } from '../utils/Select'
+import Select from 'react-select'
+import { useState } from 'react'
+import { toArray, toId } from '../utils/Submit'
+import { addToTeam } from '../../../services/requests/users'
 
 
 export const AddToTeam = () => {
-  return (
-    <div className={"select-container"}>
-      <Select
-        closeMenuOnSelect={false}
-        isMulti
-        options={Users()}
-      />
-      <Select
-        options={Teams()}
-      />
-    </div>
-  )
-}
-
-export const Delete = () => {
-  const [users, setUsers] = useState([] as any);
-
-  const handleSelectChange = (selectedOptions: any) => {
-    setUsers(selectedOptions);
-    console.log(selectedOptions); // Log the selectedOptions directly
-  };
+  const [users, setUsers] = useState([] as any)
+  const [team, setTeam] = useState({} as any)
 
   const Submit = () => {
-    
+    addToTeam(toArray(users), toId(team))
   }
 
-  return (<div>
-    <Select
-      closeMenuOnSelect={false}
-      isMulti
-      options={Users()}
-      onChange={handleSelectChange}
-    />
-  </div>)
+  return (
+    <div>
+      <div className="select-container">
+        <Select
+          closeMenuOnSelect={false}
+          isMulti
+          options={Users()}
+          onChange={users => setUsers(users)}
+        />
+        <Select
+          options={Teams()}
+          onChange={team => setTeam(team)}
+        />
+      </div>
+      <button className="submit-button" onClick={Submit}>Soumettre</button>
+    </div>
+  )
 }

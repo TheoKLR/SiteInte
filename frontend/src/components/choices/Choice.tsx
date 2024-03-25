@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+export {}
+/*import { useEffect, useRef, useState } from 'react';
 import { getAllDesires, submitChoices } from '../../services/requests';
 import './Choice.css';
 
@@ -77,3 +78,4 @@ export const Choice = () => {
         </>
     )
 }
+*/

@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/team.service';
 import { Error, Created, Ok } from '../utils/responses';
 
 
-export const getAllTeams = async (req: Request, res: Response) => {
+export const getAllTeams = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await service.getAllTeams();
     Ok(res, { data });
@@ -12,7 +12,7 @@ export const getAllTeams = async (req: Request, res: Response) => {
   }
 }
 
-export const getTeam = async (req: Request, res: Response) => {
+export const getTeam = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const idNumber = parseInt(id, 10);
 
@@ -26,7 +26,7 @@ export const getTeam = async (req: Request, res: Response) => {
   }
 };
 
-export const createTeam = async (req: Request, res: Response) => {
+export const createTeam = async (req: Request, res: Response, next: NextFunction) => {
   const { name } = req.body;
 
   name ?? Error(res, { msg: "No name" });
@@ -39,9 +39,10 @@ export const createTeam = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteTeam = async (req: Request, res: Response) => {
+export const deleteTeam = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const idNumber = parseInt(id, 10);
+  console.log(idNumber)
 
   if (isNaN(idNumber)) return Error(res, { msg : 'could not parse Id' });
 
@@ -53,11 +54,11 @@ export const deleteTeam = async (req: Request, res: Response) => {
   }
 };
 
-export const addTeamToFaction = async (req: Request, res: Response) => {
-  const { teamId, factionId } = req.body;
+export const addToFaction = async (req: Request, res: Response, next: NextFunction) => {
+  const { teamIds, factionId } = req.body;
 
   try {
-    await service.addTeamToFaction(teamId, factionId);
+    await service.addToFaction(teamIds, factionId);
     Ok(res, { msg: "Team modified" });
   } catch (error) {
     Error(res, { error });

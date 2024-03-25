@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { RoleType } from '../schemas/user.schema'
+import { PermType } from '../schemas/user.schema'
 import * as service from '../services/user.service'
 import * as bcrypt from 'bcrypt'
 import { Error, Created, Ok } from '../utils/responses'
@@ -8,7 +8,7 @@ import { jwtSecret } from '../utils/secret'
 import { decodeToken } from '../utils/token'
 import { getToken, getUserData } from '../utils/api_etu'
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response, next: NextFunction) => {
     const { first_name, last_name, email, password } = req.body
 
     first_name ?? Error(res, { msg: "No first name" })
@@ -17,14 +17,14 @@ export const register = async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(password, 10)
 
     try {
-        await service.createUser(first_name, last_name, email, hashedPassword, RoleType.NewStudent)
+        await service.createUser(first_name, last_name, email, hashedPassword, PermType.NewStudent)
         Created(res, {})
     } catch (error) {
         Error(res, { error })
     }
 }
 
-export const newStudentLogin = async (req: Request, res: Response) => {
+export const newStudentLogin = async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body
 
     try {
@@ -59,13 +59,12 @@ export const studentLogin = async (req: Request, res: Response, next: NextFuncti
         let user = await service.getUserByEmail(email)
 
         if (user === null) {
-            await service.createUser(firstName, lastName, email, "default", RoleType.Student)
+            await service.createUser(firstName, lastName, email, "default", PermType.Student)
             user = await service.getUserByEmail(email)
         }
 
         const id = user?.id
         const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
-        console.log(token)
         Ok(res, { data: { token } })
     } catch (error) {
         Error(res, { error })
@@ -80,7 +79,7 @@ export const getRole = async (req: Request, res: Response) => {
         if (user === null) {
             return Error(res, { msg: "user doesn't exists" })
         }
-        Ok(res, { data: user.role })
+        Ok(res, { data: user.permission })
     } catch (error) {
         Error(res, { error })
     }

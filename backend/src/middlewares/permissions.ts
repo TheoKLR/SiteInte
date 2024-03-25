@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { RoleType } from '../schemas/user.schema';
+import { PermType } from '../schemas/user.schema';
 import { Error, Unauthorized } from '../utils/responses';
 import { getUserByEmail } from '../services/user.service';
 import { decodeToken } from '../utils/token';
@@ -13,7 +13,7 @@ export const isAdmin = async (req: Request, res: Response, next: NextFunction) =
             return Error(res, { msg: "user doesn't exists" });
         }
 
-        if (user.role !== RoleType.NewStudent && user.role !== RoleType.Student) {
+        if (user.permission !== PermType.NewStudent && user.permission !== PermType.Student) {
             next();
         } else {
             Error(res, { msg: 'Forbidden: Insufficient permissions' });

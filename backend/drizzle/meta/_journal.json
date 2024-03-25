@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1706693198106,
-      "tag": "0000_regular_hercules",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1706786156514,
-      "tag": "0001_absent_ender_wiggin",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1707831224352,
-      "tag": "0002_demonic_freak",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1708099532170,
-      "tag": "0003_abandoned_epoch",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1708349786398,
-      "tag": "0004_blue_master_mold",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1708439701417,
-      "tag": "0005_freezing_paibok",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1710265698475,
-      "tag": "0006_military_overlord",
+      "when": 1711366410396,
+      "tag": "0000_melted_misty_knight",
       "breakpoints": true
     }
   ]

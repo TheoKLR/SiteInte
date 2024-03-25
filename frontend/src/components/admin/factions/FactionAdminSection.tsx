@@ -1,18 +1,17 @@
 import React from 'react';
 import AdminSection from '../AdminSection';
 import { AdminAction } from '../AdminSection';
-import {Create, Delete} from './Actions';
-
+import { CreateFaction, DeleteFaction } from './Actions';
 
 const DesireAdminSection: React.FC = () => {
   const actions: AdminAction[] = [
     {
       title: 'Créer une faction',
-      form: Create,
+      form: <CreateFaction/>,
     },
     {
-      title: 'Supprimer des Factions',
-      form: Delete,
+      title: 'Supprimer une faction',
+      form: <DeleteFaction/>,
     },
 ];
 

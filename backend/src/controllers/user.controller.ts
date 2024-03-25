@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/user.service';
 import { Error, Ok } from '../utils/responses';
 import { decodeToken } from '../utils/token';
 
-export const getAllUsers = async (req: Request, res: Response) => {
+export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const data = await service.getAllUsers();
         Ok(res, { data });
@@ -12,7 +12,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
     }
 }
 
-export const getUser = async (req: Request, res: Response) => {
+export const getUser = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const idNumber = parseInt(id, 10);
 
@@ -26,7 +26,7 @@ export const getUser = async (req: Request, res: Response) => {
     }
 };
 
-export const getCurentUser = async (req: Request, res: Response) => {
+export const getCurentUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const decodedToken = decodeToken(req)
         const data = await service.getUser(decodedToken.id);
@@ -36,7 +36,7 @@ export const getCurentUser = async (req: Request, res: Response) => {
     }
 }
 
-export const deleteUser = async (req: Request, res: Response) => {
+export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const idNumber = parseInt(id, 10);
 
@@ -50,18 +50,18 @@ export const deleteUser = async (req: Request, res: Response) => {
     }
 };
 
-export const addToTeam = async (req: Request, res: Response) => {
-    const { UserId, TeamId } = req.body;
+export const addToTeam = async (req: Request, res: Response, next: NextFunction) => {
+    const { userIds, teamId } = req.body;
 
     try {
-        await service.addToTeam(UserId, TeamId);
+        await service.addToTeam(userIds, teamId);
         Ok(res, { msg: "User modified" });
     } catch (error) {
         Error(res, { error });
     }
 };
 
-export const addContact = async (req: Request, res: Response) => {
+export const addContact = async (req: Request, res: Response, next: NextFunction) => {
     const { userId, contact } = req.body;
 
     try {
@@ -71,8 +71,8 @@ export const addContact = async (req: Request, res: Response) => {
         Error(res, { error });
     }
 };
-
-export const getUserDesires = async (req: Request, res: Response) => {
+/*
+export const getUserDesires = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const idNumber = parseInt(id, 10);
 
@@ -84,4 +84,4 @@ export const getUserDesires = async (req: Request, res: Response) => {
     } catch (error) {
         Error(res, { error });
     }
-};
+}*/

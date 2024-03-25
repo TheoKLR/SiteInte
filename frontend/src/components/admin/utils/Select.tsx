@@ -1,17 +1,19 @@
 import { useState, useEffect } from "react"
-import { Desire, Faction, User, Team } from '../../../services/interfaces'
-import { getAllDesires, getAllFactions, getAllTeams, getAllUsers } from '../../../services/requests'
+import { Role, Faction, User, Team, Event } from '../../../services/interfaces'
+import { getAllFactions, getAllTeams, getAllUsers } from '../../../services/requests'
+import { getAllRoles } from "../../../services/requests/roles"
+import { getActiveEvents, getInactiveEvents } from "../../../services/requests/events"
 
-export const Desires = () => {
+export const Roles = () => {
   const [options, setOptions] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getAllDesires()
-        const usersOptions = response.data.map((desire: Desire) => ({
-          value: desire.id,
-          label: `${desire.name}`,
+        const response = await getAllRoles()
+        const usersOptions = response.data.map((role: Role) => ({
+          value: role.id,
+          label: `${role.name}`,
         }))
         setOptions(usersOptions)
       } catch (error) {
@@ -79,9 +81,55 @@ export const Users = () => {
     const fetchData = async () => {
       try {
         const response = await getAllUsers()
-        const usersOptions = response.data.map((user: User) => ({
+        const usersOptions = response.map((user: User) => ({
           value: user.id,
           label: `${user.first_name} ${user.last_name}`,
+        }))
+        setOptions(usersOptions)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return options
+}
+
+export const InactiveEvents = () => {
+  const [options, setOptions] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getInactiveEvents()
+        const usersOptions = response.map((event: Event) => ({
+          value: event.id,
+          label: `${event.name}`,
+        }))
+        setOptions(usersOptions)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return options
+}
+
+export const ActiveEvents = () => {
+  const [options, setOptions] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getActiveEvents()
+        const usersOptions = response.map((event: Event) => ({
+          value: event.id,
+          label: `${event.name}`,
         }))
         setOptions(usersOptions)
       } catch (error) {

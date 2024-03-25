@@ -15,9 +15,14 @@ export interface Faction {
     points: number;
 }
 
-export interface Desire {
+export interface Role {
     id: number;
     name: string;
     description: string;
+}
+
+export interface Event {
+    id: number;
+    name: string;
 }
 

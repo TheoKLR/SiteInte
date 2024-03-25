@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/faction.service';
 import { Error, Created, Ok } from '../utils/responses';
 
 
-export const getAllFactions = async (req: Request, res: Response) => {
+export const getAllFactions = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await service.getAllFactions();
     Ok(res, { data });
@@ -12,7 +12,7 @@ export const getAllFactions = async (req: Request, res: Response) => {
   }
 }
 
-export const getFaction = async (req: Request, res: Response) => {
+export const getFaction = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const idNumber = parseInt(id, 10);
 
@@ -26,7 +26,7 @@ export const getFaction = async (req: Request, res: Response) => {
   }
 };
 
-export const createFaction = async (req: Request, res: Response) => {
+export const createFaction = async (req: Request, res: Response, next: NextFunction) => {
   const { name } = req.body;
 
   name ?? Error(res, { msg: "No name" });
@@ -39,7 +39,7 @@ export const createFaction = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteFaction = async (req: Request, res: Response) => {
+export const deleteFaction = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const idNumber = parseInt(id, 10);
 
@@ -53,7 +53,7 @@ export const deleteFaction = async (req: Request, res: Response) => {
   }
 };
 
-export const addPoints = async (req: Request, res: Response) => {
+export const addPoints = async (req: Request, res: Response, next: NextFunction) => {
   const { id, points } = req.body;
 
   try {

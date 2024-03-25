@@ -1,5 +1,4 @@
 import { api } from './api';
-import { Delete } from '../components/admin/users/Actions';
 
 // Obtention de la liste des Utilisateurs enregistrés dans la db
 export const getAllUsers = async () => {
@@ -15,12 +14,6 @@ export const getAllTeams = async () => {
 
 export const getAllFactions = async () => {
     const response = await api.get('faction/all')
-    return response.data
-}
-
-// Obtention de la liste des rôles pouvant être tenus par les étudiants de l'UTT lors de l'Inté
-export const getAllDesires = async () => {
-    let response = await api.get('desire/all')
     return response.data
 }
 
@@ -75,8 +68,9 @@ export const studentLogin = async () => {
 
 // Obtention du rôle de l'étudiant
 export const getRole = async () => {
-    const response = await api.get('/user/current')
-    return response?.data?.data?.role
+    const response = await api.get('/auth/role')
+    console.log(response?.data?.data)
+    return response?.data?.data
 }
 
 export const getCurrentUser = async () => {

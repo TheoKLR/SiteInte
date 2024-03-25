@@ -15,7 +15,6 @@ export const Navbar: React.FC = () => {
         const fetchRole = async () => {
             try {
                 const role = await getRole();
-                console.log(role)
                 setRole(role);
             } catch (error) {
                 console.error('Error fetching role:', error);
