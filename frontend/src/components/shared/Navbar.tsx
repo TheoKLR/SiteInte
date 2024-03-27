@@ -36,7 +36,7 @@ export const Navbar: React.FC = () => {
                     {role !== 'Student' && <li><a href="/Mails">Mails</a></li>}
                     {role !== 'Student' && <li><a href="/Parrainage">Parrainage</a></li>}
                     {role !== 'Student' && <li><a href="/Wei">WEI</a></li>}
-                    {role === 'Student' && <li><a href="Souhait">Souhait</a></li>}
+                    { <li><a href="Souhait">Souhait</a></li>}
                 </ul>
             </div>
             <div id="burger" onClick={handleClick}>

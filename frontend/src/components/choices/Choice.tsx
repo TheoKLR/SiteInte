@@ -1,6 +1,7 @@
-export {}
-/*import { useEffect, useRef, useState } from 'react';
-import { getAllDesires, submitChoices } from '../../services/requests';
+
+import { useEffect, useRef, useState } from 'react';
+import { submitChoices } from '../../services/requests';
+import { getAllRoles } from '../../services/requests/roles';
 import './Choice.css';
 
 // Formulaire pour que les étudiants de l'utt puissent choisir les rôles qui les intérresseraient pour l'inté
@@ -47,7 +48,7 @@ export const Choice = () => {
 
     // récupération des choix de rôle existants dans la db
     useEffect(() => {
-        getAllDesires()
+        getAllRoles()
         .then(res => {
             const data = res.data;
             setDesires(data);
@@ -64,18 +65,29 @@ export const Choice = () => {
             <div className='containerChoix'>
                 <p>L'inté a besoin de beaucoup de gens dans de nombreux domaines. Choisis ton rôle afin d'aider au mieux!</p><br />
                 <div className='inputs'>   
-                {desires.map((desire, index) => (
-                    <div key={index}>
-                        <input type="checkbox" value={desire.id} onChange={handleChange}/> {desire.name} : {desire.description}
+                <form onSubmit={handleSubmit}>
+                    {desires.map((desire, index) => (                       
+                        <div className="checkbox-wrapper-1" key={index}>
+                            <input id="example-1" className="substituted" type="checkbox" aria-hidden="true" value={desire.id} onChange={handleChange} />
+                            <label htmlFor="example-1">{desire.name} : {desire.description}</label>
+                        </div>
+                    ))}
+                    <br />
+                    <div className='reglementation'>
+                        <h3>Règlementation légale</h3>
+                        <p>gzjnngrjzng</p>
+                        <div className="checkbox-wrapper-1">
+                            <input id="example-1" className="substituted" type="checkbox" aria-hidden="true" required />
+                            <label htmlFor="example-1">J'accepte et m'engage à respecter l'article ci-dessus</label>
+                        </div>
                     </div>
-                ))}
-                <br />
-                    <button onClick={handleSubmit}>Valider</button>
+                    <button type='submit' className="login-button" id='boutonChoice'>Valider</button>
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                     <p className={success ? "success" : "offscreen"} aria-live="assertive">{successMsg}</p>
+                </form>
+               
                 </div>
             </div>
         </>
     )
 }
-*/
