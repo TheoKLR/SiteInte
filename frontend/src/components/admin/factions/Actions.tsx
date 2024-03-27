@@ -11,6 +11,7 @@ export const CreateFaction = () => {
   const handleSubmit = () => {
     if (name !== '') {
       createFaction(name);
+      setName('');
     }
   };
 
@@ -22,7 +23,7 @@ export const CreateFaction = () => {
     <div>
       <div>
         <p>Nom</p>
-        <input type="text" onChange={handleChange} />
+        <input type="text" value={name} onChange={handleChange} />
       </div>
       <button className="" onClick={handleSubmit}>Soumettre</button>
     </div>
@@ -36,6 +37,7 @@ export const DeleteFaction = () => {
     const id = toId(faction)
     if (id) {
       deleteFaction(toId(faction))
+      setFaction('');
     }
   }
 
@@ -45,6 +47,7 @@ export const DeleteFaction = () => {
         <Select
           options={Factions()}
           onChange={faction => setFaction(faction)}
+          value={faction}
         />
       </div>
       <button className="submit-button" onClick={Submit}>Soumettre</button>

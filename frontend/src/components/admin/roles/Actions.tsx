@@ -10,8 +10,12 @@ export const CreateRole = () => {
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
 
-  const handleSubmit = () => {
-    if (name !== '') createRole(name, desc)
+  const handleSubmit = async () => {
+    if (name !== '') {
+      createRole(name, desc);
+      setDesc('');
+      setName('');
+    }
   };
 
   const handleNameChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,9 +30,9 @@ export const CreateRole = () => {
     <div>
       <div>
         <p>Nom</p>
-        <input type="text" onChange={handleNameChange} />
+        <input type="text" value={name} onChange={handleNameChange} />
         <p>Description</p>
-        <input type="text" onChange={handleDescChange} />
+        <input type="text" value={desc} onChange={handleDescChange} />
       </div>
       <button className="" onClick={handleSubmit}>Soumettre</button>
     </div>
@@ -41,6 +45,7 @@ export const DeleteRole = () => {
   const Submit = async () => {
     const id = toId(Role)
     await handleError("Rôle suprimé", "Une erreur est survenue", deleteRole, id)
+    setRole('');
   }
 
   return (
@@ -49,6 +54,7 @@ export const DeleteRole = () => {
         <Select
           options={Roles()}
           onChange={Role => setRole(Role)}
+          value={Role}
         />
       </div>
       <button className="submit-button" onClick={Submit}>Soumettre</button>

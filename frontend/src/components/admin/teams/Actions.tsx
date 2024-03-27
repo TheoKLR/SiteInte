@@ -9,8 +9,11 @@ import "react-toastify/dist/ReactToastify.css";
 export const CreateTeam = () => {
   const [name, setName] = useState('');
 
-  const handleSubmit = () => {
-    if (name !== '') createTeam(name)
+  const handleSubmit = async () => {
+    if (name !== ''){
+      createTeam(name);
+      setName('');
+    }
   };
 
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +24,7 @@ export const CreateTeam = () => {
     <div>
       <div>
         <p>Nom</p>
-        <input type="text" onChange={handleChange} />
+        <input type="text" value={name} onChange={handleChange} />
       </div>
       <button className="" onClick={handleSubmit}>Soumettre</button>
     </div>
@@ -33,19 +36,23 @@ export const AddToFaction = () => {
   const [teams, setTeams] = useState({} as any)
 
   const Submit = () => {
-    addToFaction(toArray(teams), toId(faction))
+    addToFaction(toArray(teams), toId(faction));
+    setFaction('');
+    setTeams('');
   }
 
   return (
     <div>
       <div className="select-container">
         <Select
+        value={teams}
           closeMenuOnSelect={false}
           isMulti
           options={Teams()}
           onChange={teams => setTeams(teams)}
         />
         <Select
+          value={faction}
           options={Factions()}
           onChange={faction => setFaction(faction)}
         />
@@ -62,12 +69,14 @@ export const DeleteTeam = () => {
     const id = toId(team)
     deleteTeam(id)
     await handleError("Equipe supprimée !", "Une erreur est survenue", deleteTeam, id)
+    setTeam('');
   }
 
   return (
     <div>
       <div className="select-container">
         <Select
+          value={team}
           options={Teams()}
           onChange={team => setTeam(team)}
         />

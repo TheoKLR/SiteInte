@@ -12,6 +12,7 @@ export const StartEvent = () => {
         const id = toId(event)
         if (id) {
             setActiveEvent(id)
+            setEvent('');
         }
     }
 
@@ -21,6 +22,7 @@ export const StartEvent = () => {
                 <Select
                 options={InactiveEvents()}
                 onChange={event => setEvent(event)}
+                value={event}
                 />
             </div>
             <button className="submit-button" onClick={Submit}>Soumettre</button>
@@ -36,6 +38,7 @@ export const StopEvent = () => {
         const id = toId(event)
         if (id) {
             setInactiveEvent(id)
+            setEvent('');
         }
     }
 
@@ -45,6 +48,7 @@ export const StopEvent = () => {
                 <Select
                 options={ActiveEvents()}
                 onChange={event => setEvent(event)}
+                value={event}
                 />
             </div>
             <button className="submit-button" onClick={Submit}>Soumettre</button>
