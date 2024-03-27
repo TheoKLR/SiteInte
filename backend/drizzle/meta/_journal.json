@@ -8,6 +8,13 @@
       "when": 1711375642614,
       "tag": "0001_certain_kulan_gath",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1711548496035,
+      "tag": "0002_chilly_romulus",
+      "breakpoints": true
     }
   ]
 }

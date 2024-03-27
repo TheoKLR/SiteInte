@@ -5,7 +5,7 @@ export const teamSchema = pgTable('team', {
     id: serial('id').primaryKey(),
     isOfficial: boolean('isOfficial').notNull(),
     timeCode: timestamp('timeCode'),
-    name: text('team_name').notNull().unique(),
+    name: text('team_name').notNull(),
     faction: integer('city_id').references(() => factionSchema.id)
 });
 
