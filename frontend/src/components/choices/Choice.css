@@ -19,6 +19,10 @@
     width: 15%;
 }
 
+h4{
+    font-weight:700;
+}
+
 .checkbox-wrapper-1{
     margin-bottom: 10px;
 }
