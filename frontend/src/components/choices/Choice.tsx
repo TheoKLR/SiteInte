@@ -68,8 +68,8 @@ export const Choice = () => {
                 <form onSubmit={handleSubmit}>
                     {desires.map((desire, index) => (                       
                         <div className="checkbox-wrapper-1" key={index}>
-                            <input id="example-1" className="substituted" type="checkbox" aria-hidden="true" value={desire.id} onChange={handleChange} />
-                            <label htmlFor="example-1">{desire.name} : {desire.description}</label>
+                            <input id={index.toString()} className="substituted" type="checkbox" aria-hidden="true" value={desire.id} onChange={handleChange} />
+                            <label htmlFor={index.toString()}>{desire.name} : {desire.description}</label>
                         </div>
                     ))}
                     <br />
@@ -77,8 +77,8 @@ export const Choice = () => {
                         <h3>Règlementation légale</h3>
                         <p>gzjnngrjzng</p>
                         <div className="checkbox-wrapper-1">
-                            <input id="example-1" className="substituted" type="checkbox" aria-hidden="true" required />
-                            <label htmlFor="example-1">J'accepte et m'engage à respecter l'article ci-dessus</label>
+                            <input id="btnLegal" className="substituted" type="checkbox" aria-hidden="true" required />
+                            <label htmlFor="btnLegal">J'accepte et m'engage à respecter l'article ci-dessus</label>
                         </div>
                     </div>
                     <button type='submit' className="login-button" id='boutonChoice'>Valider</button>
