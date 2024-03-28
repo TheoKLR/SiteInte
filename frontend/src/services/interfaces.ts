@@ -7,6 +7,7 @@ export interface User {
 export interface Team {
     id: number;
     name: string;
+    faction:number;
 }
 
 export interface Faction {

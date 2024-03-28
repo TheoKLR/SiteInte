@@ -1,5 +1,5 @@
 {
-  "id": "94c23cf2-77e2-4d64-ad3f-8f3d21db353b",
+  "id": "10e79637-6f97-41e9-b390-18c9bef82e41",
   "prevId": "069ff296-2ee9-42af-9af7-05bbaad585e0",
   "version": "5",
   "dialect": "pg",
@@ -310,7 +310,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "team_team_name_unique": {
+          "name": "team_team_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "team_name"
+          ]
+        }
+      }
     },
     "user": {
       "name": "user",

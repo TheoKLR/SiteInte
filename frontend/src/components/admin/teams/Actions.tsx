@@ -23,7 +23,7 @@ export const CreateTeam = () => {
     <div>
       <div>
         <p>Nom</p>
-        <input type="text" onChange={handleChange} />
+        <input type="text" value={name} onChange={handleChange} />
       </div>
       <button className="" onClick={handleSubmit}>Soumettre</button>
       <ToastContainer position="bottom-right"/>
@@ -45,12 +45,14 @@ export const AddToFaction = () => {
     <div>
       <div className="select-container">
         <Select
+        value={teams}
           closeMenuOnSelect={false}
           isMulti
           options={Teams()}
           onChange={teams => setTeams(teams)}
         />
         <Select
+          value={faction}
           options={Factions()}
           onChange={faction => setFaction(faction)}
         />
@@ -68,12 +70,14 @@ export const DeleteTeam = () => {
     const id = toId(team)
     deleteTeam(id)
     await handleError("Equipe supprimée !", "Une erreur est survenue", deleteTeam, id)
+    setTeam('');
   }
 
   return (
     <div>
       <div className="select-container">
         <Select
+          value={team}
           options={Teams()}
           onChange={team => setTeam(team)}
         />

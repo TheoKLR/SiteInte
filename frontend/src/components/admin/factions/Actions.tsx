@@ -12,6 +12,8 @@ export const CreateFaction = () => {
   const handleSubmit = async () => {
     if (name !== '') {
       await handleError("Faction créée !", "Une erreur est survenue", createFaction, name)
+      createFaction(name);
+      setName('');
     }
   };
 
@@ -23,7 +25,7 @@ export const CreateFaction = () => {
     <div>
       <div>
         <p>Nom</p>
-        <input type="text" onChange={handleChange} />
+        <input type="text" value={name} onChange={handleChange} />
       </div>
       <button className="" onClick={handleSubmit}>Soumettre</button>
       <ToastContainer position="bottom-right"/>
@@ -45,6 +47,7 @@ export const DeleteFaction = () => {
         <Select
           options={Factions()}
           onChange={faction => setFaction(faction)}
+          value={faction}
         />
       </div>
       <button className="submit-button" onClick={Submit}>Soumettre</button>

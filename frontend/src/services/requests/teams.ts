@@ -23,3 +23,9 @@ export const setTimestamp = async (timestamp: number) => {
         console.error("Erreur lors de l'envoi de la candidature CE lors du shotgun");
     }
 }
+
+// Obtention de la liste des équipes enregistrées dans la db
+export const getAllTeams = async () => {
+    const response = await api.get('team/all')
+    return response.data
+}
