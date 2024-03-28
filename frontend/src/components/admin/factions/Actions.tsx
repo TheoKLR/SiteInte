@@ -3,14 +3,15 @@ import { createFaction, deleteFaction } from '../../../services/requests/faction
 import Select from 'react-select'
 import { toId } from '../../utils/Submit'
 import { Factions } from '../../utils/Select'
-
+import { handleError } from '../../utils/Submit';
+import { ToastContainer } from 'react-toastify';
 
 export const CreateFaction = () => {
   const [name, setName] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (name !== '') {
-      createFaction(name);
+      await handleError("Faction créée !", "Une erreur est survenue", createFaction, name)
     }
   };
 
@@ -25,6 +26,7 @@ export const CreateFaction = () => {
         <input type="text" onChange={handleChange} />
       </div>
       <button className="" onClick={handleSubmit}>Soumettre</button>
+      <ToastContainer position="bottom-right"/>
     </div>
   );
 };
@@ -32,11 +34,9 @@ export const CreateFaction = () => {
 export const DeleteFaction = () => {
   const [faction, setFaction] = useState({} as any)
 
-  const Submit = () => {
+  const Submit = async () => {
     const id = toId(faction)
-    if (id) {
-      deleteFaction(toId(faction))
-    }
+    await handleError("Faction créée !", "Une erreur est survenue", deleteFaction, id)
   }
 
   return (
@@ -48,6 +48,7 @@ export const DeleteFaction = () => {
         />
       </div>
       <button className="submit-button" onClick={Submit}>Soumettre</button>
+      <ToastContainer position="bottom-right"/>
     </div>
   )
 }

@@ -81,7 +81,7 @@ export const Users = () => {
     const fetchData = async () => {
       try {
         const response = await getAllUsers()
-        const usersOptions = response.map((user: User) => ({
+        const usersOptions = response.data.map((user: User) => ({
           value: user.id,
           label: `${user.first_name} ${user.last_name}`,
         }))

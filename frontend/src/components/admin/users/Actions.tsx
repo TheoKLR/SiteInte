@@ -3,14 +3,17 @@ import Select from 'react-select'
 import { useState } from 'react'
 import { toArray, toId } from '../../utils/Submit'
 import { addToTeam } from '../../../services/requests/users'
-
+import { handleError } from '../../utils/Submit'
+import { ToastContainer } from 'react-toastify'
 
 export const AddToTeam = () => {
   const [users, setUsers] = useState([] as any)
   const [team, setTeam] = useState({} as any)
 
-  const Submit = () => {
-    addToTeam(toArray(users), toId(team))
+  const Submit = async () => {
+    const u = toArray(users)
+    const id = toId(team)
+    await handleError("Utilisateur ajouté !", "Une erreur est survenue", addToTeam, u, id)
   }
 
   return (
@@ -28,6 +31,7 @@ export const AddToTeam = () => {
         />
       </div>
       <button className="submit-button" onClick={Submit}>Soumettre</button>
+      <ToastContainer position="bottom-right"/>
     </div>
   )
 }

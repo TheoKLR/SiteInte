@@ -10,8 +10,10 @@ export const CreateRole = () => {
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
 
-  const handleSubmit = () => {
-    if (name !== '') createRole(name, desc)
+  const handleSubmit = async () => {
+    if (name !== '' && desc !== '') {
+      await handleError("Role créé !", "Une erreur est survenue", createRole, name, desc)
+    }
   };
 
   const handleNameChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,6 +33,7 @@ export const CreateRole = () => {
         <input type="text" onChange={handleDescChange} />
       </div>
       <button className="" onClick={handleSubmit}>Soumettre</button>
+      <ToastContainer position="bottom-right"/>
     </div>
   );
 };
@@ -52,9 +55,7 @@ export const DeleteRole = () => {
         />
       </div>
       <button className="submit-button" onClick={Submit}>Soumettre</button>
-      <ToastContainer
-        position="bottom-right"
-      />
+      <ToastContainer position="bottom-right"/>
     </div>
   )
 }

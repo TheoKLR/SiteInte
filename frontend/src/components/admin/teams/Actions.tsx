@@ -9,8 +9,10 @@ import "react-toastify/dist/ReactToastify.css";
 export const CreateTeam = () => {
   const [name, setName] = useState('');
 
-  const handleSubmit = () => {
-    if (name !== '') createTeam(name)
+  const handleSubmit = async () => {
+    if (name !== '') {
+      await handleError("Equipe créée !", "Une erreur est survenue", createTeam, name)
+    }
   };
 
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,6 +26,7 @@ export const CreateTeam = () => {
         <input type="text" onChange={handleChange} />
       </div>
       <button className="" onClick={handleSubmit}>Soumettre</button>
+      <ToastContainer position="bottom-right"/>
     </div>
   );
 };
@@ -32,8 +35,10 @@ export const AddToFaction = () => {
   const [faction, setFaction] = useState([] as any)
   const [teams, setTeams] = useState({} as any)
 
-  const Submit = () => {
-    addToFaction(toArray(teams), toId(faction))
+  const Submit = async () => {
+    const t = toArray(teams)
+    const id = toId(faction)
+    await handleError("Equipe ajoutée !", "Une erreur est survenue", addToFaction, t, id)
   }
 
   return (
@@ -51,6 +56,7 @@ export const AddToFaction = () => {
         />
       </div>
       <button className="submit-button" onClick={Submit}>Soumettre</button>
+      <ToastContainer position="bottom-right"/>
     </div>
   )
 }
@@ -73,9 +79,7 @@ export const DeleteTeam = () => {
         />
       </div>
       <button className="submit-button" onClick={Submit}>Soumettre</button>
-      <ToastContainer
-        position="bottom-right"
-      />
+      <ToastContainer position="bottom-right"/>
     </div>
   )
 }

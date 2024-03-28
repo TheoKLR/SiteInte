@@ -41,7 +41,6 @@ const LoginForm = () => {
     const getAuthCode = () => {
         const url = new URL(window.location.href);
         const code = url.searchParams.get("authorization_code");
-        console.log(code);
         return code
     }
 
