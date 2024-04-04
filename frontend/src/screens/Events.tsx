@@ -4,6 +4,7 @@ import { getRole } from "../services/requests";
 import { ShotgunCE} from "../components/events/ShotgunCE";
 import { Barbecue } from "../components/events/Barbecue";
 import { ShotgunPerm } from "../components/events/ShotgunPerm";
+import { PreInscription } from "../components/events/PreinscriptionCE";
 import { Section } from "../components/shared/Section";
 import { getActiveEvents } from "../services/requests/events";
 import { toIdArray } from "../utils/utils";
@@ -19,7 +20,7 @@ export const Events =  () => {
                 //tableau avec les noms des events actifs
                 const activeEvents = await getActiveEvents();
                 if (!role) {
-                    window.location.href = '/Login';
+                    window.location.href = '/';
                     return null;
                 }
                 const activeEventsArray = toIdArray(activeEvents);
@@ -33,23 +34,26 @@ export const Events =  () => {
         init();
     }, []);
 
-
-
     return (
         <div className="Events">
-            <Navbar/>  
+            <Navbar/>
             {
                activeEventsArray.includes(1) ? (
+                <Section titre="Pre-inscription" contenu={PreInscription} />
+               ):null
+            }
+            {
+               activeEventsArray.includes(2) ? (
                 <Section titre="ShotgunCE" contenu={ShotgunCE} />
                ):null
             }
             {
-                activeEventsArray.includes(2) ? (
+                activeEventsArray.includes(3) ? (
                     <Section titre="ShotgunPerm" contenu={ShotgunPerm} />
                 ):null
             }
             {
-                activeEventsArray.includes(3) ? (
+                activeEventsArray.includes(4) ? (
                     <Section titre="Barbecue" contenu={Barbecue} />
                 ):null
             }

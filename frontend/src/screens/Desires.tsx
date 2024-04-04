@@ -10,7 +10,7 @@ export const Souhait = () => {
             try {
                 const role = await getRole();
                 if (!role) {
-                    window.location.href = '/Login';
+                    window.location.href = '/';
                     return null;
                 }
             } catch (error) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import AdminSection from '../AdminSection';
 import { AdminAction } from '../AdminSection';
-import { CreateFaction, DeleteFaction } from './Actions';
+import { CreateFaction, DeleteFaction, TableFaction } from './Actions';
 
 const DesireAdminSection: React.FC = () => {
   const actions: AdminAction[] = [
@@ -12,6 +12,10 @@ const DesireAdminSection: React.FC = () => {
     {
       title: 'Supprimer une faction',
       form: <DeleteFaction/>,
+    },
+    {
+      title: 'Affichage Faction',
+      form: <TableFaction/>,
     },
 ];
 

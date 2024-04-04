@@ -1,10 +1,13 @@
 import { Users, Teams } from '../../utils/Select'
 import Select from 'react-select'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toArray, toId } from '../../utils/Submit'
 import { addToTeam } from '../../../services/requests/users'
 import { handleError } from '../../utils/Submit'
 import { ToastContainer } from 'react-toastify'
+import { User } from '../../../services/interfaces'
+import { getAllUsers } from '../../../services/requests'
+import { toTable } from '../../utils/Tables'
 
 export const AddToTeam = () => {
   const [users, setUsers] = useState([] as any)
@@ -34,4 +37,24 @@ export const AddToTeam = () => {
       <ToastContainer position="bottom-right"/>
     </div>
   )
+}
+
+
+export const TableUser = () => {
+
+  const [users, setUsers] = useState<User[]>([]);
+
+    useEffect(() => {
+        const fetchRole = async () => {
+            try {
+                const response = await getAllUsers();
+                setUsers(response.data)
+            } catch (error) {
+                console.error('Error fetching role:', error);
+            }
+        };
+        fetchRole();
+    }, []);
+
+  return users.length > 0 ? toTable(users) : null;
 }

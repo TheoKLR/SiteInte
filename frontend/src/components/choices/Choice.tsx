@@ -100,7 +100,7 @@ export const Choice = () => {
                             <label htmlFor="btnLegal">Je comprends l'objectif de l'intégration et je comprends que mes actions peuvent être punies par une sanction disciplinaire et une peine d'emprisonnement et 15 000 € d'amende.</label>
                         </div>
                     </div>
-                    <button type='submit' className="login-button" id='boutonChoice'>Valider</button>
+                    <button type='submit' className="login-button, button-36" id='boutonChoice'>Valider</button>
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                     <p className={success ? "success" : "offscreen"} aria-live="assertive">{successMsg}</p>
                 </form>

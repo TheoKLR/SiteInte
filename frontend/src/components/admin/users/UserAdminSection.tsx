@@ -1,6 +1,6 @@
 import React from 'react';
 import AdminSection from '../AdminSection';
-import { AddToTeam } from './Actions';
+import { AddToTeam, TableUser } from './Actions';
 import { AdminAction } from '../AdminSection';
 
 const UserAdminSection: React.FC = () => {
@@ -8,6 +8,10 @@ const UserAdminSection: React.FC = () => {
     {
       title: 'Ajouter à une équipe',
       form: <AddToTeam/>,
+    },
+    {
+      title: 'Affichage utilisateurs',
+      form: <TableUser/>,
     },
   ];
 

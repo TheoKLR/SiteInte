@@ -9,7 +9,7 @@ export const deleteTeam = async (id: number) => {
 }
 
 export const addToFaction = async (teamIds: number[], factionId: number) => {
-    await api.put('team/addtofaction', {
+    return await api.put('team/addtofaction', {
         teamIds,
         factionId,
     })
