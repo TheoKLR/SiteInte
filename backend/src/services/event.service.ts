@@ -4,7 +4,6 @@ import { eq } from 'drizzle-orm'
 
 export const createEvent = async (name: string) => {
     const newEvent: Event = { name, state: false }
-    console.log(newEvent)
     await db.insert(eventSchema).values(newEvent)
 }
 
@@ -28,9 +27,7 @@ export const activeEvents = async () => {
 }
 
 export const inactiveEvents = async () => {
-    const event = await db.select()
+    return await db.select()
         .from(eventSchema)
         .where(eq(eventSchema.state, false))
-    console.log(event)
-    return event
 }

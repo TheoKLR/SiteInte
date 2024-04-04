@@ -28,6 +28,7 @@ export const getFaction = async (req: Request, res: Response, next: NextFunction
 
 export const createFaction = async (req: Request, res: Response, next: NextFunction) => {
   const { name } = req.body;
+  console.log(name)
 
   name ?? Error(res, { msg: "No name" });
 

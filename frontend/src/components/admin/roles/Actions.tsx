@@ -16,21 +16,13 @@ export const CreateRole = () => {
     }
   };
 
-  const handleNameChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setName(evt.target.value)
-  };
-
-  const handleDescChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setDesc(evt.target.value)
-  };
-
   return (
     <div>
       <div>
         <p>Nom</p>
-        <input type="text" value={name} onChange={handleNameChange} />
+        <input type="text" value={name} onChange={e => setName(e.target.value)} />
         <p>Description</p>
-        <input type="text" value={desc} onChange={handleDescChange} />
+        <input type="text" value={desc} onChange={e => setDesc(e.target.value)} />
       </div>
       <button className="" onClick={handleSubmit}>Soumettre</button>
       <ToastContainer position="bottom-right"/>

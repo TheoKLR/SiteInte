@@ -18,7 +18,7 @@ export const Factions = () => {
                 setFactions(factions)
                 console.log(factions)
                 if (!role) {
-                    window.location.href = '/Login';
+                    window.location.href = '/';
                     return null;
                 }
             } catch (error) {

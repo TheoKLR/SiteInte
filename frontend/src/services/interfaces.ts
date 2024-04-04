@@ -2,6 +2,8 @@ export interface User {
     id: number;
     first_name: string;
     last_name: string;
+    email: string;
+    team_id: number;
 }
 
 export interface Team {

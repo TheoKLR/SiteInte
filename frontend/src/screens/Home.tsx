@@ -14,7 +14,7 @@ const Home = () => {
             try {
                 const user = await getCurrentUser();
                 if (!user) {
-                    window.location.href = '/Login';
+                    window.location.href = '/';
                     return null;
                 }
                 setTitle("Bienvenue " + user.first_name +" !");

@@ -12,20 +12,15 @@ export const CreateFaction = () => {
   const handleSubmit = async () => {
     if (name !== '') {
       await handleError("Faction créée !", "Une erreur est survenue", createFaction, name)
-      createFaction(name);
       setName('');
     }
-  };
-
-  const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setName(evt.target.value)
   };
 
   return (
     <div>
       <div>
         <p>Nom</p>
-        <input type="text" value={name} onChange={handleChange} />
+        <input type="text" value={name} onChange={e => setName(e.target.value)} />
       </div>
       <button className="" onClick={handleSubmit}>Soumettre</button>
       <ToastContainer position="bottom-right"/>
@@ -38,7 +33,7 @@ export const DeleteFaction = () => {
 
   const Submit = async () => {
     const id = toId(faction)
-    await handleError("Faction créée !", "Une erreur est survenue", deleteFaction, id)
+    await handleError("Faction suprimée !", "Une erreur est survenue", deleteFaction, id)
   }
 
   return (
