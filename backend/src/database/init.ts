@@ -6,9 +6,8 @@ export const init = async () => {
         await db.insert(eventSchema).values({name: "PreInscription", state: false})
         await db.insert(eventSchema).values({name: "ShotgunCE", state: false})
         await db.insert(eventSchema).values({name: "ShotgunPerm", state: false})
-        await db.insert(eventSchema).values({name: "Barbecue", state: false})    
+        await db.insert(eventSchema).values({name: "Barbecue", state: false})
     } catch {
         console.log("event already implemented")
     }
-    
 }

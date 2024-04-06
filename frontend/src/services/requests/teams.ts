@@ -4,6 +4,10 @@ export const createTeam = async (name: string) => {
     return await api.post('team', { name })
 }
 
+export const createTeamWithUsers = async (name: string, userIds: number[]) => {
+    createTeam(name)
+}
+
 export const deleteTeam = async (id: number) => {
     return await api.delete('team/' + id)
 }
@@ -26,6 +30,11 @@ export const setTimestamp = async (timestamp: number) => {
 
 // Obtention de la liste des équipes enregistrées dans la db
 export const getAllTeams = async () => {
+    const response = await api.get('team/all')
+    return response.data
+}
+
+export const getTeamByName = async (name: string) => {
     const response = await api.get('team/all')
     return response.data
 }

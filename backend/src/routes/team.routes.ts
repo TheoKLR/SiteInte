@@ -4,6 +4,7 @@ import { isAdmin } from '../middlewares/permissions';
 
 const teamRouter = express.Router();
 
+teamRouter.post('/register', tc.registerTeam);
 teamRouter.post('', isAdmin, tc.createTeam);
 teamRouter.get('/all', isAdmin, tc.getAllTeams);
 teamRouter.get('/:id', isAdmin, tc.getTeam);
