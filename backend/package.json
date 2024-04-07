@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start:build": "ls && tsc -p .",
+    "start:build": "tsc -p .",
     "start:dev": "nodemon --exec ts-node src/server.ts",
     "start:prod": "node dist/server.js",
     "db:generate": "drizzle-kit generate:pg --schema=./src/schemas/*",
