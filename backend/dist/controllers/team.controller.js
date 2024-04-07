@@ -23,95 +23,84 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addTeamToFaction = exports.renameTeam = exports.deleteTeam = exports.addTeam = exports.getTeam = exports.getAllTeams = void 0;
-const response_1 = require("../utils/response");
+exports.registerTeam = exports.addToFaction = exports.deleteTeam = exports.createTeam = exports.getTeam = exports.getAllTeams = void 0;
 const service = __importStar(require("../services/team.service"));
-const error_1 = require("../utils/error");
-const getAllTeams = async (req, res) => {
+const user_service = __importStar(require("../services/user.service"));
+const responses_1 = require("../utils/responses");
+const getAllTeams = async (req, res, next) => {
     try {
-        const entities = await service.getAllTeams();
-        res.status(response_1.Code.OK).send(new response_1.HttpResponse(response_1.Code.OK, "Teams reached", entities));
+        const data = await service.getAllTeams();
+        (0, responses_1.Ok)(res, { data });
     }
     catch (error) {
-        (0, error_1.serviceError)(res, error);
+        (0, responses_1.Error)(res, { error });
     }
 };
 exports.getAllTeams = getAllTeams;
-const getTeam = async (req, res) => {
+const getTeam = async (req, res, next) => {
     const { id } = req.params;
     const idNumber = parseInt(id, 10);
-    if (isNaN(idNumber)) {
-        (0, error_1.fetchingError)(res, "ID format not recognized");
-    }
+    if (isNaN(idNumber))
+        return (0, responses_1.Error)(res, { msg: 'could not parse Id' });
     try {
-        const entitie = await service.getTeam(idNumber);
-        res.status(response_1.Code.OK).send(new response_1.HttpResponse(response_1.Code.OK, "Team reached", entitie));
+        const data = await service.getTeam(idNumber);
+        (0, responses_1.Ok)(res, { data });
     }
-    catch (err) {
-        (0, error_1.serviceError)(res, err);
+    catch (error) {
+        (0, responses_1.Error)(res, { error });
     }
 };
 exports.getTeam = getTeam;
-const addTeam = async (req, res) => {
-    const { name } = req.params;
-    name ?? res.status(response_1.Code.BAD_REQUEST).json(new response_1.HttpResponse(response_1.Code.BAD_REQUEST, "no name"));
+const createTeam = async (req, res, next) => {
+    const { name } = req.body;
+    name ?? (0, responses_1.Error)(res, { msg: "No name" });
     try {
-        await service.addTeam(name);
-        res.status(response_1.Code.OK).send(new response_1.HttpResponse(response_1.Code.OK, "Team added"));
+        await service.createTeam(name);
+        (0, responses_1.Created)(res, {});
     }
-    catch (err) {
-        (0, error_1.serviceError)(res, err);
+    catch (error) {
+        (0, responses_1.Error)(res, { error });
     }
 };
-exports.addTeam = addTeam;
-const deleteTeam = async (req, res) => {
+exports.createTeam = createTeam;
+const deleteTeam = async (req, res, next) => {
     const { id } = req.params;
     const idNumber = parseInt(id, 10);
-    if (isNaN(idNumber)) {
-        (0, error_1.fetchingError)(res, "ID format not recognized");
-    }
+    if (isNaN(idNumber))
+        return (0, responses_1.Error)(res, { msg: 'could not parse Id' });
     try {
+        await user_service.removeUsersFromTeam(idNumber);
         await service.deleteTeam(idNumber);
-        res.status(response_1.Code.OK).send(new response_1.HttpResponse(response_1.Code.OK, "Team deleted"));
+        (0, responses_1.Ok)(res, { msg: "Team deleted" });
     }
-    catch (err) {
-        (0, error_1.serviceError)(res, err);
+    catch (error) {
+        (0, responses_1.Error)(res, { error });
     }
 };
 exports.deleteTeam = deleteTeam;
-const renameTeam = async (req, res) => {
-    const { id, name } = req.params;
-    const idNumber = parseInt(id, 10);
-    name ?? (0, error_1.fetchingError)(res, "no name");
-    if (isNaN(idNumber)) {
-        (0, error_1.fetchingError)(res, "ID format not recognized");
-    }
+const addToFaction = async (req, res, next) => {
+    const { teamIds, factionId } = req.body;
     try {
-        await service.renameTeam(name, idNumber);
-        res.status(response_1.Code.OK).send(new response_1.HttpResponse(response_1.Code.OK, "Team renamed"));
+        await service.addToFaction(teamIds, factionId);
+        (0, responses_1.Ok)(res, { msg: "Team modified" });
     }
-    catch (err) {
-        (0, error_1.serviceError)(res, err);
+    catch (error) {
+        (0, responses_1.Error)(res, { error });
     }
 };
-exports.renameTeam = renameTeam;
-const addTeamToFaction = async (req, res) => {
-    const { teamId, factionId } = req.params;
-    const teamIdNumber = parseInt(teamId, 10);
-    const factionIdNumber = parseInt(factionId, 10);
-    if (isNaN(teamIdNumber)) {
-        (0, error_1.fetchingError)(res, "ID format not recognized");
-    }
-    if (isNaN(factionIdNumber)) {
-        (0, error_1.fetchingError)(res, "ID format not recognized");
-    }
+exports.addToFaction = addToFaction;
+const registerTeam = async (req, res, next) => {
+    const { name, userIds } = req.body;
     try {
-        await service.addTeamToFaction(teamIdNumber, factionIdNumber);
-        res.status(response_1.Code.OK).send(new response_1.HttpResponse(response_1.Code.OK, "Team modified"));
+        await service.createTeam(name);
+        const id = await service.getTeamId(name);
+        if (id) {
+            await user_service.addToTeam(userIds, id);
+        }
     }
-    catch (err) {
-        (0, error_1.serviceError)(res, err);
+    catch (error) {
+        (0, responses_1.Error)(res, { error });
     }
 };
-exports.addTeamToFaction = addTeamToFaction;
+exports.registerTeam = registerTeam;
 //# sourceMappingURL=team.controller.js.map

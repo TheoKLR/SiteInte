@@ -28,13 +28,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const fc = __importStar(require("../controllers/faction.controller"));
+const permissions_1 = require("../middlewares/permissions");
 const factionRouter = express_1.default.Router();
-factionRouter.post('/:name', fc.addFaction);
-factionRouter.get('', fc.getAllFactions);
-factionRouter.get('/:id', fc.getFaction);
-factionRouter.delete('/:id', fc.deleteFaction);
-factionRouter.post('/rename/:id/:name', fc.renameFaction);
-factionRouter.post('/add/:id/:points', fc.addPoints);
-factionRouter.post('/rmv/:id/:points', fc.removePoints);
+factionRouter.post('', permissions_1.isAdmin, fc.createFaction);
+factionRouter.get('/all', fc.getAllFactions);
+factionRouter.get('/:id', permissions_1.isAdmin, fc.getFaction);
+factionRouter.delete('/:id', permissions_1.isAdmin, fc.deleteFaction);
 exports.default = factionRouter;
 //# sourceMappingURL=faction.routes.js.map

@@ -23,116 +23,71 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removePoints = exports.addPoints = exports.renameFaction = exports.deleteFaction = exports.addFaction = exports.getFaction = exports.getAllFactions = void 0;
-const response_1 = require("../utils/response");
+exports.addPoints = exports.deleteFaction = exports.createFaction = exports.getFaction = exports.getAllFactions = void 0;
 const service = __importStar(require("../services/faction.service"));
-const error_1 = require("../utils/error");
-const getAllFactions = async (req, res) => {
+const team_service = __importStar(require("../services/team.service"));
+const responses_1 = require("../utils/responses");
+const getAllFactions = async (req, res, next) => {
     try {
-        const entities = await service.getAllFactions();
-        res.status(response_1.Code.OK).send(new response_1.HttpResponse(response_1.Code.OK, "factions reached", entities));
+        const data = await service.getAllFactions();
+        (0, responses_1.Ok)(res, { data });
     }
     catch (error) {
-        (0, error_1.serviceError)(res, error);
+        (0, responses_1.Error)(res, { error });
     }
 };
 exports.getAllFactions = getAllFactions;
-const getFaction = async (req, res) => {
+const getFaction = async (req, res, next) => {
     const { id } = req.params;
     const idNumber = parseInt(id, 10);
-    if (isNaN(idNumber)) {
-        (0, error_1.fetchingError)(res, "ID format not recognized");
-    }
+    if (isNaN(idNumber))
+        return (0, responses_1.Error)(res, { msg: 'could not parse Id' });
     try {
-        const entitie = await service.getFaction(idNumber);
-        res.status(response_1.Code.OK).send(new response_1.HttpResponse(response_1.Code.OK, "faction reached", entitie));
+        const data = await service.getFaction(idNumber);
+        (0, responses_1.Ok)(res, { data });
     }
-    catch (err) {
-        (0, error_1.serviceError)(res, err);
+    catch (error) {
+        (0, responses_1.Error)(res, { error });
     }
 };
 exports.getFaction = getFaction;
-const addFaction = async (req, res) => {
-    const { name } = req.params;
-    name ?? res.status(response_1.Code.BAD_REQUEST).json(new response_1.HttpResponse(response_1.Code.BAD_REQUEST, "no name"));
+const createFaction = async (req, res, next) => {
+    const { name } = req.body;
+    name ?? (0, responses_1.Error)(res, { msg: "No name" });
     try {
-        await service.addFaction(name);
-        res.status(response_1.Code.OK).send(new response_1.HttpResponse(response_1.Code.OK, "faction added"));
+        await service.createFaction(name);
+        (0, responses_1.Created)(res, {});
     }
-    catch (err) {
-        (0, error_1.serviceError)(res, err);
+    catch (error) {
+        (0, responses_1.Error)(res, { error });
     }
 };
-exports.addFaction = addFaction;
-const deleteFaction = async (req, res) => {
+exports.createFaction = createFaction;
+const deleteFaction = async (req, res, next) => {
     const { id } = req.params;
     const idNumber = parseInt(id, 10);
-    if (isNaN(idNumber)) {
-        (0, error_1.fetchingError)(res, "ID format not recognized");
-    }
+    if (isNaN(idNumber))
+        return (0, responses_1.Error)(res, { msg: 'could not parse Id' });
     try {
+        await team_service.removeTeamFromFaction(idNumber);
         await service.deleteFaction(idNumber);
-        res.status(response_1.Code.OK).send(new response_1.HttpResponse(response_1.Code.OK, "faction deleted"));
+        (0, responses_1.Ok)(res, { msg: "Faction deleted" });
     }
-    catch (err) {
-        (0, error_1.serviceError)(res, err);
+    catch (error) {
+        (0, responses_1.Error)(res, { error });
     }
 };
 exports.deleteFaction = deleteFaction;
-const renameFaction = async (req, res) => {
-    const { id, name } = req.params;
-    const idNumber = parseInt(id, 10);
-    name ?? (0, error_1.fetchingError)(res, "no name");
-    if (isNaN(idNumber)) {
-        (0, error_1.fetchingError)(res, "ID format not recognized");
-    }
+const addPoints = async (req, res, next) => {
+    const { id, points } = req.body;
     try {
-        await service.renameFaction(name, idNumber);
-        res.status(response_1.Code.OK).send(new response_1.HttpResponse(response_1.Code.OK, "faction renamed"));
+        const currentPoints = await service.getPoints(id);
+        service.addPoints(id, currentPoints, points);
+        (0, responses_1.Ok)(res, { msg: "Faction modified" });
     }
-    catch (err) {
-        (0, error_1.serviceError)(res, err);
-    }
-};
-exports.renameFaction = renameFaction;
-const addPoints = async (req, res) => {
-    const { id, points } = req.params;
-    const idNumber = parseInt(id, 10);
-    const pointsNumber = parseInt(points, 10);
-    if (isNaN(idNumber)) {
-        (0, error_1.fetchingError)(res, "ID format not recognized");
-    }
-    if (isNaN(pointsNumber)) {
-        (0, error_1.fetchingError)(res, "points format not recognized");
-    }
-    try {
-        const currentPoints = await service.getPoints(idNumber);
-        service.addPoints(idNumber, currentPoints, pointsNumber);
-        res.status(response_1.Code.OK).send(new response_1.HttpResponse(response_1.Code.OK, "faction modified"));
-    }
-    catch (err) {
-        (0, error_1.serviceError)(res, err);
+    catch (error) {
+        (0, responses_1.Error)(res, { error });
     }
 };
 exports.addPoints = addPoints;
-const removePoints = async (req, res) => {
-    const { id, points } = req.params;
-    const idNumber = parseInt(id, 10);
-    const pointsNumber = parseInt(points, 10);
-    if (isNaN(idNumber)) {
-        (0, error_1.fetchingError)(res, "ID format not recognized");
-    }
-    if (isNaN(pointsNumber)) {
-        (0, error_1.fetchingError)(res, "points format not recognized");
-    }
-    try {
-        const currentPoints = await service.getPoints(idNumber);
-        service.removePoints(idNumber, currentPoints, pointsNumber);
-        res.status(response_1.Code.OK).send(new response_1.HttpResponse(response_1.Code.OK, "faction modified"));
-    }
-    catch (err) {
-        (0, error_1.serviceError)(res, err);
-    }
-};
-exports.removePoints = removePoints;
 //# sourceMappingURL=faction.controller.js.map

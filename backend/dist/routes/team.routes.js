@@ -28,12 +28,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const tc = __importStar(require("../controllers/team.controller"));
+const permissions_1 = require("../middlewares/permissions");
 const teamRouter = express_1.default.Router();
-teamRouter.post('/:name', tc.addTeam);
-teamRouter.get('', tc.getAllTeams);
-teamRouter.get('/:id', tc.getTeam);
-teamRouter.delete('/:id', tc.deleteTeam);
-teamRouter.post('/rename/:id/:name', tc.renameTeam);
-teamRouter.post('/addtofac/:teamId/:factionId', tc.addTeamToFaction);
+teamRouter.post('/register', tc.registerTeam);
+teamRouter.post('', permissions_1.isAdmin, tc.createTeam);
+teamRouter.get('/all', tc.getAllTeams);
+teamRouter.get('/:id', permissions_1.isAdmin, tc.getTeam);
+teamRouter.delete('/:id', permissions_1.isAdmin, tc.deleteTeam);
+teamRouter.put('/addtofaction', permissions_1.isAdmin, tc.addToFaction);
 exports.default = teamRouter;
 //# sourceMappingURL=team.routes.js.map
