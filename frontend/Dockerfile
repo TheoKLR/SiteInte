@@ -14,6 +14,6 @@ RUN npm i -g serve
 
 COPY . .
 
-EXPOSE 8000
+EXPOSE 3000
 
 CMD ["serve", "-s", "build"]
