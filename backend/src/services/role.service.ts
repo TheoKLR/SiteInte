@@ -67,12 +67,14 @@ const createUserToWish = async (userId: number, roleId: number) => {
     return await db.insert(userToRoleSchema).values(newUserToWish)
 }
 
-
-/*
-export const getRoleUsers = async (id: number) => {
+export const getWishUsers = async (id: number) => {
     return db.select({ users: userSchema })
         .from(userToRoleSchema)
         .rightJoin(roleSchema, eq(userToRoleSchema.roleId, roleSchema.id))
         .leftJoin(userSchema, eq(userToRoleSchema.userId, userSchema.id))
-        .where(eq(roleSchema.id, id))
-}*/
+        .where(and(
+            eq(roleSchema.id, id), 
+            eq(userToRoleSchema.isWish, true)
+            )
+        )
+}

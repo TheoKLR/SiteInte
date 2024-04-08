@@ -76,5 +76,4 @@ export const registerTeam = async (req: Request, res: Response, next: NextFuncti
   } catch (error) {
     Error(res, { error });
   }
-
 }

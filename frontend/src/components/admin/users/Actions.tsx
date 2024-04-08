@@ -2,7 +2,7 @@ import { Users, Teams } from '../../utils/Select'
 import Select from 'react-select'
 import { useEffect, useState } from 'react'
 import { toArray, toId } from '../../utils/Submit'
-import { addToTeam } from '../../../services/requests/users'
+import { addToTeam, changePermission } from '../../../services/requests/users';
 import { handleError } from '../../utils/Submit'
 import { ToastContainer } from 'react-toastify'
 import { User } from '../../../services/interfaces'
@@ -38,6 +38,43 @@ export const AddToTeam = () => {
     </div>
   )
 }
+
+export const ChangePermission = () => {
+  const [user, setUser] = useState([] as any)
+  const [perm, setPerm] = useState({} as any)
+  
+  const permTypeOptions = [
+    { value: 'Admin', label: 'Admin' },
+    { value: 'RespoCE', label: 'RespoCE' },
+    { value: 'Respo', label: 'Respo' },
+    { value: 'Anim', label: 'Anim' }
+  ];
+  
+
+  const Submit = async () => {
+    const id = toId(user)
+    await handleError("permission modifiée !", "Une erreur est survenue", changePermission, id, perm)
+  }
+
+  return (
+    <div>
+      <div className="select-container">
+        <Select
+          closeMenuOnSelect={false}
+          options={Users()}
+          onChange={user => setUser(user)}
+        />
+        <Select
+          options={permTypeOptions}
+          onChange={perm => setPerm(perm)}
+        />
+      </div>
+      <button className="submit-button" onClick={Submit}>Soumettre</button>
+      <ToastContainer position="bottom-right"/>
+    </div>
+  )
+}
+
 
 
 export const TableUser = () => {

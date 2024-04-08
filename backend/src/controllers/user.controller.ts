@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/user.service';
 import { Error, Ok } from '../utils/responses';
 import { decodeToken } from '../utils/token';
+import { PermType, parsePermType } from '../schemas/user.schema';
 
 export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -71,17 +72,32 @@ export const addContact = async (req: Request, res: Response, next: NextFunction
         Error(res, { error });
     }
 };
-/*
-export const getUserDesires = async (req: Request, res: Response, next: NextFunction) => {
+
+export const changePermission = async (req: Request, res: Response, next: NextFunction) => {
+    const { id, perm } = req.body;
+    const permission = parsePermType(perm);
+    if (!permission || permission === PermType.NewStudent) {
+        Error(res, { msg: "bad permission" });
+    }
+
+    try {
+        await service.changePermission(id, perm);
+        Ok(res, { msg: "User modified" });
+    } catch (error) {
+        Error(res, { error });
+    }
+};
+
+export const getUserWish = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const idNumber = parseInt(id, 10);
 
     if (isNaN(idNumber)) return Error(res, { msg: 'could not parse Id' });
 
     try {
-        const data = await service.getUserDesires(idNumber);
+        const data = await service.getUserWish(idNumber);
         Ok(res, { data });
     } catch (error) {
         Error(res, { error });
     }
-}*/
+}

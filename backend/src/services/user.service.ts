@@ -1,5 +1,6 @@
 
 import { userSchema, User, PermType } from '../schemas/user.schema';
+import { roleSchema, userToRoleSchema } from '../schemas/role.schema';
 import { db } from "../database/db"
 import { eq, and } from 'drizzle-orm'
 
@@ -10,6 +11,7 @@ export const getAllUsers = async () => {
         last_name: userSchema.last_name,
         email: userSchema.email,
         permission: userSchema.permission,
+        connection_number: userSchema.connection_number,
         team_id: userSchema.team,
     }).from(userSchema)
 }
@@ -20,6 +22,8 @@ export const getUser = async (id: number) => {
         first_name: userSchema.first_name,
         last_name: userSchema.id,
         email: userSchema.email,
+        permission: userSchema.permission,
+        connection_number: userSchema.connection_number,
         team_id: userSchema.team,
     }).from(userSchema).where(eq(userSchema.id, id))
 
@@ -50,7 +54,7 @@ export const createUser = async (first_name: string, last_name: string, email: s
     const allUser = await getAllUsers()
     if (allUser.length === 0) permission = PermType.Admin
 
-    const newUser: User = { first_name, last_name, email, contact: null, permission, password, team: null }
+    const newUser: User = { first_name, last_name, email, contact: null, connection_number: 0, permission, password, team: null }
     await db.insert(userSchema).values(newUser)
 }
 
@@ -72,15 +76,31 @@ export const addContact = async (id: number, contact: string) => {
         .set({ contact: contact })
         .where(eq(userSchema.id, id))
 }
-/*
-export const getRole = async (id: number) => {
-    return await db.select({ role: userSchema.role }).from(userSchema).where(eq(userSchema.id, id))
+
+export const changePermission = async (id: number, perm: PermType) => {
+    await db.update(userSchema)
+        .set({ permission: perm })
+        .where(eq(userSchema.id, id))
 }
 
-export const getUserDesires = async (id: number) => {
-    return db.select({ desires: desireSchema })
-        .from(userToDesireSchema)
-        .rightJoin(desireSchema, eq(userToDesireSchema.desireId, desireSchema.id))
-        .leftJoin(userSchema, eq(userToDesireSchema.userId, userSchema.id))
+export const incrementConnection = async (id: number) => {
+    const user = await getUser(id);
+    const num = user?.connection_number || 0;
+
+    await db.update(userSchema)
+        .set({ connection_number: num + 1 })
         .where(eq(userSchema.id, id))
-}*/
+}
+
+
+export const getUserWish = async (id: number) => {
+    return await db.select({ desires: roleSchema })
+        .from(userToRoleSchema)
+        .rightJoin(roleSchema, eq(userToRoleSchema.roleId, roleSchema.id))
+        .leftJoin(userSchema, eq(userToRoleSchema.userId, userSchema.id))
+        .where(and(
+            eq(userSchema.id, id), 
+            eq(userToRoleSchema.isWish, true)
+            )
+        )
+}

@@ -54,31 +54,21 @@ export const deleteRole = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-export const addUserRoles = async (req: Request, res: Response, next: NextFunction) => {
-  const { userId, roleIds } = req.body;
+export const getWishUsers = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+  const idNumber = parseInt(id, 10);
+
+  if (isNaN(idNumber)) return Error(res, { msg: 'could not parse Id' });
 
   try {
-    //const data = await service.getRoleUsers(idNumber);
-    Ok(res, {});
+    const data = await service.getWishUsers(idNumber);
+    Ok(res, { data });
   } catch (error) {
     Error(res, { error });
   }
 };
 
-export const removeUserRoles = async (req: Request, res: Response, next: NextFunction) => {
-  const { userId, roleIds } = req.body;
-
-  try {
-    //const data = await service.getRoleUsers(idNumber);
-    Ok(res, {});
-  } catch (error) {
-    Error(res, { error });
-  }
-};
-
-
-/*
-export const submitRoles = async (req: Request, res: Response, next: NextFunction) => {
+export const submitWish = async (req: Request, res: Response, next: NextFunction) => {
   const { ids } = req.body;
 
   const token = decodeToken(req)
@@ -88,24 +78,9 @@ export const submitRoles = async (req: Request, res: Response, next: NextFunctio
   }
 
   try {
-    await service.deleteUserRoles(token.id);
-    await service.submitRoles(token.id, ids);
+    await service.submitWish(token.id, ids);
     Ok(res, { msg: "Roles submitted" });
   } catch (error) {
     Error(res, { error });
   }
 };
-
-export const getRoleUsers = async (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.params;
-  const idNumber = parseInt(id, 10);
-
-  if (isNaN(idNumber)) return Error(res, { msg: 'could not parse Id' });
-
-  try {
-    const data = await service.getRoleUsers(idNumber);
-    Ok(res, { data });
-  } catch (error) {
-    Error(res, { error });
-  }
-};*/

@@ -4,10 +4,6 @@ export const createTeam = async (name: string) => {
     return await api.post('team', { name })
 }
 
-export const createTeamWithUsers = async (name: string, userIds: number[]) => {
-    createTeam(name)
-}
-
 export const deleteTeam = async (id: number) => {
     return await api.delete('team/' + id)
 }
@@ -16,6 +12,13 @@ export const addToFaction = async (teamIds: number[], factionId: number) => {
     return await api.put('team/addtofaction', {
         teamIds,
         factionId,
+    })
+}
+
+export const registerTeam = async (name: string, userIds: number[]) => {
+    return await api.post('team/register', {
+        name,
+        userIds,
     })
 }
 
@@ -33,8 +36,8 @@ export const getAllTeams = async () => {
     const response = await api.get('team/all')
     return response.data
 }
-
+/*
 export const getTeamByName = async (name: string) => {
     const response = await api.get('team/all')
     return response.data
-}
+}*/

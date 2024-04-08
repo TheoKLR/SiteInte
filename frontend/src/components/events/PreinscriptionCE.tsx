@@ -3,8 +3,8 @@ import Select from 'react-select'
 import { getCurrentUser } from '../../services/requests'
 import { User } from '../../services/interfaces'
 import { getAllUsers } from '../../services/requests'
-import { createTeam } from '../../services/requests/teams'
-import { addToTeam } from '../../services/requests/users'
+import { createTeam, registerTeam } from '../../services/requests/teams'
+import { handleError } from '../utils/Submit'
 import { toArray } from '../utils/Submit'
 
 // Formulaire pour que les étudiants de l'utt puissent choisir les rôles qui les intérresseraient pour l'inté
@@ -40,10 +40,10 @@ export const PreInscription = () => {
     }, []);
 
     const handleSubmit = () => {
-        createTeam(teamName)
-        const u = toArray(users)
-        addToTeam(u)
-        
+        if (setUsers.length == 1 || setUsers.length == 1) {
+            const u = toArray(users)
+            handleError("equipe ajoutée", "une erreur s'est produite", registerTeam, teamName, u)   
+        }
     }
 
     return (

@@ -39,6 +39,7 @@ export const newStudentLogin = async (req: Request, res: Response, next: NextFun
         }
         const id = user.id
         const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
+        service.incrementConnection;
         Ok(res, { data: token })
     } catch (error) {
         Error(res, { error })
@@ -69,6 +70,7 @@ export const studentLogin = async (req: Request, res: Response, next: NextFuncti
 
         const id = user?.id
         const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
+        service.incrementConnection;
         Ok(res, { data: { token } })
     } catch (error) {
         Error(res, { error })
