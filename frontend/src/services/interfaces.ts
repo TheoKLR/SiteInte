@@ -6,6 +6,13 @@ export interface User {
     team_id: number;
 }
 
+export interface UserLight {
+    id: number;
+    first_name: string;
+    last_name: string;
+    team_id: number;
+}
+
 export interface Team {
     id: number;
     name: string;

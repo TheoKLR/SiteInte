@@ -4,7 +4,7 @@ import userRouter from './routes/user.routes'
 import teamRouter from './routes/team.routes'
 import factionRouter from './routes/faction.routes'
 import authRouter from './routes/auth.routes'
-import desireRouter from './routes/desire.routes'
+import {roleRouter, wishRouter} from './routes/role.routes'
 import eventRouter from './routes/event.routes'
 import { isTokenValid } from './middlewares/permissions'
 import { init } from './database/init'
@@ -22,8 +22,9 @@ async function startServer() {
   app.use('/user', userRouter)
   app.use('/team', teamRouter)
   app.use('/faction', factionRouter)
-  app.use('/role', desireRouter)
+  app.use('/role', roleRouter)
   app.use('/event', eventRouter)
+  app.use('/wish', wishRouter)
   await init()
 
   app.listen(8000, () => {

@@ -12,6 +12,15 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
     }
 }
 
+export const getUserLight = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const data = await service.getUserLight();
+        Ok(res, { data });
+    } catch (error) {
+        Error(res, { error });
+    }
+}
+
 export const getUser = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const idNumber = parseInt(id, 10);

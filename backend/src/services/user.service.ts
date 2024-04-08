@@ -16,6 +16,15 @@ export const getAllUsers = async () => {
     }).from(userSchema)
 }
 
+export const getUserLight = async () => {
+    return await db.select({
+        id: userSchema.id,
+        first_name: userSchema.first_name,
+        last_name: userSchema.last_name,
+        team_id: userSchema.team,
+    }).from(userSchema)
+}
+
 export const getUser = async (id: number) => {
     const user = await db.select({
         id: userSchema.id,

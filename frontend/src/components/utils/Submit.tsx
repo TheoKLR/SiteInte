@@ -4,7 +4,7 @@ interface data {
     value: number
 }
 
-export const toArray = (json: any[]) => {
+export const toArray = (json: any[]): number[] => {
     let result: number[] = []
     json.map((i: data) => result.push(i.value))
     return result

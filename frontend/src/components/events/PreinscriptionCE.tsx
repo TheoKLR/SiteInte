@@ -1,52 +1,50 @@
 import { useState, useEffect } from 'react'
 import Select from 'react-select'
-import { getCurrentUser } from '../../services/requests'
-import { User } from '../../services/interfaces'
-import { getAllUsers } from '../../services/requests'
-import { createTeam, registerTeam } from '../../services/requests/teams'
+import { getCurrentUser } from '../../services/requests';
+import { UserLight } from '../../services/interfaces'
+import { registerTeam } from '../../services/requests/teams'
 import { handleError } from '../utils/Submit'
 import { toArray } from '../utils/Submit'
+import { ToastContainer } from 'react-toastify';
+import { getUserLight } from '../../services/requests/users';
 
 // Formulaire pour que les étudiants de l'utt puissent choisir les rôles qui les intérresseraient pour l'inté
 export const PreInscription = () => {
     const [Options, setOptions] = useState([]);
-    const [userIndex, setUserIndex] = useState(0);
     const [teamName, setTeamName] = useState('');
     const [users, setUsers] = useState([] as any);
     const [hasTeam, setHasTeam] = useState(false);
+    const [currentUserId, setId] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
-            const allUsers = await getAllUsers();
+            const allUsers = await getUserLight();
             const currentUser = await getCurrentUser();
-
-            const index = allUsers.data.findIndex((i: User) => i.id === currentUser.id);
-            setUserIndex(index);
+            setId(currentUser.id);
 
             const usersOptions = allUsers
                 .data
-                .filter((u: User) => u.team_id === null)
-                .map((user: User) => ({
+                .filter((u: UserLight) => u.team_id === null)
+                .map((user: UserLight) => ({
                     value: user.id,
                     label: `${user.first_name} ${user.last_name}`,
                 }))
             setOptions(usersOptions);
-            
+
             if (currentUser.team_id) {
                 setHasTeam(currentUser.team_id);
             } else {
-                
+
             }
-            setUsers([usersOptions[index]])
         }
         fetchData();
     }, []);
 
-    const handleSubmit = () => {
-        if (setUsers.length == 4 || setUsers.length == 5) {
-            console.log(toArray(users))
+    const handleSubmit = async () => {
+        if (users.length == 3 || users.length == 4) {
             const u = toArray(users)
-            handleError("equipe ajoutée", "une erreur s'est produite", registerTeam, teamName, u)   
+            u.push(currentUserId)
+            handleError("equipe ajoutée", "une erreur s'est produite", registerTeam, teamName, u)
         }
         setHasTeam(true)
     }
@@ -67,11 +65,11 @@ export const PreInscription = () => {
                         isMulti
                         closeMenuOnSelect={false}
                         options={Options}
-                        value={Options[userIndex]}
                         onChange={u => setUsers(u)}
-                        isOptionDisabled={() => users.length >= 5 && users.length < 4}
+                        isOptionDisabled={() => users.length >= 4}
                     />
                     <button className="" onClick={handleSubmit}>Soumettre</button>
+                    <ToastContainer position="bottom-right"/>
                 </div>
             )}
         </div>
