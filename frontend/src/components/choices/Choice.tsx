@@ -16,14 +16,16 @@ export const Choice = () => {
     // Appelé à chaque cochage/décochage d'une checkbox
     // Récupère les id des choix cochés et les stocke dans un array d'entiers
     function handleChange(event: React.FormEvent){
-        const {value, checked} = event.target as HTMLInputElement;
-        setCheckedValues( pre => {
-            if (checked){
-                return [...pre,parseInt(value)];
-            } else {
-                return pre.filter(skill => skill!==parseInt(value));
-            }
-        })        
+        const {id, value, checked} = event.target as HTMLInputElement;
+        if (id !== "btnLegal"){
+            setCheckedValues( pre => {
+                if (checked){
+                    return [...pre,parseInt(value)];
+                } else {
+                    return pre.filter(skill => skill!==parseInt(value));
+                }
+            })  
+        }        
     }
 
     // Soumission du formulaire

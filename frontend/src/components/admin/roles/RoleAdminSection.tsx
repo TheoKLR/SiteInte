@@ -1,7 +1,8 @@
+
 import React from 'react';
 import AdminSection from '../AdminSection';
 import { AdminAction } from '../AdminSection';
-import { CreateRole, DeleteRole } from './Actions';
+import { CreateRole, DeleteRole, TableRoleUsers, TableUserRoles } from './Actions';
 
 
 
@@ -15,6 +16,14 @@ const DesireAdminSection: React.FC = () => {
     {
       title: 'Supprimer un rôle',
       form: <DeleteRole/>,
+    },
+    {
+      title: 'Rôles demandés par un utilisateur',
+      form: <TableUserRoles/>,
+    },
+    {
+      title: 'Utilisateurs ayant demandé un rôle',
+      form: <TableRoleUsers/>,
     },
 ];
 
