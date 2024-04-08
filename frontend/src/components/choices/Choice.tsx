@@ -1,4 +1,5 @@
 
+
 import { useEffect, useRef, useState } from 'react';
 import { submitChoices } from '../../services/requests';
 import { getAllRoles } from '../../services/requests/roles';
@@ -52,7 +53,7 @@ export const Choice = () => {
                     {wish.map((wish, index) => (
                         <div className="checkbox-wrapper-1" key={index}>
                             <input id={index.toString()} className="substituted" type="checkbox" aria-hidden="true" value={wish.id} onChange={handleChange} />
-                            <label htmlFor={index.toString()}>{wish.name} : {wish.description}</label>
+                            <label htmlFor={index.toString()}><strong>{wish.name}</strong> : {wish.description}</label>
                         </div>
                     ))}
                     <br />
