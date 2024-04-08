@@ -34,7 +34,10 @@ export const removeUserRoles = async (userId: number, roleIds: number[]) => {
 }
 
 export const submitWish = async (userId: number, RoleIds: number[]) => {
-    db.delete(userToRoleSchema).where(eq(userToRoleSchema.userId, userId))
+    await db.delete(userToRoleSchema).where(and(
+        eq(userToRoleSchema.userId, userId),
+        eq(userToRoleSchema.isWish, true),
+    ))
     for (const id of RoleIds) {
         await createUserToWish(userId, id)
     }

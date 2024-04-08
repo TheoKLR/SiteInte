@@ -25,6 +25,7 @@ async function startServer() {
   app.use('/role', roleRouter)
   app.use('/event', eventRouter)
   app.use('/wish', wishRouter)
+  
   await init()
 
   app.listen(8000, () => {

@@ -76,7 +76,6 @@ export const submitWish = async (req: Request, res: Response, next: NextFunction
   if (token === null) {
     return Error(res, { msg: 'No email' });
   }
-
   try {
     await service.submitWish(token.id, ids);
     Ok(res, { msg: "Roles submitted" });

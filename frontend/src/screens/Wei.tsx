@@ -21,7 +21,8 @@ export const Wei = () => {
 
     return (
         <div className="Wei">
-            <Navbar/>  
+            <Navbar />
+            <h1>Prochainement !</h1>
         </div>
     )
 }

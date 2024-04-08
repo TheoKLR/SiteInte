@@ -22,6 +22,7 @@ export const Defis = () => {
     return (
         <div className="Defis">
             <Navbar/>  
+            <h1>Prochainement !</h1>
         </div>
     )
 }

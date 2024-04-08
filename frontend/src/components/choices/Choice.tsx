@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { submitChoices } from '../../services/requests';
 import { getAllRoles } from '../../services/requests/roles';
 import './Choice.css';
+import { handleError } from '../utils/Submit';
 
 // Formulaire pour que les étudiants de l'utt puissent choisir les rôles qui les intérresseraient pour l'inté
 export const Choice = () => {
@@ -12,9 +13,6 @@ export const Choice = () => {
     const [checkedValues, setCheckedValues] = useState<number[]>([]);
     const [desires, setDesires] = useState<any[]>([]);
     const [success, setSuccess] = useState(false);
-    const [errMsg, setErrMsg] = useState('');
-    const [successMsg, setSuccessMsg] = useState('');
-
     // Appelé à chaque cochage/décochage d'une checkbox
     // Récupère les id des choix cochés et les stocke dans un array d'entiers
     function handleChange(event: React.FormEvent){
@@ -31,17 +29,9 @@ export const Choice = () => {
     // Soumission du formulaire
     function handleSubmit(event: React.FormEvent){
         try {
-            console.log(checkedValues);
-            const token = localStorage.getItem("authToken");
-            if (token !== null){
-                console.log("Token :" + token);
-                submitChoices(checkedValues);
-                setSuccess(true);
-                setSuccessMsg("Choix envoyés avec succès")
-            }
+            handleError("Choix envoyés avec succès", "Problème rencontré lors de l'envoi des choix", submitChoices, checkedValues)
         } catch (error) {
             console.error(error)
-            setErrMsg("Problème rencontré lors de l'envoi des choix");
         }
         
     }
@@ -69,7 +59,7 @@ export const Choice = () => {
                     {desires.map((desire, index) => (                       
                         <div className="checkbox-wrapper-1" key={index}>
                             <input id={index.toString()} className="substituted" type="checkbox" aria-hidden="true" value={desire.id} onChange={handleChange} />
-                            <label htmlFor={index.toString()}>{desire.name} : {desire.description}</label>
+                            <label htmlFor={index.toString()}><b>{desire.name}</b> : {desire.description}</label>
                         </div>
                     ))}
                     <br />
@@ -101,8 +91,6 @@ export const Choice = () => {
                         </div>
                     </div>
                     <button type='submit' className="login-button, button-36" id='boutonChoice'>Valider</button>
-                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-                    <p className={success ? "success" : "offscreen"} aria-live="assertive">{successMsg}</p>
                 </form>
                
                 </div>
