@@ -5,8 +5,8 @@ export const toTable = (json: any[]) => {
     const keys = Object.keys(json[0]);
     return (
       <div>
-        <div className="table">
-          <table>
+        <div className="table-container">
+          <table className="table">
             <thead>
               <tr>
                 {keys.map((key, index) => (

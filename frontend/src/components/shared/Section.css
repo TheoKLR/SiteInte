@@ -27,7 +27,15 @@ hr{
     padding: 20px;
 }
 
+@media screen and (max-width: 769px) {
+    .container{
+        width: 95vw;
+    }
 
+    .contenu{
+        padding: 5px;
+    }
+}
 
 
 

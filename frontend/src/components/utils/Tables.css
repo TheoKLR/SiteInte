@@ -6,8 +6,8 @@ table{
     border-radius: 12px 12px 0 0;
     overflow: hidden;
     font-size: 12px;
-   
    }
+
    td , th{
     padding: 15px 20px;
     text-align: center;
@@ -29,3 +29,15 @@ table{
    tr:nth-child(even){
     background-color: #eeeeee;
    }
+
+.table-container{
+    width: 50vw;
+    overflow: auto;
+    max-height: 300px;
+}
+
+@media screen and (max-width: 769px) {
+    .table-container{
+        width: 65vw;
+    }
+}
