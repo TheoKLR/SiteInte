@@ -4,8 +4,9 @@ import { createRole, deleteRole } from '../../../services/requests/roles';
 import { toId, handleError } from '../../utils/Submit'
 import { Roles, Users } from '../../utils/Select';
 import { ToastContainer } from 'react-toastify';
-import { getDesireUsers, getUserDesires } from '../../../services/requests';
+import { getWishUsers, getUserWishes } from '../../../services/requests';
 import { toTable } from '../../utils/Tables';
+import { Role, RoleNoDesc } from '../../../services/interfaces';
 
 export const CreateRole = () => {
   const [name, setName] = useState('');
@@ -60,35 +61,39 @@ export const TableRoleUsers = () => {
 
   const handleChange = async (user: any) => {
     const id = toId(user)
-    const result = await getDesireUsers(id)
-    setUsers(result)
+    let wishUsers = await getWishUsers(id)
+    console.log(wishUsers)
+    wishUsers = wishUsers.map((user: any) => ({
+      ID: user.users.id,
+      name: `${user.users.first_name} ${user.users.last_name}`,
+    }))
+    setUsers(wishUsers)
   }
 
   return (
     <div>
-      <Select
-        options={Roles()}
-        onChange={handleChange}
-      />
-      <p>{users.toString()}</p>
+      <Select options={Roles()} onChange={handleChange}/>
+      {toTable(users)}
     </div>
   )
 }
 
 export const TableUserRoles = () => {
-  const [wish, setWish] = useState([] as any);
+  const [wish, setWish] = useState<any[]>([]);
 
   const handleChange = async (user: any) => {
     const id = toId(user);
-    const result = await getUserDesires(id);
-    console.log(result)
-    setWish(result);
+    let userWishes = await getUserWishes(id);
+    userWishes = userWishes.map((role: any) => ({
+      ID: role.desires.id,
+      name: role.desires.name,
+    }))
+    setWish(userWishes);
   };
-
   return (
     <div>
       <Select options={Users()} onChange={user => handleChange(user)} />
-      {wish.length > 0 ? toTable(wish) : null}
+      {toTable(wish)}
     </div>
   );
 };

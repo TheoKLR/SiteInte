@@ -12,7 +12,7 @@ export const Roles = () => {
         const response = await getAllRoles()
         const usersOptions = response.data.map((role: Role) => ({
           value: role.id,
-          label: `${role.name}`,
+          label: role.name,
         }))
         setOptions(usersOptions)
       } catch (error) {
@@ -35,7 +35,7 @@ export const Factions = () => {
         const response = await getAllFactions()
         const usersOptions = response.data.map((faction: Faction) => ({
           value: faction.id,
-          label: `${faction.name}`,
+          label: faction.name,
         }))
         setOptions(usersOptions)
       } catch (error) {
@@ -59,7 +59,7 @@ export const Teams = () => {
         const response = await getAllTeams()
         const usersOptions = response.data.map((team: Team) => ({
           value: team.id,
-          label: `${team.name}`,
+          label: team.name,
         }))
         setOptions(usersOptions)
       } catch (error) {

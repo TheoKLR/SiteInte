@@ -4,8 +4,6 @@ import { Error, Created, Ok } from '../utils/responses';
 import { decodeToken } from '../utils/token';
 
 export const getAllRoles = async (req: Request, res: Response, next: NextFunction) => {
-  console.log('AAAAAAAAAAAAAAAAAAAAAA')
-
   try {
     const data = await service.getAllRoles();
     Ok(res, { data });
@@ -72,7 +70,7 @@ export const getWishUsers = async (req: Request, res: Response, next: NextFuncti
 
 export const submitWish = async (req: Request, res: Response, next: NextFunction) => {
   const { choiceIds } = req.body;
-  console.log('BBBBBBBBBBBBBBBBBB')
+
   const token = decodeToken(req)
   if (token === null) {
     return Error(res, { msg: 'No email' });

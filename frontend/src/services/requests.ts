@@ -78,13 +78,13 @@ export const DeleteUsers = async (users: number[]) => {
 }
 
 // Obtention de tous les roles demandés par un utilisateur précis
-export const getUserDesires = async (userId: string) => {
+export const getUserWishes = async (userId: string) => {
     const response = await api.get('/user/' + userId + '/wish');
     return response?.data.data;
 }
 
 // Obtention de tous les utilisateurs ayant demandé un role précis
-export const getDesireUsers = async (roleId: string) => {
+export const getWishUsers = async (roleId: string) => {
     const response = await api.get('/wish/' + roleId + '/users');
     return response?.data.data;
 }

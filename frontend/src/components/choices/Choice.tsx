@@ -9,7 +9,7 @@ import { ToastContainer } from 'react-toastify';
 // Formulaire pour que les étudiants de l'utt puissent choisir les rôles qui les intérresseraient pour l'inté
 export const Choice = () => {
     const [checkedValues, setCheckedValues] = useState<number[]>([]);
-    const [desires, setDesires] = useState<any[]>([]);
+    const [wish, setWish] = useState<any[]>([]);
     // Appelé à chaque cochage/décochage d'une checkbox
     // Récupère les id des choix cochés et les stocke dans un array d'entiers
     function handleChange(event: React.FormEvent) {
@@ -35,7 +35,7 @@ export const Choice = () => {
         getAllRoles()
             .then(res => {
                 const data = res.data;
-                setDesires(data);
+                setWish(data);
             })
             .catch(error => {
                 console.error('Une erreur s\'est produite lors de la récupération des souhaits :', error);
@@ -49,10 +49,10 @@ export const Choice = () => {
             <p>L'inté a besoin de beaucoup de gens dans de nombreux domaines. Choisis ton rôle afin d'aider au mieux!</p><br />
             <div className='inputs'>
                 <form>
-                    {desires.map((desire, index) => (
+                    {wish.map((wish, index) => (
                         <div className="checkbox-wrapper-1" key={index}>
-                            <input id={index.toString()} className="substituted" type="checkbox" aria-hidden="true" value={desire.id} onChange={handleChange} />
-                            <label htmlFor={index.toString()}>{desire.name} : {desire.description}</label>
+                            <input id={index.toString()} className="substituted" type="checkbox" aria-hidden="true" value={wish.id} onChange={handleChange} />
+                            <label htmlFor={index.toString()}>{wish.name} : {wish.description}</label>
                         </div>
                     ))}
                     <br />
