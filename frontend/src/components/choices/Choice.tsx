@@ -52,7 +52,7 @@ export const Choice = () => {
                     {desires.map((desire, index) => (
                         <div className="checkbox-wrapper-1" key={index}>
                             <input id={index.toString()} className="substituted" type="checkbox" aria-hidden="true" value={desire.id} onChange={handleChange} />
-                            <label htmlFor={index.toString()}>{desire.name} : {desire.description}</label>
+                            <label htmlFor={index.toString()}><strong>{desire.name}</strong> : {desire.description}</label>
                         </div>
                     ))}
                     <br />

@@ -24,10 +24,21 @@ h4{
     font-weight:700;
 }
 
+.checkbox-wrapper-1 {
+    margin-bottom: 20px; 
+
+}
+
+
+
 .checkbox-wrapper-1 *,
 .checkbox-wrapper-1 ::after,
 .checkbox-wrapper-1 ::before {
     box-sizing: border-box;
+}
+
+strong{
+    font-weight: bolder;
 }
 
 .checkbox-wrapper-1 [type=checkbox].substituted {
