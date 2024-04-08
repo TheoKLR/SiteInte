@@ -3,29 +3,28 @@ import { eventSchema } from "../schemas/event.schema"
 import { roleSchema } from "../schemas/role.schema"
 
 export const init = async () => {
-    try {
-        initEvent()
-    } catch {
-        console.error('event already in th DB')
-    }
-    try {
-        initRole()
-    } catch {
-        console.error('role already in th DB')
-    }
+    initEvent()
+    initRole()
 }
 
 const initEvent = async () => {
+    try {
         for (const event of events) {
             await db.insert(eventSchema).values(event);
         }
+    } catch {
+        console.error('event already in th DB')
+    }
 }
 
 const initRole = async () => {
-    for (const role of roles) {
-        await db.insert(roleSchema).values(role);
+    try {
+        for (const role of roles) {
+            await db.insert(roleSchema).values(role);
+        }
+    } catch {
+        console.error('role already in th DB')
     }
-
 }
 
 const events = [

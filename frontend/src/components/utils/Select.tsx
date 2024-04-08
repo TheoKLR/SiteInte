@@ -6,7 +6,6 @@ import { getActiveEvents, getInactiveEvents } from "../../services/requests/even
 
 export const Roles = () => {
   const [options, setOptions] = useState([])
-
   useEffect(() => {
     const fetchData = async () => {
       try {

@@ -17,7 +17,7 @@ export const toId = (json: any) => {
 export const handleError = async (success_msg: string, error_msg: string, func: Function, ...args: any[]) => {
     try {
         const response = await func(...args);
-        console.log(response)
+        console.log(response.status)
         if (response.status > 201 || !response) {
             return toast.error(error_msg);
         } 
