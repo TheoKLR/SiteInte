@@ -34,7 +34,6 @@ export const Choice = () => {
             console.log(checkedValues);
             const token = localStorage.getItem("authToken");
             if (token !== null){
-                console.log("Token :" + token);
                 submitChoices(checkedValues);
                 setSuccess(true);
                 setSuccessMsg("Choix envoyés avec succès")
@@ -96,7 +95,7 @@ export const Choice = () => {
                             <br /> <br />
                         </p>
                         <div className="checkbox-wrapper-1">
-                            <input id="btnLegal" className="substituted" type="checkbox" aria-hidden="true" required />
+                            <input id="btnLegal" className="substituted" type="checkbox" aria-hidden="true" />
                             <label htmlFor="btnLegal">Je comprends l'objectif de l'intégration et je comprends que mes actions peuvent être punies par une sanction disciplinaire et une peine d'emprisonnement et 15 000 € d'amende.</label>
                         </div>
                     </div>

@@ -78,6 +78,7 @@ export const submitWish = async (req: Request, res: Response, next: NextFunction
   }
 
   try {
+    console.log("ids:"+ids)
     await service.submitWish(token.id, ids);
     Ok(res, { msg: "Roles submitted" });
   } catch (error) {

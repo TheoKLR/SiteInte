@@ -31,8 +31,8 @@ export const createDesire = async (name: string, desc: string) => {
 // Attribution des rôles souhaités à l'étudiant de l'UTT ayant rempli le formulaire de choix de rôles
 export const submitChoices = async (choices: number[]) => {
     try {
-        const response = await api.post('/desire/submit',
-            { desireIds: choices },
+        const response = await api.post('/role/submit',
+            { ids: choices },
         );
         console.log(response.data);
     } catch (err: any) {
@@ -86,7 +86,7 @@ export const DeleteUsers = async (users: number[]) => {
 // Obtention de tous les roles demandés par un utilisateur précis
 export const getUserDesiresById = async (userId: string) => {
     try {
-        const response = await api.get('/user/' + userId + '/desires');
+        const response = await api.get('/user/' + userId + '/wish');
         return response?.data.data;
     } catch (error) {
         console.error("Erreur lors de la récupération des desires de l'utilisateur " + userId)
@@ -95,11 +95,11 @@ export const getUserDesiresById = async (userId: string) => {
 }
 
 // Obtention de tous les utilisateurs ayant demandé un role précis
-export const getDesiresUsersById = async (desireId: string) => {
+export const getDesiresUsersById = async (roleId: string) => {
     try {
-        const response = await api.get('/desire/' + desireId + '/users');
+        const response = await api.get('/role/' + roleId + '/users');
         return response?.data.data;
     } catch (error) {
-        console.error("Erreur lors de la récupération des utilisateurs correspondants au désire " + desireId)
+        console.error("Erreur lors de la récupération des utilisateurs correspondants au role " + roleId)
     }
 }
