@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/user.service';
 import { Error, Ok } from '../utils/responses';
 import { decodeToken } from '../utils/token';
-import { PermType, parsePermType } from '../schemas/user.schema';
 
 export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -75,12 +74,14 @@ export const addContact = async (req: Request, res: Response, next: NextFunction
 
 export const changePermission = async (req: Request, res: Response, next: NextFunction) => {
     const { id, perm } = req.body;
-    const permission = parsePermType(perm);
-    if (!permission || permission === PermType.NewStudent) {
-        Error(res, { msg: "bad permission" });
-    }
 
     try {
+        const user = await service.getUser(id);
+        const permission = user?.permission || "newStudent";
+        console.log(permission)
+        if (permission === "newStudent") {
+            return Error(res, { msg: "bad permission" });
+        }
         await service.changePermission(id, perm);
         Ok(res, { msg: "User modified" });
     } catch (error) {

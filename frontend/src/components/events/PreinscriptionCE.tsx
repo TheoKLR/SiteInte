@@ -13,7 +13,7 @@ export const PreInscription = () => {
     const [userIndex, setUserIndex] = useState(0);
     const [teamName, setTeamName] = useState('');
     const [users, setUsers] = useState([] as any);
-    const [hasTeam, setHasTeam] = useState('');
+    const [hasTeam, setHasTeam] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,21 +34,26 @@ export const PreInscription = () => {
             
             if (currentUser.team_id) {
                 setHasTeam(currentUser.team_id);
+            } else {
+                
             }
+            setUsers([usersOptions[index]])
         }
         fetchData();
     }, []);
 
     const handleSubmit = () => {
-        if (setUsers.length == 1 || setUsers.length == 1) {
+        if (setUsers.length == 4 || setUsers.length == 5) {
+            console.log(toArray(users))
             const u = toArray(users)
             handleError("equipe ajoutée", "une erreur s'est produite", registerTeam, teamName, u)   
         }
+        setHasTeam(true)
     }
 
     return (
         <div>
-            {hasTeam !== '' ? (
+            {hasTeam ? (
                 <div>
                     <p>Tu ne peux pas inscrire une équipe car tu as déjà une équipe assignée</p>
                     <p>Ton équipe : {hasTeam}</p>

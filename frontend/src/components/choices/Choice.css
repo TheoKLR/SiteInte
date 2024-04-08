@@ -134,7 +134,12 @@ h4{
   }
   
   .button-36:hover {
-    box-shadow: rgba(218,76,114,1) 0 1px 30px;
+    box-shadow: rgba(218,76,114,1) 0 1px 15px;
+    transition-duration: .1s;
+  }
+
+  .button-36:focus {
+    background-color: rgba(218,76,114,0.7);
     transition-duration: .1s;
   }
   

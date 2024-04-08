@@ -26,6 +26,12 @@ export const deleteTeam = async (id: number) => {
     await db.delete(teamSchema).where(eq(teamSchema.id, id))
 }
 
+export const removeTeamFromFaction = async (id: number) => {
+    await db.update(teamSchema)
+        .set({ faction: null })
+        .where(eq(teamSchema.faction, id))
+}
+
 export const renameTeam = async (name: string, id: number) => {
     await db.update(teamSchema)
         .set({ name: name })

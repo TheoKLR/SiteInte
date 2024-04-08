@@ -54,9 +54,9 @@ export const registerStudent = async (fName: string, lName: string, mail: string
     });
 }
 
-export const newStudentLogin = async (email: string, pwd: string) => {
+export const newStudentLogin = async (email: string, password: string) => {
     const response = await api.post('/auth/newStudentLogin',
-        { email, password: pwd }
+        { email, password }
     );
     return response?.data?.data;
 }

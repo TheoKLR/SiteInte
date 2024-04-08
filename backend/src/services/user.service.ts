@@ -63,6 +63,12 @@ export const deleteUser = async (id: number) => {
     await db.delete(userSchema).where(eq(userSchema.id, id))
 }
 
+export const removeUsersFromTeam = async (id: number) => {
+    await db.update(userSchema)
+        .set({ team: null })
+        .where(eq(userSchema.team, id))
+}
+
 export const addToTeam = async (UserIds: number[], TeamId: number) => {
     for (const id of UserIds) {
         await db.update(userSchema)

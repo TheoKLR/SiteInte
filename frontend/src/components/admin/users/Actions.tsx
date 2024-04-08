@@ -53,14 +53,13 @@ export const ChangePermission = () => {
 
   const Submit = async () => {
     const id = toId(user)
-    await handleError("permission modifiée !", "Une erreur est survenue", changePermission, id, perm)
+    await handleError("permission modifiée !", "Une erreur est survenue", changePermission, id, perm.value)
   }
 
   return (
     <div>
       <div className="select-container">
         <Select
-          closeMenuOnSelect={false}
           options={Users()}
           onChange={user => setUser(user)}
         />
