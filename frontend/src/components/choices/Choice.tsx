@@ -5,12 +5,13 @@ import { submitChoices } from '../../services/requests';
 import { getAllRoles } from '../../services/requests/roles';
 import { handleError } from '../utils/Submit';
 import './Choice.css';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 
 // Formulaire pour que les étudiants de l'utt puissent choisir les rôles qui les intérresseraient pour l'inté
 export const Choice = () => {
     const [checkedValues, setCheckedValues] = useState<number[]>([]);
     const [wish, setWish] = useState<any[]>([]);
+    const [accept, setAccept] = useState(false)
     // Appelé à chaque cochage/décochage d'une checkbox
     // Récupère les id des choix cochés et les stocke dans un array d'entiers
     function handleChange(event: React.FormEvent) {
@@ -28,7 +29,11 @@ export const Choice = () => {
 
     // Soumission du formulaire
     const handleSubmit = async () => {
-        await handleError("Choix envoyés avec succès", "Problème rencontré lors de l'envoi des choix", submitChoices, checkedValues)
+        if (accept === false) {
+            toast.error("Le texte de loi n'a pas été coché");
+        } else {
+            await handleError("Choix envoyés avec succès", "Problème rencontré lors de l'envoi des choix", submitChoices, checkedValues)
+        }
     }
 
     // récupération des choix de rôle existants dans la db
@@ -80,7 +85,7 @@ export const Choice = () => {
                             <br /> <br />
                         </p>
                         <div className="checkbox-wrapper-1">
-                            <input id="btnLegal" className="substituted" type="checkbox" aria-hidden="true" required/>
+                            <input id="btnLegal" onClick={() => setAccept(true)} className="substituted" type="checkbox" aria-hidden="true" required/>
                             <label htmlFor="btnLegal">Je comprends l'objectif de l'intégration et je comprends que mes actions peuvent être punies par une sanction disciplinaire et une peine d'emprisonnement et 15 000 € d'amende.</label>
                         </div>
                     </div>
