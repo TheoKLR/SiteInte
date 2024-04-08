@@ -1,6 +1,8 @@
 import { Navbar } from "../components/shared/Navbar"
 import { useEffect } from "react";
 import { getRole } from "../services/requests";
+import { Section } from "../components/shared/Section";
+import { Default } from "../components/shared/Default";
 
 export const Mails = () => {
     useEffect(() => {
@@ -22,7 +24,7 @@ export const Mails = () => {
     return (
         <div className="Mails">
             <Navbar />
-            <h1>Prochainement !</h1>
+            <Section titre="Prochainement !" contenu={Default} />
         </div>
     )
 }

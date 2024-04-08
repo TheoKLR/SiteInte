@@ -8,6 +8,7 @@ import { PreInscription } from "../components/events/PreinscriptionCE";
 import { Section } from "../components/shared/Section";
 import { getActiveEvents } from "../services/requests/events";
 import { toIdArray } from "../utils/utils";
+import { Default } from "../components/events/Default";
 
 export const Events =  () => {
     const [activeEvents, setEvent] = useState<number[]>([]); 
@@ -37,6 +38,11 @@ export const Events =  () => {
     return (
         <div className="Events">
             <Navbar/>
+            {
+              activeEventsArray.length === 0 ? (
+                <Section titre="Aucun événement en cours" contenu={Default}/>
+              ):null
+            }
             {
                activeEventsArray.includes(1) ? (
                 <Section titre="Pre-inscription" contenu={PreInscription} />
