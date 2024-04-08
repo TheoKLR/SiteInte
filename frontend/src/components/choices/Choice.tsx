@@ -18,14 +18,16 @@ export const Choice = () => {
     // Appelé à chaque cochage/décochage d'une checkbox
     // Récupère les id des choix cochés et les stocke dans un array d'entiers
     function handleChange(event: React.FormEvent){
-        const {value, checked} = event.target as HTMLInputElement;
-        setCheckedValues( pre => {
-            if (checked){
-                return [...pre,parseInt(value)];
-            } else {
-                return pre.filter(skill => skill!==parseInt(value));
-            }
-        })        
+        const {id, value, checked} = event.target as HTMLInputElement;
+        if (id !== "btnLegal"){
+            setCheckedValues( pre => {
+                if (checked){
+                    return [...pre,parseInt(value)];
+                } else {
+                    return pre.filter(skill => skill!==parseInt(value));
+                }
+            })  
+        }        
     }
 
     // Soumission du formulaire
@@ -95,7 +97,7 @@ export const Choice = () => {
                             <br /> <br />
                         </p>
                         <div className="checkbox-wrapper-1">
-                            <input id="btnLegal" className="substituted" type="checkbox" aria-hidden="true" />
+                            <input id="btnLegal" className="substituted" type="checkbox" aria-hidden="true" required />
                             <label htmlFor="btnLegal">Je comprends l'objectif de l'intégration et je comprends que mes actions peuvent être punies par une sanction disciplinaire et une peine d'emprisonnement et 15 000 € d'amende.</label>
                         </div>
                     </div>
