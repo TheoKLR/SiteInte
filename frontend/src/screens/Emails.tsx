@@ -21,7 +21,8 @@ export const Mails = () => {
 
     return (
         <div className="Mails">
-            <Navbar/>  
+            <Navbar />
+            <h1>Prochainement !</h1>
         </div>
     )
 }

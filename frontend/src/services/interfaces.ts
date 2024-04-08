@@ -5,6 +5,12 @@ export interface User {
     email: string;
     team_id: number;
 }
+export interface UserLight {
+    id: number;
+    first_name: string;
+    last_name: string;
+    team_id: number;
+}
 
 export interface Team {
     id: number;
@@ -22,6 +28,11 @@ export interface Role {
     id: number;
     name: string;
     description: string;
+}
+
+export interface RoleNoDesc {
+    id: number;
+    name: string;
 }
 
 export interface Event {

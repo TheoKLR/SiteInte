@@ -14,7 +14,7 @@ export const Admin = () => {
             try {
                 const role = await getRole();
                 if (role !== "Admin") {
-                    window.location.href = '/Login';
+                    window.location.href = '/Home';
                     return null;
                 }
             } catch (error) {

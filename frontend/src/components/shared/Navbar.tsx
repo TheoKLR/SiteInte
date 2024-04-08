@@ -30,13 +30,13 @@ export const Navbar: React.FC = () => {
             <div>
                 <ul id="navbar" className={clicked ? "#navbar active" : "#navbar"}>
                     {role === 'Admin' && <li><a href="/Admin">Admin</a></li>}
-                    {role !== 'Student' && <li><a href="/Defis">Défis</a></li>}
-                    {role !== 'Student' && <li><a href="/Factions">Factions</a></li>}
-                    {role !== 'Student' && <li><a href="/Events">Events</a></li>}
-                    {role !== 'Student' && <li><a href="/Mails">Mails</a></li>}
-                    {role !== 'Student' && <li><a href="/Parrainage">Parrainage</a></li>}
-                    {role !== 'Student' && <li><a href="/Wei">WEI</a></li>}
-                    { <li><a href="Souhait">Souhait</a></li>}
+                    {<li><a href="/Defis">Défis</a></li>}
+                    {<li><a href="/Factions">Factions</a></li>}
+                    {<li><a href="/Events">Events</a></li>}
+                    {<li><a href="/Mails">Mails</a></li>}
+                    {<li><a href="/Parrainage">Parrainage</a></li>}
+                    {<li><a href="/Wei">WEI</a></li>}
+                    {role !== 'newStudent' && <li><a href="Souhait">Souhait</a></li>}
                 </ul>
             </div>
             <div id="burger" onClick={handleClick}>

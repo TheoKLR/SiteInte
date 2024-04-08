@@ -2,7 +2,7 @@ import { api } from './api';
 
 // Obtention de la liste des Utilisateurs enregistrés dans la db
 export const getAllUsers = async () => {
-    let response = await api.get('user/all')
+    const response = await api.get('user/all')
     return response.data
 }
 
@@ -29,15 +29,9 @@ export const createDesire = async (name: string, desc: string) => {
 };
 
 // Attribution des rôles souhaités à l'étudiant de l'UTT ayant rempli le formulaire de choix de rôles
-export const submitChoices = async (choices: number[]) => {
-    try {
-        const response = await api.post('/desire/submit',
-            { desireIds: choices },
-        );
-        console.log(response.data);
-    } catch (err: any) {
-        console.error(err);
-    }
+export const submitChoices = async (choiceIds: number[]) => {
+    const response = await api.post('/wish/submit', { choiceIds });
+    return response.data;
 }
 
 // Enregistrement d'un étudiant
@@ -54,14 +48,14 @@ export const registerStudent = async (fName: string, lName: string, mail: string
     });
 }
 
-export const newStudentLogin = async (email: string, pwd: string) => {
+export const newStudentLogin = async (email: string, password: string) => {
     const response = await api.post('/auth/newStudentLogin',
-        { email, password: pwd }
+        { email, password }
     );
     return response?.data?.data;
 }
 
-export const studentLogin = async (code:string) => {
+export const studentLogin = async (code: string) => {
     const response = await api.get('/auth/studentLogin/' + code);
     return response?.data?.data.token;
 }
@@ -84,22 +78,13 @@ export const DeleteUsers = async (users: number[]) => {
 }
 
 // Obtention de tous les roles demandés par un utilisateur précis
-export const getUserDesiresById = async (userId: string) => {
-    try {
-        const response = await api.get('/user/' + userId + '/desires');
-        return response?.data.data;
-    } catch (error) {
-        console.error("Erreur lors de la récupération des desires de l'utilisateur " + userId)
-    }
-
+export const getUserWishes = async (userId: string) => {
+    const response = await api.get('/user/' + userId + '/wish');
+    return response?.data.data;
 }
 
 // Obtention de tous les utilisateurs ayant demandé un role précis
-export const getDesiresUsersById = async (desireId: string) => {
-    try {
-        const response = await api.get('/desire/' + desireId + '/users');
-        return response?.data.data;
-    } catch (error) {
-        console.error("Erreur lors de la récupération des utilisateurs correspondants au désire " + desireId)
-    }
+export const getWishUsers = async (roleId: string) => {
+    const response = await api.get('/wish/' + roleId + '/users');
+    return response?.data.data;
 }

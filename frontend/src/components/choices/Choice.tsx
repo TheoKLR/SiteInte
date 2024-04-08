@@ -2,74 +2,57 @@
 import { useEffect, useRef, useState } from 'react';
 import { submitChoices } from '../../services/requests';
 import { getAllRoles } from '../../services/requests/roles';
+import { handleError } from '../utils/Submit';
 import './Choice.css';
+import { ToastContainer } from 'react-toastify';
 
 // Formulaire pour que les étudiants de l'utt puissent choisir les rôles qui les intérresseraient pour l'inté
 export const Choice = () => {
-
-    const errRef = useRef<HTMLInputElement>(null);
-
     const [checkedValues, setCheckedValues] = useState<number[]>([]);
-    const [desires, setDesires] = useState<any[]>([]);
-    const [success, setSuccess] = useState(false);
-    const [errMsg, setErrMsg] = useState('');
-    const [successMsg, setSuccessMsg] = useState('');
-
+    const [wish, setWish] = useState<any[]>([]);
     // Appelé à chaque cochage/décochage d'une checkbox
     // Récupère les id des choix cochés et les stocke dans un array d'entiers
-    function handleChange(event: React.FormEvent){
-        const {value, checked} = event.target as HTMLInputElement;
-        setCheckedValues( pre => {
-            if (checked){
-                return [...pre,parseInt(value)];
-            } else {
-                return pre.filter(skill => skill!==parseInt(value));
-            }
-        })        
+    function handleChange(event: React.FormEvent) {
+        const { id, value, checked } = event.target as HTMLInputElement;
+        if (id !== "btnLegal") {
+            setCheckedValues(pre => {
+                if (checked) {
+                    return [...pre, parseInt(value)];
+                } else {
+                    return pre.filter(skill => skill !== parseInt(value));
+                }
+            })
+        }
     }
 
     // Soumission du formulaire
-    function handleSubmit(event: React.FormEvent){
-        try {
-            console.log(checkedValues);
-            const token = localStorage.getItem("authToken");
-            if (token !== null){
-                console.log("Token :" + token);
-                submitChoices(checkedValues);
-                setSuccess(true);
-                setSuccessMsg("Choix envoyés avec succès")
-            }
-        } catch (error) {
-            console.error(error)
-            setErrMsg("Problème rencontré lors de l'envoi des choix");
-        }
-        
+    const handleSubmit = async () => {
+        await handleError("Choix envoyés avec succès", "Problème rencontré lors de l'envoi des choix", submitChoices, checkedValues)
     }
 
     // récupération des choix de rôle existants dans la db
     useEffect(() => {
         getAllRoles()
-        .then(res => {
-            const data = res.data;
-            setDesires(data);
-        })
-        .catch(error => {
-            console.error('Une erreur s\'est produite lors de la récupération des désirs :', error);
-        });
-    }, [])    
+            .then(res => {
+                const data = res.data;
+                setWish(data);
+            })
+            .catch(error => {
+                console.error('Une erreur s\'est produite lors de la récupération des souhaits :', error);
+            });
+    }, [])
 
     // Frontend
     // Création des checkbox automatique en fonction des rôles existants dans la db
     return (
-        <>
-            <div className='containerChoix'>
-                <p>L'inté a besoin de beaucoup de gens dans de nombreux domaines. Choisis ton rôle afin d'aider au mieux!</p><br />
-                <div className='inputs'>   
-                <form onSubmit={handleSubmit}>
-                    {desires.map((desire, index) => (                       
+        <div className='containerChoix'>
+            <p>L'inté a besoin de beaucoup de gens dans de nombreux domaines. Choisis ton rôle afin d'aider au mieux!</p><br />
+            <div className='inputs'>
+                <form>
+                    {wish.map((wish, index) => (
                         <div className="checkbox-wrapper-1" key={index}>
-                            <input id={index.toString()} className="substituted" type="checkbox" aria-hidden="true" value={desire.id} onChange={handleChange} />
-                            <label htmlFor={index.toString()}>{desire.name} : {desire.description}</label>
+                            <input id={index.toString()} className="substituted" type="checkbox" aria-hidden="true" value={wish.id} onChange={handleChange} />
+                            <label htmlFor={index.toString()}>{wish.name} : {wish.description}</label>
                         </div>
                     ))}
                     <br />
@@ -84,7 +67,7 @@ export const Choice = () => {
                             Ce n'est pas parce que vous trouvez cela drôle que cela l'est aussi pour les nouveaux. <br /><br />
                             Si vous êtes témoins de bizutage pendant l'intégration, ou que vous avez un doute si quelque chose est acceptable, contactez un coordinateur. <br />
                             Notez ce numéro d'urgence, à ne jamais utiliser pour jouer (c'est comme le 15 ou le 112) : 07.68.74.02.59. <br />
-                            Le bizutage est un délit, puni par la loi. Ceux qui le pratiquent risquent des peines de prison ou de fortes amendes. En marge des poursuites judiciaires engagées, ils peuvent être présentés aux sections disciplinaires de l'UTT, avec des sanctions pouvant aller jusqu'à l'exclusion définitive de tout établissement d'enseignement supérieur français. <br /><br /></p> 
+                            Le bizutage est un délit, puni par la loi. Ceux qui le pratiquent risquent des peines de prison ou de fortes amendes. En marge des poursuites judiciaires engagées, ils peuvent être présentés aux sections disciplinaires de l'UTT, avec des sanctions pouvant aller jusqu'à l'exclusion définitive de tout établissement d'enseignement supérieur français. <br /><br /></p>
                         <h3>Règlementation légale</h3>
                         <h4> Extrait de la loi n°98-468 du 17 juin 1998 </h4> <br />
                         <p>Section 3 bis – Du bizutage <br /> <br />
@@ -96,17 +79,14 @@ export const Choice = () => {
                             <br /> <br />
                         </p>
                         <div className="checkbox-wrapper-1">
-                            <input id="btnLegal" className="substituted" type="checkbox" aria-hidden="true" required />
+                            <input id="btnLegal" className="substituted" type="checkbox" aria-hidden="true" required/>
                             <label htmlFor="btnLegal">Je comprends l'objectif de l'intégration et je comprends que mes actions peuvent être punies par une sanction disciplinaire et une peine d'emprisonnement et 15 000 € d'amende.</label>
                         </div>
                     </div>
-                    <button type='submit' className="login-button" id='boutonChoice'>Valider</button>
-                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-                    <p className={success ? "success" : "offscreen"} aria-live="assertive">{successMsg}</p>
                 </form>
-               
-                </div>
+                <button  className="login-button, button-36" onClick={handleSubmit}>Valider</button>
             </div>
-        </>
+            <ToastContainer position="bottom-right" />
+        </div>
     )
 }

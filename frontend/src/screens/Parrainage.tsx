@@ -22,6 +22,7 @@ export const Parrainage = () => {
     return (
         <div className="Parrainage">
             <Navbar/> 
+            <h1>Prochainement !</h1>
         </div>
     )
 }

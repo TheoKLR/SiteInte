@@ -15,6 +15,13 @@ export const addToFaction = async (teamIds: number[], factionId: number) => {
     })
 }
 
+export const registerTeam = async (name: string, userIds: number[]) => {
+    return await api.post('team/register', {
+        name,
+        userIds,
+    })
+}
+
 export const setTimestamp = async (timestamp: number) => {
     try {
         const response = await api.put('/team/timestamp');
@@ -29,3 +36,8 @@ export const getAllTeams = async () => {
     const response = await api.get('team/all')
     return response.data
 }
+/*
+export const getTeamByName = async (name: string) => {
+    const response = await api.get('team/all')
+    return response.data
+}*/

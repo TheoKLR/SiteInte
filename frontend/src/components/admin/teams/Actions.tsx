@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Select from 'react-select'
-import { createTeam, addToFaction, deleteTeam } from '../../../services/requests/teams';
+import { createTeam, addToFaction, deleteTeam, getAllTeams } from '../../../services/requests/teams';
 import { toArray, toId, handleError } from '../../utils/Submit'
 import { Teams, Factions } from '../../utils/Select'
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { Team } from '../../../services/interfaces';
+import { toTable } from '../../utils/Tables';
 
 export const CreateTeam = () => {
   const [name, setName] = useState('');
@@ -21,7 +23,7 @@ export const CreateTeam = () => {
         <p>Nom</p>
         <input type="text" value={name} onChange={e => setName(e.target.value)} />
       </div>
-      <button className="" onClick={handleSubmit}>Soumettre</button>
+      <button className="submit-button" onClick={handleSubmit}>Soumettre</button>
       <ToastContainer position="bottom-right"/>
     </div>
   );
@@ -81,4 +83,24 @@ export const DeleteTeam = () => {
       <ToastContainer position="bottom-right"/>
     </div>
   )
+}
+
+export const TableTeams = () => {
+
+  const [factions, setFactions] = useState<Team[]>([]);
+
+    useEffect(() => {
+        const fetchRole = async () => {
+            try {
+                const factions = await getAllTeams();
+                setFactions(factions.data)
+            } catch (error) {
+                console.error('Error fetching role:', error);
+            }
+        };
+        fetchRole();
+    }, []);
+
+  console.log(factions)
+  return factions.length > 0 ? toTable(factions) : null;
 }

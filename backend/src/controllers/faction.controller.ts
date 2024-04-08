@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/faction.service';
+import * as team_service from '../services/team.service'
 import { Error, Created, Ok } from '../utils/responses';
 
 
@@ -47,6 +48,7 @@ export const deleteFaction = async (req: Request, res: Response, next: NextFunct
   if (isNaN(idNumber)) return Error(res, { msg : 'could not parse Id' });
 
   try {
+    await team_service.removeTeamFromFaction(idNumber);
     await service.deleteFaction(idNumber);
     Ok(res, { msg: "Faction deleted" });
   } catch (error) {

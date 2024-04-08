@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/team.service';
+import * as user_service from '../services/user.service';
 import { Error, Created, Ok } from '../utils/responses';
 
 
@@ -47,6 +48,7 @@ export const deleteTeam = async (req: Request, res: Response, next: NextFunction
   if (isNaN(idNumber)) return Error(res, { msg : 'could not parse Id' });
 
   try {
+    await user_service.removeUsersFromTeam(idNumber);
     await service.deleteTeam(idNumber);
     Ok(res, { msg: "Team deleted" });
   } catch (error) {
@@ -64,3 +66,15 @@ export const addToFaction = async (req: Request, res: Response, next: NextFuncti
     Error(res, { error });
   }
 };
+
+export const registerTeam = async (req: Request, res: Response, next: NextFunction) => {
+  const { name, userIds } = req.body;
+
+  try {
+    await service.createTeam(name);
+    const id = await service.getTeamId(name);
+    await user_service.addToTeam(userIds, id);
+  } catch (error) {
+    Error(res, { error });
+  }
+}

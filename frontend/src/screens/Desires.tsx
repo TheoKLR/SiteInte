@@ -9,7 +9,7 @@ export const Souhait = () => {
         const fetchRole = async () => {
             try {
                 const role = await getRole();
-                if (!role) {
+                if (!role && role === "newStudent") {
                     window.location.href = '/';
                     return null;
                 }
@@ -17,7 +17,6 @@ export const Souhait = () => {
                 console.error('Error fetching role:', error);
             }
         };
-
         fetchRole();
     }, []);
 

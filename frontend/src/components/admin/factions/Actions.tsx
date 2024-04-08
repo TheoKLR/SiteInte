@@ -1,10 +1,12 @@
-import { useState } from 'react';
-import { createFaction, deleteFaction } from '../../../services/requests/factions';
+import { useEffect, useState } from 'react';
+import { createFaction, deleteFaction, getAllFactions } from '../../../services/requests/factions';
 import Select from 'react-select'
 import { toId } from '../../utils/Submit'
 import { Factions } from '../../utils/Select'
 import { handleError } from '../../utils/Submit';
 import { ToastContainer } from 'react-toastify';
+import { Faction } from '../../../services/interfaces';
+import { toTable } from '../../utils/Tables';
 
 export const CreateFaction = () => {
   const [name, setName] = useState('');
@@ -22,8 +24,8 @@ export const CreateFaction = () => {
         <p>Nom</p>
         <input type="text" value={name} onChange={e => setName(e.target.value)} />
       </div>
-      <button className="" onClick={handleSubmit}>Soumettre</button>
-      <ToastContainer position="bottom-right"/>
+      <button className="submit-button" onClick={handleSubmit}>Soumettre</button>
+      <ToastContainer position="bottom-right" />
     </div>
   );
 };
@@ -46,7 +48,26 @@ export const DeleteFaction = () => {
         />
       </div>
       <button className="submit-button" onClick={Submit}>Soumettre</button>
-      <ToastContainer position="bottom-right"/>
+      <ToastContainer position="bottom-right" />
     </div>
   )
+}
+
+export const TableFaction = () => {
+
+  const [factions, setFactions] = useState<Faction[]>([]);
+
+  useEffect(() => {
+    const fetchRole = async () => {
+      try {
+        const factions = await getAllFactions();
+        setFactions(factions)
+      } catch (error) {
+        console.error('Error fetching role:', error);
+      }
+    };
+    fetchRole();
+  }, []);
+
+  return factions.length > 0 ? toTable(factions) : null;
 }
