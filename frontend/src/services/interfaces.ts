@@ -31,6 +31,11 @@ export interface Role {
     description: string;
 }
 
+export interface RoleNoDesc {
+    id: number;
+    name: string;
+}
+
 export interface Event {
     id: number;
     name: string;
