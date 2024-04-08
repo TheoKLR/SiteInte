@@ -23,7 +23,7 @@ export const CreateTeam = () => {
         <p>Nom</p>
         <input type="text" value={name} onChange={e => setName(e.target.value)} />
       </div>
-      <button className="" onClick={handleSubmit}>Soumettre</button>
+      <button className="submit-button" onClick={handleSubmit}>Soumettre</button>
       <ToastContainer position="bottom-right"/>
     </div>
   );

@@ -24,7 +24,7 @@ export const CreateRole = () => {
         <p>Description</p>
         <input type="text" value={desc} onChange={e => setDesc(e.target.value)} />
       </div>
-      <button className="" onClick={handleSubmit}>Soumettre</button>
+      <button className="submit-button" onClick={handleSubmit}>Soumettre</button>
       <ToastContainer position="bottom-right"/>
     </div>
   );

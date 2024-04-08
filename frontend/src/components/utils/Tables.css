@@ -5,6 +5,7 @@ table{
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     border-radius: 12px 12px 0 0;
     overflow: hidden;
+    font-size: 12px;
    
    }
    td , th{
@@ -16,8 +17,7 @@ table{
    th{
     background-color: rgba(218, 76, 114, 0.82);
     color: #fafafa;
-    font-family: 'Open Sans',Sans-serif;
-    font-weight: 200;
+    font-weight: 400;
     text-transform: uppercase;
    
    }

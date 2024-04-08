@@ -29,7 +29,7 @@ export const newStudentLogin = async (req: Request, res: Response, next: NextFun
 
     try {
         const user = await service.getNewStudentByEmail(email)
-        if (user === null) {
+        if (!user) {
             return Error(res, { msg: "user doesn't exists" })
         }
 
@@ -39,7 +39,7 @@ export const newStudentLogin = async (req: Request, res: Response, next: NextFun
         }
         const id = user.id
         const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
-        service.incrementConnection;
+        service.incrementConnection(id);
         Ok(res, { data: token })
     } catch (error) {
         Error(res, { error })
@@ -63,14 +63,16 @@ export const studentLogin = async (req: Request, res: Response, next: NextFuncti
         const { email, firstName, lastName } = user_data
         let user = await service.getUserByEmail(email)
 
-        if (user === null) {
+        if (!user) {
             await service.createUser(firstName, lastName, email, "default", PermType.Student)
             user = await service.getUserByEmail(email)
         }
 
         const id = user?.id
+        if (!id) return Error(res, {})
+            
         const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
-        service.incrementConnection;
+        service.incrementConnection(id);
         Ok(res, { data: { token } })
     } catch (error) {
         Error(res, { error })
