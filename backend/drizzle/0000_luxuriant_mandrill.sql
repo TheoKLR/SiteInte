@@ -46,6 +46,8 @@ CREATE TABLE IF NOT EXISTS "userToRole" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "team" (
 	"id" serial PRIMARY KEY NOT NULL,
+	"isOfficial" boolean NOT NULL,
+	"timeCode" timestamp,
 	"team_name" text NOT NULL,
 	"city_id" integer,
 	CONSTRAINT "team_team_name_unique" UNIQUE("team_name")
@@ -57,6 +59,7 @@ CREATE TABLE IF NOT EXISTS "user" (
 	"last_name" text NOT NULL,
 	"email" text NOT NULL,
 	"contact" text,
+	"connection_num" integer NOT NULL,
 	"permission" "permission" NOT NULL,
 	"password" text NOT NULL,
 	"team" integer,

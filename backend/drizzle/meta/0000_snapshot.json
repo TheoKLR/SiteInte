@@ -1,6 +1,6 @@
 {
-  "id": "10e79637-6f97-41e9-b390-18c9bef82e41",
-  "prevId": "069ff296-2ee9-42af-9af7-05bbaad585e0",
+  "id": "a6eb0ed2-598a-471d-9b78-9f44ceb73ce2",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -353,6 +353,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "connection_num": {
+          "name": "connection_num",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         },
         "permission": {
           "name": "permission",

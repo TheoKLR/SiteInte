@@ -1,19 +1,5 @@
 import { db } from "./db"
 import { eventSchema } from "../schemas/event.schema"
-<<<<<<< HEAD
-
-export const init = async () => {
-    try {
-        await db.insert(eventSchema).values({name: "PreInscription", state: false})
-        await db.insert(eventSchema).values({name: "ShotgunCE", state: false})
-        await db.insert(eventSchema).values({name: "ShotgunPerm", state: false})
-        await db.insert(eventSchema).values({name: "Barbecue", state: false})    
-    } catch {
-        console.log("event already implemented")
-    }
-    
-}
-=======
 import { roleSchema } from "../schemas/role.schema"
 
 export const init = async () => {
@@ -74,4 +60,3 @@ const roles = [
     { name: "Visites", description: "Organiser les visites du samedi aprèm avant l'inté et celles pendant la première semaine pour les TC et les branches." },
     { name: "WEI", description: "Organiser le Week-end d’intégration (transport, animation, logistique, soirée, boissons) en coordonnant avec les différentes commissions de l’inté : log, bouffe, S&L, anim..." }
 ];
->>>>>>> backupTheo

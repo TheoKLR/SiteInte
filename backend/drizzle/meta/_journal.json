@@ -3,35 +3,11 @@
   "dialect": "pg",
   "entries": [
     {
-      "idx": 1,
+      "idx": 0,
       "version": "5",
-      "when": 1711375642614,
-      "tag": "0001_certain_kulan_gath",
+      "when": 1712611554924,
+      "tag": "0000_luxuriant_mandrill",
       "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1711488399995,
-      "tag": "0002_material_zodiak",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1711634302892,
-      "tag": "0003_unique_shinko_yamashiro",
-      "breakpoints": true
-<<<<<<< HEAD
-=======
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1712563252227,
-      "tag": "0004_moaning_salo",
-      "breakpoints": true
->>>>>>> backupTheo
     }
   ]
 }
