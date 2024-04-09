@@ -6,7 +6,6 @@ import { Roles, Users } from '../../utils/Select';
 import { ToastContainer } from 'react-toastify';
 import { getWishUsers, getUserWishes } from '../../../services/requests';
 import { toTable } from '../../utils/Tables';
-import { Role, RoleNoDesc } from '../../../services/interfaces';
 
 export const CreateRole = () => {
   const [name, setName] = useState('');
@@ -15,6 +14,8 @@ export const CreateRole = () => {
   const handleSubmit = async () => {
     if (name !== '' && desc !== '') {
       await handleError("Role créé !", "Une erreur est survenue", createRole, name, desc)
+      setName('')
+      setDesc('')
     }
   };
 
@@ -38,7 +39,7 @@ export const DeleteRole = () => {
   const Submit = async () => {
     const id = toId(Role)
     await handleError("Rôle suprimé", "Une erreur est survenue", deleteRole, id)
-    setRole('');
+    setRole({});
   }
 
   return (

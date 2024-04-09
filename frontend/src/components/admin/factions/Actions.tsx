@@ -36,6 +36,7 @@ export const DeleteFaction = () => {
   const Submit = async () => {
     const id = toId(faction)
     await handleError("Faction suprimée !", "Une erreur est survenue", deleteFaction, id)
+    setFaction({})
   }
 
   return (

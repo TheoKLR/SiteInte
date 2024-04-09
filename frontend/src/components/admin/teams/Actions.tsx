@@ -14,6 +14,7 @@ export const CreateTeam = () => {
   const handleSubmit = async () => {
     if (name !== '') {
       await handleError("Equipe créée !", "Une erreur est survenue", createTeam, name)
+      setName('')
     }
   };
 
@@ -30,13 +31,15 @@ export const CreateTeam = () => {
 };
 
 export const AddToFaction = () => {
-  const [faction, setFaction] = useState([] as any)
-  const [teams, setTeams] = useState({} as any)
+  const [faction, setFaction] = useState({} as any)
+  const [teams, setTeams] = useState([] as any)
 
   const Submit = async () => {
     const t = toArray(teams)
     const id = toId(faction)
     await handleError("Equipe ajoutée !", "Une erreur est survenue", addToFaction, t, id)
+    setTeams([])
+    setFaction({})
   }
 
   return (
@@ -47,6 +50,7 @@ export const AddToFaction = () => {
           isMulti
           options={Teams()}
           onChange={teams => setTeams(teams)}
+          value={teams}
         />
         <Select
           value={faction}
@@ -67,7 +71,7 @@ export const DeleteTeam = () => {
     const id = toId(team)
     deleteTeam(id)
     await handleError("Equipe supprimée !", "Une erreur est survenue", deleteTeam, id)
-    setTeam('');
+    setTeam({});
   }
 
   return (

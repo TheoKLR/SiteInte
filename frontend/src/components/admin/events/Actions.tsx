@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getActiveEvents, setActiveEvent, setInactiveEvent} from '../../../services/requests/events';
+import { setActiveEvent, setInactiveEvent} from '../../../services/requests/events';
 import Select from 'react-select'
 import { InactiveEvents, ActiveEvents } from '../../utils/Select';
 import { toId } from '../../utils/Submit';
@@ -12,6 +12,7 @@ export const StartEvent = () => {
     const Submit = async () => {
         const id = toId(event)
         await handleError("L'event à commencé ", "Une erreur est survenue", setActiveEvent, id)
+        setEvent({})
     }
 
     return (
@@ -36,6 +37,7 @@ export const StopEvent = () => {
     const Submit = async () => {
         const id = toId(event)
         await handleError("L'event à commencé ", "Une erreur est survenue", setInactiveEvent, id)
+        setEvent(event)
     }
 
     return (

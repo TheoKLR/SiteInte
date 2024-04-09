@@ -17,43 +17,49 @@ export const AddToTeam = () => {
     const u = toArray(users)
     const id = toId(team)
     await handleError("Utilisateur ajouté !", "Une erreur est survenue", addToTeam, u, id)
+    setUsers([])
+    setTeam({})
   }
 
   return (
     <div>
       <div className="select-container">
         <Select
+          value={users}
           closeMenuOnSelect={false}
           isMulti
           options={Users()}
           onChange={users => setUsers(users)}
         />
         <Select
+          value={team}
           options={Teams()}
           onChange={team => setTeam(team)}
         />
       </div>
       <button className="submit-button" onClick={Submit}>Soumettre</button>
-      <ToastContainer position="bottom-right"/>
+      <ToastContainer position="bottom-right" />
     </div>
   )
 }
 
 export const ChangePermission = () => {
-  const [user, setUser] = useState([] as any)
+  const [user, setUser] = useState({} as any)
   const [perm, setPerm] = useState({} as any)
-  
+
   const permTypeOptions = [
     { value: 'Admin', label: 'Admin' },
     { value: 'RespoCE', label: 'RespoCE' },
     { value: 'Respo', label: 'Respo' },
     { value: 'Anim', label: 'Anim' }
   ];
-  
+
 
   const Submit = async () => {
     const id = toId(user)
     await handleError("permission modifiée !", "Une erreur est survenue", changePermission, id, perm.value)
+    setUser({})
+    setPerm({})
   }
 
   return (
@@ -62,14 +68,16 @@ export const ChangePermission = () => {
         <Select
           options={Users()}
           onChange={user => setUser(user)}
+          value={user}
         />
         <Select
           options={permTypeOptions}
           onChange={perm => setPerm(perm)}
+          value={perm}
         />
       </div>
       <button className="submit-button" onClick={Submit}>Soumettre</button>
-      <ToastContainer position="bottom-right"/>
+      <ToastContainer position="bottom-right" />
     </div>
   )
 }
@@ -80,17 +88,17 @@ export const TableUser = () => {
 
   const [users, setUsers] = useState<User[]>([]);
 
-    useEffect(() => {
-        const fetchRole = async () => {
-            try {
-                const response = await getAllUsers();
-                setUsers(response.data)
-            } catch (error) {
-                console.error('Error fetching role:', error);
-            }
-        };
-        fetchRole();
-    }, []);
+  useEffect(() => {
+    const fetchRole = async () => {
+      try {
+        const response = await getAllUsers();
+        setUsers(response.data)
+      } catch (error) {
+        console.error('Error fetching role:', error);
+      }
+    };
+    fetchRole();
+  }, []);
 
   return users.length > 0 ? toTable(users) : null;
 }
