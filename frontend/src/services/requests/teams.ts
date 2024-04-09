@@ -36,8 +36,3 @@ export const getAllTeams = async () => {
     const response = await api.get('team/all')
     return response.data.data
 }
-/*
-export const getTeamByName = async (name: string) => {
-    const response = await api.get('team/all')
-    return response.data
-}*/

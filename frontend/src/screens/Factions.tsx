@@ -16,7 +16,6 @@ export const Factions = () => {
                 const role = await getRole();
                 const factions = await getAllFactions();
                 setFactions(factions)
-                console.log(factions)
                 if (!role) {
                     window.location.href = '/';
                     return null;

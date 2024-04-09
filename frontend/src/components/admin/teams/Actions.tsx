@@ -97,7 +97,6 @@ export const TableTeams = () => {
         const fetchRole = async () => {
             try {
                 const teams = await getAllTeams();
-                console.log(teams)
                 setTeams(teams)
             } catch (error) {
                 console.error('Error fetching role:', error);

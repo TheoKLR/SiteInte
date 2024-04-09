@@ -6,7 +6,6 @@ export const getAllRoles = async () => {
     try {
         return await db.select().from(roleSchema);
     } catch (error) {
-        console.error("Error fetching all roles:", error);
         throw new Error("Failed to fetch roles. Please try again later.");
     }
 }
@@ -16,7 +15,6 @@ export const getRole = async (id: number) => {
         const role = await db.select().from(roleSchema).where(eq(roleSchema.id, id));
         return role[0];
     } catch (error) {
-        console.error("Error fetching role:", error);
         throw new Error("Failed to fetch role. Please try again later.");
     }
 }
@@ -26,7 +24,6 @@ export const createRole = async (name: string, description: string) => {
         const newRole: Role = { name, description };
         await db.insert(roleSchema).values(newRole);
     } catch (error) {
-        console.error("Error creating role:", error);
         throw new Error("Failed to create role. Please try again later.");
     }
 }
@@ -35,7 +32,6 @@ export const deleteRole = async (id: number) => {
     try {
         await db.delete(roleSchema).where(eq(roleSchema.id, id));
     } catch (error) {
-        console.error("Error deleting role:", error);
         throw new Error("Failed to delete role. Please try again later.");
     }
 }
@@ -46,7 +42,6 @@ export const addUserRoles = async (userId: number, roleIds: number[]) => {
             await createUserToRole(userId, id);
         }
     } catch (error) {
-        console.error("Error adding user roles:", error);
         throw new Error("Failed to add user roles. Please try again later.");
     }
 }
@@ -57,7 +52,6 @@ export const removeUserRoles = async (userId: number, roleIds: number[]) => {
             await removeUserToRole(userId, id);
         }
     } catch (error) {
-        console.error("Error removing user roles:", error);
         throw new Error("Failed to remove user roles. Please try again later.");
     }
 }
@@ -72,7 +66,6 @@ export const submitWish = async (userId: number, roleIds: number[]) => {
             await createUserToWish(userId, id);
         }
     } catch (error) {
-        console.error("Error submitting wish:", error);
         throw new Error("Failed to submit wish. Please try again later.");
     }
 }
@@ -85,7 +78,6 @@ const createUserToRole = async (userId: number, roleId: number) => {
             await db.insert(userToRoleSchema).values(newUserToRole);
         }
     } catch (error) {
-        console.error("Error creating user to role:", error);
         throw new Error("Failed to create user to role. Please try again later.");
     }
 }
@@ -98,7 +90,6 @@ const removeUserToRole = async (userId: number, roleId: number) => {
             await db.delete(userToRoleSchema).where(eq(userToRoleSchema, role));
         }
     } catch (error) {
-        console.error("Error removing user to role:", error);
         throw new Error("Failed to remove user to role. Please try again later.");
     }
 }
@@ -108,7 +99,6 @@ const createUserToWish = async (userId: number, roleId: number) => {
         const newUserToWish: userToRole = { userId, roleId, isWish: true };
         await db.insert(userToRoleSchema).values(newUserToWish);
     } catch (error) {
-        console.error("Error creating user to wish:", error);
         throw new Error("Failed to create user to wish. Please try again later.");
     }
 }
@@ -124,7 +114,6 @@ export const getWishUsers = async (id: number) => {
                 eq(userToRoleSchema.isWish, true)
             ));
     } catch (error) {
-        console.error("Error fetching wish users:", error);
         throw new Error("Failed to fetch wish users. Please try again later.");
     }
 }

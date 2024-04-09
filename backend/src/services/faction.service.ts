@@ -6,7 +6,6 @@ export const getAllFactions = async () => {
     try {
         return await db.select().from(factionSchema);
     } catch (error) {
-        console.error("Error fetching all factions:", error);
         throw new Error("Failed to fetch factions. Please try again later.");
     }
 }
@@ -15,7 +14,6 @@ export const getFaction = async (id: number) => {
     try {
         return await db.select().from(factionSchema).where(eq(factionSchema.id, id));
     } catch (error) {
-        console.error("Error fetching faction:", error);
         throw new Error("Failed to fetch faction. Please try again later.");
     }
 }
@@ -39,7 +37,6 @@ export const deleteFaction = async (id: number) => {
     try {
         await db.delete(factionSchema).where(eq(factionSchema.id, id));
     } catch (error) {
-        console.error("Error deleting faction:", error);
         throw new Error("Failed to delete faction. Please try again later.");
     }
 }
@@ -51,7 +48,6 @@ export const getPoints = async (id: number) => {
         }).from(factionSchema).where(eq(factionSchema.id, id));
         return faction[0]?.points;
     } catch (error) {
-        console.error("Error fetching points:", error);
         throw new Error("Failed to fetch points. Please try again later.");
     }
 }
@@ -62,7 +58,6 @@ export const addPoints = async (id: number, current: number, points: number) => 
             .set({ points: current + points })
             .where(eq(factionSchema.id, id));
     } catch (error) {
-        console.error("Error adding points:", error);
         throw new Error("Failed to add points. Please try again later.");
     }
 }

@@ -3,7 +3,6 @@ import { api } from './api';
 // Obtention de la liste des Utilisateurs enregistrés dans la db
 export const getAllUsers = async () => {
     const response = await api.get('user/all')
-    console.log(response?.data.data)
     return response?.data.data
 }
 
@@ -24,7 +23,6 @@ export const createDesire = async (name: string, desc: string) => {
         const response = await api.post('/desire/', { name, desc });
         return response.data;
     } catch (error) {
-        console.error('Erreur lors de l\'enregistrement du desire :', error);
         throw error;
     }
 };
@@ -64,7 +62,6 @@ export const studentLogin = async (code: string) => {
 // Obtention du rôle de l'étudiant
 export const getRole = async () => {
     const response = await api.get('/auth/role')
-    console.log(response?.data?.data)
     return response?.data?.data
 }
 

@@ -87,7 +87,6 @@ export const changePermission = async (req: Request, res: Response, next: NextFu
     try {
         const user = await service.getUser(id);
         const permission = user?.permission || "newStudent";
-        console.log(permission)
         if (permission === "newStudent") {
             return Error(res, { msg: "bad permission" });
         }

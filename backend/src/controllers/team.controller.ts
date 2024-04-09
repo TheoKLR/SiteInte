@@ -43,7 +43,6 @@ export const createTeam = async (req: Request, res: Response, next: NextFunction
 export const deleteTeam = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const idNumber = parseInt(id, 10);
-  console.log(idNumber)
 
   if (isNaN(idNumber)) return Error(res, { msg : 'could not parse Id' });
 

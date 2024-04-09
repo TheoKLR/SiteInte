@@ -12,7 +12,6 @@ const client = axios.create({
 
 export const getToken = async (authorization_code: string) => {
     try {
-        console.log(authorization_code)
         const app_connection = await client.post('https://etu.utt.fr/api/oauth/token', querystring.stringify({
             grant_type: 'authorization_code',
             authorization_code: authorization_code

@@ -63,7 +63,6 @@ export const TableRoleUsers = () => {
   const handleChange = async (user: any) => {
     const id = toId(user)
     let wishUsers = await getWishUsers(id)
-    console.log(wishUsers)
     wishUsers = wishUsers.map((user: any) => ({
       ID: user.users.id,
       name: `${user.users.first_name} ${user.users.last_name}`,

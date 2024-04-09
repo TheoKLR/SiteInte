@@ -25,8 +25,6 @@ const LoginForm = () => {
     const NSLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            console.log(user)
-            console.log(pwd)
             const token = await newStudentLogin(user, pwd);
             if (token !== null) {
                 localStorage.setItem("authToken", token);

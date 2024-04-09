@@ -16,7 +16,6 @@ export const getAllUsers = async () => {
             team_id: userSchema.team,
         }).from(userSchema);
     } catch (error) {
-        console.error("Error fetching all users:", error);
         throw new Error("Failed to fetch users. Please try again later.");
     }
 }
@@ -30,7 +29,6 @@ export const getUserLight = async () => {
             team_id: userSchema.team,
         }).from(userSchema);
     } catch (error) {
-        console.error("Error fetching user light:", error);
         throw new Error("Failed to fetch user light. Please try again later.");
     }
 }
@@ -49,7 +47,6 @@ export const getUser = async (id: number) => {
 
         return user.length === 0 ? null : user[0];
     } catch (error) {
-        console.error("Error fetching user:", error);
         throw new Error("Failed to fetch user. Please try again later.");
     }
 }
@@ -65,7 +62,6 @@ export const getNewStudentByEmail = async (email: string) => {
 
         return user.length === 0 ? null : user[0];
     } catch (error) {
-        console.error("Error fetching new student by email:", error);
         throw new Error("Failed to fetch new student by email. Please try again later.");
     }
 }
@@ -76,7 +72,6 @@ export const getUserByEmail = async (email: string) => {
 
         return user.length === 0 ? null : user[0];
     } catch (error) {
-        console.error("Error fetching user by email:", error);
         throw new Error("Failed to fetch user by email. Please try again later.");
     }
 }
@@ -89,7 +84,6 @@ export const createUser = async (first_name: string, last_name: string, email: s
         const newUser: User = { first_name, last_name, email, contact: null, connection_number: 0, permission, password, team: null };
         await db.insert(userSchema).values(newUser);
     } catch (error) {
-        console.error("Error creating user:", error);
         throw new Error("Failed to create user. Please try again later.");
     }
 }
@@ -98,7 +92,6 @@ export const deleteUser = async (id: number) => {
     try {
         await db.delete(userSchema).where(eq(userSchema.id, id));
     } catch (error) {
-        console.error("Error deleting user:", error);
         throw new Error("Failed to delete user. Please try again later.");
     }
 }
@@ -109,7 +102,6 @@ export const removeUsersFromTeam = async (id: number) => {
             .set({ team: null })
             .where(eq(userSchema.team, id));
     } catch (error) {
-        console.error("Error removing users from team:", error);
         throw new Error("Failed to remove users from team. Please try again later.");
     }
 }
@@ -122,7 +114,6 @@ export const addToTeam = async (UserIds: number[], TeamId: number) => {
                 .where(eq(userSchema.id, id));
         }
     } catch (error) {
-        console.error("Error adding users to team:", error);
         throw new Error("Failed to add users to team. Please try again later.");
     }
 }
@@ -133,7 +124,6 @@ export const addContact = async (id: number, contact: string) => {
             .set({ contact: contact })
             .where(eq(userSchema.id, id));
     } catch (error) {
-        console.error("Error adding contact:", error);
         throw new Error("Failed to add contact. Please try again later.");
     }
 }
@@ -144,7 +134,6 @@ export const changePermission = async (id: number, perm: PermType) => {
             .set({ permission: perm })
             .where(eq(userSchema.id, id));
     } catch (error) {
-        console.error("Error changing permission:", error);
         throw new Error("Failed to change permission. Please try again later.");
     }
 }
@@ -158,7 +147,6 @@ export const incrementConnection = async (id: number) => {
             .set({ connection_number: num + 1 })
             .where(eq(userSchema.id, id));
     } catch (error) {
-        console.error("Error incrementing connection:", error);
         throw new Error("Failed to increment connection. Please try again later.");
     }
 }
@@ -174,7 +162,6 @@ export const getUserWish = async (id: number) => {
                 eq(userToRoleSchema.isWish, true)
             ));
     } catch (error) {
-        console.error("Error fetching user wish:", error);
         throw new Error("Failed to fetch user wish. Please try again later.");
     }
 }
