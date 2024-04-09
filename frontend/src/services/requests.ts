@@ -3,18 +3,19 @@ import { api } from './api';
 // Obtention de la liste des Utilisateurs enregistrés dans la db
 export const getAllUsers = async () => {
     const response = await api.get('user/all')
-    return response.data
+    console.log(response?.data.data)
+    return response?.data.data
 }
 
 // Obtention de la liste des équipes enregistrées dans la db
 export const getAllTeams = async () => {
     const response = await api.get('team/all')
-    return response.data
+    return response?.data.data
 }
 
 export const getAllFactions = async () => {
     const response = await api.get('faction/all')
-    return response.data
+    return response?.data.data
 }
 
 // Création d'un rôle pouvant être tenu par les étudiants de l'UTT lors de l'Inté

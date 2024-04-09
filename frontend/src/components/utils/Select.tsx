@@ -10,7 +10,7 @@ export const Roles = () => {
     const fetchData = async () => {
       try {
         const response = await getAllRoles()
-        const usersOptions = response.data.map((role: Role) => ({
+        const usersOptions = response.map((role: Role) => ({
           value: role.id,
           label: role.name,
         }))
@@ -33,7 +33,7 @@ export const Factions = () => {
     const fetchData = async () => {
       try {
         const response = await getAllFactions()
-        const usersOptions = response.data.map((faction: Faction) => ({
+        const usersOptions = response.map((faction: Faction) => ({
           value: faction.id,
           label: faction.name,
         }))
@@ -57,7 +57,7 @@ export const Teams = () => {
     const fetchData = async () => {
       try {
         const response = await getAllTeams()
-        const usersOptions = response.data.map((team: Team) => ({
+        const usersOptions = response.map((team: Team) => ({
           value: team.id,
           label: team.name,
         }))
@@ -80,7 +80,7 @@ export const Users = () => {
     const fetchData = async () => {
       try {
         const response = await getAllUsers()
-        const usersOptions = response.data.map((user: User) => ({
+        const usersOptions = response.map((user: User) => ({
           value: user.id,
           label: `${user.first_name} ${user.last_name}`,
         }))

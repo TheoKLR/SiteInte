@@ -34,7 +34,7 @@ export const setTimestamp = async (timestamp: number) => {
 // Obtention de la liste des équipes enregistrées dans la db
 export const getAllTeams = async () => {
     const response = await api.get('team/all')
-    return response.data
+    return response.data.data
 }
 /*
 export const getTeamByName = async (name: string) => {

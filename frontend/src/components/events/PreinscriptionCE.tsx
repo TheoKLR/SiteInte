@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import Select from 'react-select'
-import { getCurrentUser } from '../../services/requests';
+import { getAllTeams, getCurrentUser } from '../../services/requests';
 import { UserLight } from '../../services/interfaces'
 import { registerTeam } from '../../services/requests/teams'
 import { handleError } from '../utils/Submit'
 import { toArray } from '../utils/Submit'
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import { getUserLight } from '../../services/requests/users';
+import './events.css'
 
 // Formulaire pour que les étudiants de l'utt puissent choisir les rôles qui les intérresseraient pour l'inté
 export const PreInscription = () => {
@@ -39,12 +40,20 @@ export const PreInscription = () => {
     }, []);
 
     const handleSubmit = async () => {
-        if (users.length == 3 || users.length == 4) {
+        const teams = await getAllTeams()
+        const AlreadyExists = teams.filter((team: any) => team.name === teamName)
+        if (teamName === '') {
+            toast.error("tu n'as pas entré de nom d'équipe")
+        } else if (users.length !== 1 || users.length !== 1) {
+            toast.error("tu dois inscrire 3 ou 4 coéquipiers")
+        } else if (AlreadyExists.length !== 0) {
+            toast.error("Une équipe a déja le même nom")
+        } else {
             const u = toArray(users)
             u.push(currentUserId)
-            handleError("equipe ajoutée", "une erreur s'est produite", registerTeam, teamName, u)
+            handleError("équipe ajoutée", "une erreur s'est produite", registerTeam, teamName, u)
+            setHasTeam(true)
         }
-        setHasTeam(true)
     }
 
     return (
@@ -57,17 +66,18 @@ export const PreInscription = () => {
                 </div>
             ) : (
                 <div>
-                    <p>Nom provisoire de l'équipe</p>
-                    <input type="text" onChange={(e) => { setTeamName(e.target.value) }} />
+                    <p id="desc-preinsc">Inscris ton équipe pour la préinscription en choisissant un nom d'équipe temporaire, puis en ajoutant tes coéquipiers (tu seras automatiquement ajouté à l'équipe). Tu peux inscrire 3 ou 4 coéquipiers.</p>
+                    <input className="event-input" type="text" placeholder="Nom provisoire de l'équipe" onChange={(e) => { setTeamName(e.target.value) }} />
                     <Select
                         isMulti
                         closeMenuOnSelect={false}
                         options={Options}
                         onChange={u => setUsers(u)}
                         isOptionDisabled={() => users.length >= 4}
+                        placeholder={'Coéquipiers'}
                     />
-                    <button className="" onClick={handleSubmit}>Soumettre</button>
-                    <ToastContainer position="bottom-right"/>
+                    <button className="submit-button" onClick={handleSubmit}>Soumettre</button>
+                    <ToastContainer position="bottom-right" />
                 </div>
             )}
         </div>

@@ -13,7 +13,7 @@ const initEvent = async () => {
             await db.insert(eventSchema).values(event);
         }
     } catch {
-        console.error('event already in th DB')
+        console.error('event already in the DB')
     }
 }
 
@@ -23,7 +23,7 @@ const initRole = async () => {
             await db.insert(roleSchema).values(role);
         }
     } catch {
-        console.error('role already in th DB')
+        console.error('role already in the DB')
     }
 }
 

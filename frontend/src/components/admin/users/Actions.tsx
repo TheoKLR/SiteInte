@@ -92,7 +92,7 @@ export const TableUser = () => {
     const fetchRole = async () => {
       try {
         const response = await getAllUsers();
-        setUsers(response.data)
+        setUsers(response)
       } catch (error) {
         console.error('Error fetching role:', error);
       }

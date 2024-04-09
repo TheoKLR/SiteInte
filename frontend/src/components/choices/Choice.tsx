@@ -90,6 +90,7 @@ export const Choice = () => {
                         </div>
                     </div>
                 </form>
+                <p><strong>Attention ! Si tu as déjà fait tes souhaits et que tu veux les modifier, tes précédents souhaits seront supprimés.</strong></p>
                 <button  className="login-button, button-36" onClick={handleSubmit}>Valider</button>
             </div>
             <ToastContainer position="bottom-right" />

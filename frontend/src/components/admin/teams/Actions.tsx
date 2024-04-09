@@ -91,20 +91,19 @@ export const DeleteTeam = () => {
 
 export const TableTeams = () => {
 
-  const [factions, setFactions] = useState<Team[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
 
     useEffect(() => {
         const fetchRole = async () => {
             try {
-                const factions = await getAllTeams();
-                setFactions(factions.data)
+                const teams = await getAllTeams();
+                console.log(teams)
+                setTeams(teams)
             } catch (error) {
                 console.error('Error fetching role:', error);
             }
         };
         fetchRole();
     }, []);
-
-  console.log(factions)
-  return factions.length > 0 ? toTable(factions) : null;
+  return teams.length > 0 ? toTable(teams) : null;
 }

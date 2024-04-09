@@ -1,0 +1,39 @@
+#desc-preinsc {
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.event-input {
+    padding: 5px;
+    font-size: 16px;
+    height: 40px;
+}
+
+.submit-button {
+    background-color: rgb(229, 116, 146);
+    border-radius: 5px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    height: 3rem;
+    padding: 0 1.6rem;
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+    transition: all .5s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+  
+  .submit-button:hover {
+    box-shadow: rgb(229, 116, 146) 0 1px 10px;
+    transition-duration: .3s;
+  }
+  
+  .submit-button:focus {
+    background-color: rgba(229, 116, 146, 0.7);
+    transition-duration: .3s;
+  }
