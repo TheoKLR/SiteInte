@@ -73,7 +73,9 @@ export const registerTeam = async (req: Request, res: Response, next: NextFuncti
   try {
     await service.createTeam(name);
     const id = await service.getTeamId(name);
-    await user_service.addToTeam(userIds, id);
+    if (id) {
+      await user_service.addToTeam(userIds, id);
+    }
   } catch (error) {
     Error(res, { error });
   }

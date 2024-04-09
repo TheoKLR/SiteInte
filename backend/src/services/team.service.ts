@@ -1,47 +1,85 @@
 import { teamSchema, Team } from "../schemas/team.schema"
 import { db } from "../database/db"
 import { eq } from 'drizzle-orm'
-
 export const getAllTeams = async () => {
-    return await db.select().from(teamSchema)
+    try {
+        return await db.select().from(teamSchema);
+    } catch (error) {
+        console.error("Error fetching all teams:", error);
+        throw new Error("Failed to fetch teams. Please try again later.");
+    }
 }
 
 export const createTeam = async (name: string) => {
-    const newTeam: Team = { name, isOfficial: false, faction: null }
-    return await db.insert(teamSchema).values(newTeam)
+    try {
+        const newTeam: Team = { name, isOfficial: false, faction: null };
+        return await db.insert(teamSchema).values(newTeam);
+    } catch (error) {
+        console.error("Error creating team:", error);
+        throw new Error("Failed to create team. Please try again later.");
+    }
 }
 
 export const getTeam = async (id: number) => {
-    const team = await db.select().from(teamSchema).where(eq(teamSchema.id, id))
-    if (team.length === 0) return null
-    return team[0]
+    try {
+        const team = await db.select().from(teamSchema).where(eq(teamSchema.id, id));
+        return team.length === 0 ? null : team[0];
+    } catch (error) {
+        console.error("Error fetching team:", error);
+        throw new Error("Failed to fetch team. Please try again later.");
+    }
 }
 
 export const getTeamId = async (name: string) => {
-    const teams = await db.select().from(teamSchema).where(eq(teamSchema.name, name))
-    return teams[0].id
+    try {
+        const teams = await db.select().from(teamSchema).where(eq(teamSchema.name, name));
+        return teams.length > 0 ? teams[0].id : null;
+    } catch (error) {
+        console.error("Error fetching team ID:", error);
+        throw new Error("Failed to fetch team ID. Please try again later.");
+    }
 }
 
 export const deleteTeam = async (id: number) => {
-    await db.delete(teamSchema).where(eq(teamSchema.id, id))
+    try {
+        await db.delete(teamSchema).where(eq(teamSchema.id, id));
+    } catch (error) {
+        console.error("Error deleting team:", error);
+        throw new Error("Failed to delete team. Please try again later.");
+    }
 }
 
 export const removeTeamFromFaction = async (id: number) => {
-    await db.update(teamSchema)
-        .set({ faction: null })
-        .where(eq(teamSchema.faction, id))
+    try {
+        await db.update(teamSchema)
+            .set({ faction: null })
+            .where(eq(teamSchema.faction, id));
+    } catch (error) {
+        console.error("Error removing team from faction:", error);
+        throw new Error("Failed to remove team from faction. Please try again later.");
+    }
 }
 
 export const renameTeam = async (name: string, id: number) => {
-    await db.update(teamSchema)
-        .set({ name: name })
-        .where(eq(teamSchema.id, id))
+    try {
+        await db.update(teamSchema)
+            .set({ name: name })
+            .where(eq(teamSchema.id, id));
+    } catch (error) {
+        console.error("Error renaming team:", error);
+        throw new Error("Failed to rename team. Please try again later.");
+    }
 }
 
 export const addToFaction = async (teamIds: number[], factionId: number) => {
-    for (const id of teamIds) {
-        await db.update(teamSchema)
-            .set({ faction: factionId })
-            .where(eq(teamSchema.id, id))
+    try {
+        for (const id of teamIds) {
+            await db.update(teamSchema)
+                .set({ faction: factionId })
+                .where(eq(teamSchema.id, id));
+        }
+    } catch (error) {
+        console.error("Error adding team to faction:", error);
+        throw new Error("Failed to add team to faction. Please try again later.");
     }
 }

@@ -13,7 +13,7 @@ export const isAdmin = async (req: Request, res: Response, next: NextFunction) =
             return Error(res, { msg: "user doesn't exists" });
         }
 
-        if (user.permission !== PermType.NewStudent && user.permission !== PermType.Student) {
+        if (user.permission === PermType.Admin) {
             next();
         } else {
             Error(res, { msg: 'Forbidden: Insufficient permissions' });

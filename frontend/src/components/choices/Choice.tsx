@@ -85,7 +85,7 @@ export const Choice = () => {
                             <br /> <br />
                         </p>
                         <div className="checkbox-wrapper-1">
-                            <input id="btnLegal" onClick={() => setAccept(true)} className="substituted" type="checkbox" aria-hidden="true" required/>
+                            <input id="btnLegal" onClick={() => setAccept(!accept)} className="substituted" type="checkbox" aria-hidden="true" required/>
                             <label htmlFor="btnLegal">Je comprends l'objectif de l'intégration et je comprends que mes actions peuvent être punies par une sanction disciplinaire et une peine d'emprisonnement et 15 000 € d'amende.</label>
                         </div>
                     </div>
