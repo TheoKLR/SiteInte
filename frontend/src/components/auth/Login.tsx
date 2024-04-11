@@ -47,7 +47,6 @@ const LoginForm = () => {
 
   const TryLogin = async () => {
     localStorage.setItem("tryLogin", "false");
-
     try {
       const code = getAuthCode();
       if (code !== null) {
