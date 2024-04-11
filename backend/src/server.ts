@@ -9,6 +9,7 @@ import eventRouter from "./routes/event.routes";
 import { isTokenValid } from "./middlewares/permissions";
 import { init } from "./database/init";
 import { api_prefix } from "./utils/secret";
+import { log } from "./middlewares/log";
 
 async function startServer() {
   const app = express();
@@ -18,6 +19,7 @@ async function startServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(api_prefix, router);
+  app.use(log)
   router.use("/auth", authRouter);
   router.use(isTokenValid);
   router.use("/user", userRouter);

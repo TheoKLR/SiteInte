@@ -25,6 +25,7 @@ export const isAdmin = async (req: Request, res: Response, next: NextFunction) =
 
 export const isTokenValid = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        console.log("isTokenValid called")
         const token = req.headers['authorization']?.split(' ')[1];
         if (!token) {
             return Error(res, { msg: 'Unauthorized: Invalid token' });
@@ -33,6 +34,7 @@ export const isTokenValid = async (req: Request, res: Response, next: NextFuncti
         if (!decodedToken) {
             return Unauthorized(res, { msg: 'Unauthorized: Token has expired' });
         }
+        console.log("isTokenValid passed")
         next();
     } catch (error) {
         return Error(res, { msg: 'Unauthorized: Invalid token' });

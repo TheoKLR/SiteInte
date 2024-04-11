@@ -49,6 +49,7 @@ export const newStudentLogin = async (req: Request, res: Response, next: NextFun
 export const studentLogin = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { authorization_code } = req.params
+        console.log("auth_code : ", authorization_code )
 
         if (!authorization_code) return Error(res, { msg : 'no auth code provided' });
 
