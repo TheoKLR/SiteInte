@@ -1,6 +1,7 @@
 import { teamSchema, Team } from "../schemas/team.schema"
 import { db } from "../database/db"
 import { eq } from 'drizzle-orm'
+
 export const getAllTeams = async () => {
     try {
         return await db.select().from(teamSchema);

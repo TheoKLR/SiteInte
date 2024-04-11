@@ -2,12 +2,8 @@ import { useState } from 'react';
 import { handleError } from '../utils/Submit';
 import { setTimestamp } from '../../services/requests/teams';
 
-
-
-
 // Formulaire pour que les étudiants de l'utt puissent choisir les rôles qui les intérresseraient pour l'inté
 export const ShotgunCE = () => {
-
     const [answer, setAnswer] = useState('');
     const [success, setSuccess] = useState(false);
 
@@ -26,7 +22,6 @@ export const ShotgunCE = () => {
         handleError("Bien joué", "Mauvaise saisie", test)
     }
 
-   
     return (
         <>
             <div className='containerChoix'>
@@ -36,7 +31,6 @@ export const ShotgunCE = () => {
                     <input type="text" placeholder="Nom Prénom" autoComplete="off" onChange={(e) => setAnswer(e.target.value)} value={answer} required />
                     <button className="login-button" type="submit">Envoyer</button>
                     {success && <p>Bien joué ta candidature a bien été prise en compte!</p>}
-
                 </form>
             </div>
         </>

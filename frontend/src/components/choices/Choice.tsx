@@ -40,7 +40,7 @@ export const Choice = () => {
     useEffect(() => {
         getAllRoles()
             .then(res => {
-                const data = res.data;
+                const data = res;
                 setWish(data);
             })
             .catch(error => {
