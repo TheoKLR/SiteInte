@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS "userToRole" (
 CREATE TABLE IF NOT EXISTS "team" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"isOfficial" boolean NOT NULL,
-	"timeCode" timestamp,
+	"timeCode" bigint,
 	"team_name" text NOT NULL,
 	"city_id" integer,
 	CONSTRAINT "team_team_name_unique" UNIQUE("team_name")

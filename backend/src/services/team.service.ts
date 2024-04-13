@@ -1,6 +1,7 @@
 import { teamSchema, Team } from "../schemas/team.schema"
 import { db } from "../database/db"
 import { eq } from 'drizzle-orm'
+import { timeEnd, timeStamp } from "console";
 
 export const getAllTeams = async () => {
     try {
@@ -12,7 +13,7 @@ export const getAllTeams = async () => {
 
 export const createTeam = async (name: string) => {
     try {
-        const newTeam: Team = { name, isOfficial: false, faction: null };
+        const newTeam: Team = { name, isOfficial: false, faction: null, timeCode: 0};
         return await db.insert(teamSchema).values(newTeam);
     } catch (error) {
         throw new Error("Failed to create team. Please try again later.");
@@ -74,5 +75,34 @@ export const addToFaction = async (teamIds: number[], factionId: number) => {
         }
     } catch (error) {
         throw new Error("Failed to add team to faction. Please try again later.");
+    }
+}
+
+
+export const addTimestamp = async (timestamp: number, id: number) => {
+    try {
+        const currentTimestamp = await getTimestamp(id);
+
+        const currentTimestampValue = currentTimestamp[0]?.timeCode ?? 0;
+
+        if ((currentTimestampValue > timestamp) || (currentTimestampValue===0) ){
+            await db.update(teamSchema)
+                .set({ timeCode: timestamp })
+                .where(eq(teamSchema.id, id));
+        }
+    } catch (error) {
+        throw new Error("Failed to modify the timeCode of the team. Please try again later.");
+    }
+}
+
+export const getTimestamp = async (id: number) => {
+    try {
+        const teamTimeCode = await db.select({ timeCode: teamSchema.timeCode })
+            .from(teamSchema)
+            .where(eq(teamSchema.id, id));
+
+        return teamTimeCode as { timeCode: number | null; }[];
+    } catch (error) {
+        throw new Error("Failed to get the team's timecode. Please try again later.");
     }
 }

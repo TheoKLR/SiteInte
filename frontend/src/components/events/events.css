@@ -37,3 +37,12 @@
     background-color: rgba(229, 116, 146, 0.7);
     transition-duration: .3s;
   }
+
+
+  .unselectable {
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
