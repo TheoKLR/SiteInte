@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/team.service';
 import * as user_service from '../services/user.service';
 import { Error, Created, Ok } from '../utils/responses';
+import { time } from 'console';
 
 
 export const getAllTeams = async (req: Request, res: Response, next: NextFunction) => {
@@ -79,3 +80,25 @@ export const registerTeam = async (req: Request, res: Response, next: NextFuncti
     Error(res, { error });
   }
 }
+
+export const addTimestamp = async (req: Request, res: Response, next: NextFunction) => {
+  const { timestamp, id } = req.body;
+  console.log('test2:' + timestamp + "   " +  id)
+  try {
+    await service.addTimestamp(timestamp, id);
+    Ok(res, { msg: "Team modified" });
+  } catch (error) {
+    Error(res, { error });
+  }
+};
+
+export const getTimestamp = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.body;
+
+  try {
+    const data = await service.getTimestamp(id);
+    Ok(res, { data });
+  } catch (error) {
+    Error(res, { error });
+  }
+};

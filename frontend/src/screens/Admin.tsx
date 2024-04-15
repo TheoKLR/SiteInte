@@ -7,6 +7,7 @@ import EventsAdminSection from '../components/admin/events/EventsAdminSection'
 import { Section } from "../components/shared/Section";
 import { useEffect } from "react";
 import { getRole } from "../services/requests";
+import ExportAdminSection from "../components/admin/export/ExportAdminSection";
 
 export const Admin = () => {
     useEffect(() => {
@@ -33,6 +34,7 @@ export const Admin = () => {
             <Section titre="Factions" contenu={FactionAdminSection} />
             <Section titre="Rôles" contenu={DesireAdminSection} />
             <Section titre="Events" contenu={EventsAdminSection} />
+            <Section titre="Exports" contenu={ExportAdminSection} />
         </div>
     )
 }

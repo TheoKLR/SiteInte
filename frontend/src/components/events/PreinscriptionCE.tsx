@@ -25,7 +25,7 @@ export const PreInscription = () => {
 
             const usersOptions = allUsers
                 .data
-                .filter((u: UserLight) => (u.team_id === null && u.id !== currentUser.id))
+                .filter((u: UserLight) => u.team_id === null && u.id !== currentUser.id)
                 .map((user: UserLight) => ({
                     value: user.id,
                     label: `${user.first_name} ${user.last_name}`,

@@ -48,6 +48,7 @@ export const ChangePermission = () => {
   const [perm, setPerm] = useState({} as any)
 
   const permTypeOptions = [
+    { value: 'Student', label: 'Etudiant' },
     { value: 'Admin', label: 'Admin' },
     { value: 'RespoCE', label: 'RespoCE' },
     { value: 'Respo', label: 'Respo' },
@@ -85,7 +86,6 @@ export const ChangePermission = () => {
 
 
 export const TableUser = () => {
-
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {

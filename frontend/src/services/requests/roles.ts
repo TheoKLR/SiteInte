@@ -2,7 +2,7 @@ import { api } from "../api"
 
 export const getAllRoles = async () => {
     let response = await api.get('role/all')
-    return response.data
+    return response?.data.data
 }
 
 export const createRole = async (name: string, desc: string) => {

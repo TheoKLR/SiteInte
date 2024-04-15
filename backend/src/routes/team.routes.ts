@@ -10,5 +10,7 @@ teamRouter.get('/all', tc.getAllTeams);
 teamRouter.get('/:id', isAdmin, tc.getTeam);
 teamRouter.delete('/:id', isAdmin, tc.deleteTeam);
 teamRouter.put('/addtofaction', isAdmin, tc.addToFaction);
+teamRouter.put('/timestamp', tc.addTimestamp);
+teamRouter.get('/timestamp', tc.getTimestamp);
 
 export default teamRouter;

@@ -1,18 +1,19 @@
-FROM node:18-alpine
+FROM node:18
 
-# Copy package.json and package-lock.json (if available) to the container
-COPY package*.json ./
+WORKDIR /srv/app
 
-# Install dependencies
-RUN npm install
+COPY --chown=node:node package*.json ./
 
-# Copy the entire project to the container
-COPY . .
+RUN npm install --frozen-lockfile
 
-# Build the React app
+COPY --chown=node:node . .
+
 RUN npm run build
+
+RUN npm i -g serve
+
+COPY . .
 
 EXPOSE 3000
 
-# Start the React app
-CMD ["npm", "start"]
+CMD ["serve", "-s", "build"]

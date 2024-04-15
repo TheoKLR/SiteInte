@@ -5,6 +5,9 @@
 
 .action-menu {
   width: 20%;
+  padding-right: 20px;
+  border-right: solid;
+  border-color: rgb(229, 116, 146);
 }
 
 .action-button {

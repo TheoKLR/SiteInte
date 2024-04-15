@@ -1,10 +1,14 @@
 FROM node:18.0.0
 
-WORKDIR /usr/code
+WORKDIR /srv/app
 
-COPY package.json .
+COPY --chown=node:node package*.json ./
 
-RUN npm install
+RUN npm install --frozen-lockfile
+
+COPY --chown=node:node . .
+
+RUN npm run start:build
 
 COPY . .
 

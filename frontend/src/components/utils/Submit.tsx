@@ -22,7 +22,6 @@ export const handleError = async (success_msg: string, error_msg: string, func: 
         } 
         return toast.success(success_msg);
     } catch (err) {
-        console.error(err)
         return toast.error(error_msg);
     }
 }
