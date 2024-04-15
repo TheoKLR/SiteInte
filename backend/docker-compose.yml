@@ -12,17 +12,17 @@ services:
     networks:
       - docker-service
 
-  # node-app:
-  #   build:
-  #     context: .
-  #   container_name: node-app
-  #   ports:
-  #     - "8000:8000"
-  #   networks:
-  #     - docker-service
-  #   depends_on:
-  #     - postgres
-  #   restart: always
+  node-app:
+    build:
+      context: .
+    container_name: node-app
+    ports:
+      - "8000:8000"
+    networks:
+      - docker-service
+    depends_on:
+      - postgres
+    restart: always
 
 networks:
   docker-service:
