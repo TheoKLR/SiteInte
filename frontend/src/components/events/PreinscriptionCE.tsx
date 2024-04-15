@@ -51,17 +51,26 @@ export const PreInscription = () => {
         } else {
             const u = toArray(users)
             u.push(currentUserId)
-            handleError("équipe ajoutée", "une erreur s'est produite", registerTeam, teamName, u)
-            setHasTeam(true)
+            if (await handleError("équipe ajoutée", "une erreur s'est produite", registerTeam, teamName, u))
+                setHasTeam(true);
         }
     }
 
     return (
         <div>
-            {hasTeam ? (
+            { hasTeam ?
                 <div>
-                    <p>Tu ne peux pas inscrire une équipe car tu as déjà une équipe assignée</p>
-                    <p>Ton équipe : {hasTeam}</p>
+                    {
+                        typeof hasTeam === true ? (
+                            <div>
+                                <p>Ton équipe a bien été créée !</p>
+                                <p>Si il y a un problème avec ton équipe, contacte les administrateurs !</p>
+                            </div>
+                        ) : (
+                            <p>Tu ne peux pas inscrire une équipe car tu as déjà une équipe assignée</p>
+                            <p>Ton équipe : {hasTeam}</p>
+                        )
+                    }
                     <p>Si il y a un problème avec ton équipe, contacte les administrateurs !</p>
                 </div>
             ) : (
