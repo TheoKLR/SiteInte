@@ -70,10 +70,6 @@ export const PreInscription = () => {
           {hasTeam === true ? (
             <div>
               <p>Ton équipe a bien été créée !</p>
-              <p>
-                Si il y a un problème avec ton équipe, contacte les
-                administrateurs !
-              </p>
             </div>
           ) : (
             <div>
