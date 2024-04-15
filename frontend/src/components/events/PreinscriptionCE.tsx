@@ -44,7 +44,7 @@ export const PreInscription = () => {
         const AlreadyExists = teams.filter((team: any) => team.name === teamName)
         if (teamName === '') {
             toast.error("tu n'as pas entré de nom d'équipe")
-        } else if (users.length !== 3 || users.length !== 4) {
+        } else if (users.length !== 3 && users.length !== 4) {
             toast.error("tu dois inscrire 3 ou 4 coéquipiers")
         } else if (AlreadyExists.length !== 0) {
             toast.error("Une équipe a déja le même nom")
