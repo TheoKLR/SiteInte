@@ -24,6 +24,13 @@ export const Navbar: React.FC = () => {
         fetchRole();
     }, []);
 
+    const handleLogout = () => {
+        // Supprimer le token authToken
+        localStorage.removeItem('authToken');
+        // Rediriger l'utilisateur vers la page de connexion ou une autre page appropriée
+        window.location.href = '/';
+    }
+
     return (
         <nav>
             <a href="/Home"><img src="ressources/integration.png" alt="Logo" className="logo"></img></a>
@@ -37,6 +44,7 @@ export const Navbar: React.FC = () => {
                     {<li><a href="/Parrainage">Parrainage</a></li>}
                     {<li><a href="/Wei">WEI</a></li>}
                     {role !== 'newStudent' && <li><a href="Souhait">Souhait</a></li>}
+                    <li><button onClick={handleLogout}>Logout</button></li>
                 </ul>
             </div>
             <div id="burger" onClick={handleClick}>
