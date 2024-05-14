@@ -151,6 +151,26 @@ export const incrementConnection = async (id: number) => {
     }
 }
 
+export const SendEmailToAll = async (content: any) => {
+    try {
+        await db.update(userSchema)
+            .set({ permission: perm })
+            .where(eq(userSchema.id, id));
+    } catch (error) {
+        throw new Error("Failed to change permission. Please try again later.");
+    }
+}
+
+export const SendEmailToPerms = async (content: any) => {
+    try {
+        await db.update(userSchema)
+            .set({ permission: perm })
+            .where(eq(userSchema.id, id));
+    } catch (error) {
+        throw new Error("Failed to change permission. Please try again later.");
+    }
+}
+
 export const getUserWish = async (id: number) => {
     try {
         return await db.select({ desires: roleSchema })

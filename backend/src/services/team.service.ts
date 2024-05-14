@@ -78,7 +78,6 @@ export const addToFaction = async (teamIds: number[], factionId: number) => {
     }
 }
 
-
 export const addTimestamp = async (timestamp: number, id: number) => {
     try {
         const currentTimestamp = await getTimestamp(id);

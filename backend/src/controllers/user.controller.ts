@@ -97,6 +97,20 @@ export const changePermission = async (req: Request, res: Response, next: NextFu
     }
 };
 
+export const sendEmail = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { roles, all, content } = req.body;
+        if (all) {
+            service.sendEmailToAllUser(content)
+        } else {
+            service.sendEmailToRoles(roles, content)
+        }
+        Ok(res, {});
+    } catch (error) {
+        Error(res, { error });
+    }
+}
+
 export const getUserWish = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const idNumber = parseInt(id, 10);
