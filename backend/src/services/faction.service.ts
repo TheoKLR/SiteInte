@@ -52,10 +52,11 @@ export const getPoints = async (id: number) => {
     }
 }
 
-export const addPoints = async (id: number, current: number, points: number) => {
+export const addPoints = async (id: number, points: number) => {
+    const current_points = await getPoints(id);
     try {
         await db.update(factionSchema)
-            .set({ points: current + points })
+            .set({ points: current_points + points })
             .where(eq(factionSchema.id, id));
     } catch (error) {
         throw new Error("Failed to add points. Please try again later.");
