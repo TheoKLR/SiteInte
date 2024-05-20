@@ -10,8 +10,8 @@ export const roleSchema = pgTable('role', {
 export type Role = typeof roleSchema.$inferInsert;
 
 export const userToRoleSchema = pgTable('userToRole', {
-    userId: integer('user_id').notNull().references(() => userSchema.id),
-    roleId: integer('role_id').notNull().references(() => roleSchema.id),
+    userId: integer('user_id').notNull().references(() => userSchema.id, { onDelete: "cascade" }),
+    roleId: integer('role_id').notNull().references(() => roleSchema.id, { onDelete: "cascade" }),
     isWish: boolean('isWish').notNull()
 });
 
