@@ -69,6 +69,16 @@ nav {
     transform: rotate(-10deg);
 }
 
+.logout {
+    width: 20px;
+    transition: transform 0.3s ease;
+}
+
+.logout:hover {
+    transform: rotate(180deg);
+}
+
+
 @media screen and (max-width: 769px) {
     #navbar {
         visibility: hidden;

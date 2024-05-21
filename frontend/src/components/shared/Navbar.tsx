@@ -44,7 +44,7 @@ export const Navbar: React.FC = () => {
                     {<li><a href="/Parrainage">Parrainage</a></li>}
                     {<li><a href="/Wei">WEI</a></li>}
                     {role !== 'newStudent' && <li><a href="Souhait">Souhait</a></li>}
-                    <li><button onClick={handleLogout}>Logout</button></li>
+                    <li><img src="ressources/logout_button.png" alt="Logout_Button" className="logout" onClick={handleLogout}></img></li>
                 </ul>
             </div>
             <div id="burger" onClick={handleClick}>
