@@ -70,7 +70,7 @@ export const getCurrentUser = async () => {
     return response?.data?.data
 }
 
-export const DeleteUsers = async (users: number[]) => {
+export const DeleteUsers = async (id: number) => {
     const response = await api.delete('/user')
     return response
 }

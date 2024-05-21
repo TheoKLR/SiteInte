@@ -6,8 +6,7 @@ export const registerMiddleware = async (req: Request, res: Response, next: Next
     const { email, password } = req.body;
 
     const email_regex = new RegExp('^[a-z0-9._%+-]+@[a-z0-9-]+\.[a-z]{2,4}$');
-
-    if (!email_regex.test(email) || email.includes("@utt.fr")) {
+    if (!email_regex.test(email) || !email.includes("@utt.fr")) {
         return Error(res, { msg: "Invalid email address" });
     }
 
