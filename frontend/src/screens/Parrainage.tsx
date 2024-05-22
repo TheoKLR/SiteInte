@@ -4,6 +4,7 @@ import { getRole } from "../services/requests";
 import { Section } from "../components/shared/Section";
 import { ParrainageNewStudent }  from "../components/parrainage/ParrainageNewStudent";
 import { ParrainageStudent } from "../components/parrainage/ParrainageStudent";
+import { Default } from "../components/shared/Default";
 
 export const Parrainage = () => {
 
@@ -28,8 +29,9 @@ export const Parrainage = () => {
     return (
         <div className="Parrainage">
             <Navbar/>
-            {(role === 'Admin'|| role === 'Student') && <Section titre="Tu veux être Parrain ?" contenu={ParrainageStudent} />} 
-            {role === 'newStudent' && <Section titre="Tu souhaites avoir un parrain ?" contenu={ParrainageNewStudent} />}
+            {/*(role === 'Admin'|| role === 'Student') && <Section titre="Tu veux être Parrain ?" contenu={ParrainageStudent} />*/} 
+            {/*role === 'newStudent' && <Section titre="Tu souhaites avoir un parrain ?" contenu={ParrainageNewStudent} />*/}
+            <Section titre="Prochainement !" contenu={Default} />
             
         </div>
     )
