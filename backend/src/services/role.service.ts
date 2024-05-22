@@ -30,6 +30,7 @@ export const createRole = async (name: string, description: string) => {
 
 export const deleteRole = async (id: number) => {
     try {
+        await db.delete(userToRoleSchema).where(eq(userToRoleSchema.roleId, id));
         await db.delete(roleSchema).where(eq(roleSchema.id, id));
     } catch (error) {
         throw new Error("Failed to delete role. Please try again later.");

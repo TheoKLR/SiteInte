@@ -53,15 +53,3 @@ export const deleteFaction = async (req: Request, res: Response, next: NextFunct
     Error(res, { error });
   }
 };
-
-export const addPoints = async (req: Request, res: Response, next: NextFunction) => {
-  const { id, points } = req.body;
-
-  try {
-    const currentPoints = await service.getPoints(id);
-    service.addPoints(id, currentPoints, points);
-    Ok(res, { msg: "Faction modified" });
-  } catch (error) {
-    Error(res, { error });
-  }
-};

@@ -1,6 +1,7 @@
 import { eventSchema, Event } from "../schemas/event.schema"
 import { db } from "../database/db"
 import { eq } from 'drizzle-orm'
+
 export const createEvent = async (name: string) => {
     const newEvent: Event = { name, state: false };
     try {
