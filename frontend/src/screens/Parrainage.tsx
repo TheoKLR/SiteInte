@@ -29,10 +29,8 @@ export const Parrainage = () => {
     return (
         <div className="Parrainage">
             <Navbar/>
-            {/*(role === 'Admin'|| role === 'Student') && <Section titre="Tu veux être Parrain ?" contenu={ParrainageStudent} />*/} 
-            {/*role === 'newStudent' && <Section titre="Tu souhaites avoir un parrain ?" contenu={ParrainageNewStudent} />*/}
-            <Section titre="Prochainement !" contenu={Default} />
-            
+            {(role === 'Admin'|| role === 'Student') && <Section titre="Tu souhaite devenir parrain ?" contenu={ParrainageStudent} />} 
+            {role === 'newStudent' && <Section titre="Tu souhaites avoir un parrain ?" contenu={Default} />}
         </div>
     )
 }
