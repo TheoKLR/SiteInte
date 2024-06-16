@@ -59,17 +59,19 @@ export const SyncDb = () => {
                 name: role.desires.name,
                 }))
 
-                let teamName;
-                if(user.id){
-                let userTeam = await getTeam(user.id);
-                teamName = userTeam.name;
+                let teamName = await getTeam(user.id);
+                if(!teamName){
+                  teamName = 'No Team';
                 }
-                else{teamName = 'No Team'};
+                else{
+                  teamName=teamName.name;
+                }
+
 
             return {
                 ...user,
                 userWishes: userWishes.map((wish: { ID: any; name: any; }) => `${wish.ID}: ${wish.name}`).join(', '),
-                teamName,
+                teamName
               };
             })
           );
