@@ -1,4 +1,4 @@
-import { pgTable, serial, text, integer, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, integer, pgEnum, date } from "drizzle-orm/pg-core";
 import { teamSchema } from "./team.schema";
 
 export const permission = pgEnum('permission', ['newStudent', 'Student', 'Admin', 'RespoCE', 'Respo', 'Anim']);
@@ -36,6 +36,7 @@ export const userSchema = pgTable("user", {
   first_name: text("first_name").notNull(),
   last_name: text("last_name").notNull(),
   email: text("email").notNull().unique(),
+  birthday: date("birthday"),
   contact: text("contact"),
   connection_number: integer("connection_num").notNull(),
   permission: permission('permission').notNull(),

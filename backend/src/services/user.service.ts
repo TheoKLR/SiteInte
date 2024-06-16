@@ -12,6 +12,8 @@ export const getAllUsers = async () => {
             last_name: userSchema.last_name,
             email: userSchema.email,
             permission: userSchema.permission,
+            birthday: userSchema.birthday,
+            contact: userSchema.contact,
             connection_number: userSchema.connection_number,
             team_id: userSchema.team,
         }).from(userSchema);
@@ -68,8 +70,8 @@ export const getNewStudentByEmail = async (email: string) => {
 
 export const getUserByEmail = async (email: string) => {
     try {
-        const user = await db.select().from(userSchema).where(eq(userSchema.email, email));
 
+        const user = await db.select().from(userSchema).where(eq(userSchema.email, email));
         return user.length === 0 ? null : user[0];
     } catch (error) {
         throw new Error("Failed to fetch user by email. Please try again later.");
@@ -81,10 +83,18 @@ export const createUser = async (first_name: string, last_name: string, email: s
         const allUser = await getAllUsers();
         if (allUser.length === 0) permission = PermType.Admin;
 
-        const newUser: User = { first_name, last_name, email, contact: null, connection_number: 0, permission, password, team: null };
+        const newUser: User = { first_name, last_name, email, contact: null, birthday: null, connection_number: 0, permission, password, team: null };
         await db.insert(userSchema).values(newUser);
     } catch (error) {
         throw new Error("Failed to create user. Please try again later.");
+    }
+}
+
+export const updateUser = async (id: number, first_name: string, last_name: string, birthday: string, contact: string) => {
+    try {
+        await db.update(userSchema).set({ first_name: first_name, last_name: last_name, birthday: birthday, contact: contact }).where(eq(userSchema.id, id));
+    } catch (error) {
+        throw new Error("Failed to update user. Please try again later.");
     }
 }
 
@@ -154,8 +164,8 @@ export const incrementConnection = async (id: number) => {
 export const SendEmailToAll = async (content: any) => {
     try {
         await db.update(userSchema)
-            .set({ permission: perm })
-            .where(eq(userSchema.id, id));
+            .set({ permission: content })
+            .where(eq(userSchema.id, content));
     } catch (error) {
         throw new Error("Failed to change permission. Please try again later.");
     }
@@ -164,8 +174,8 @@ export const SendEmailToAll = async (content: any) => {
 export const SendEmailToPerms = async (content: any) => {
     try {
         await db.update(userSchema)
-            .set({ permission: perm })
-            .where(eq(userSchema.id, id));
+            .set({ permission: content })
+            .where(eq(userSchema.id, content));
     } catch (error) {
         throw new Error("Failed to change permission. Please try again later.");
     }

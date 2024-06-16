@@ -3,6 +3,7 @@ export interface User {
     first_name: string;
     last_name: string;
     email: string;
+    birthday : Date;
     team_id: number;
 }
 export interface UserLight {

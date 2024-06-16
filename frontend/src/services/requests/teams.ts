@@ -8,6 +8,11 @@ export const deleteTeam = async (id: number) => {
   return await api.delete("team/" + id);
 };
 
+export const getTeam = async (id: number) => {
+  const response = await api.get("team/" + id)
+  return response?.data.data ;
+};
+
 export const addToFaction = async (teamIds: number[], factionId: number) => {
   return await api.put("team/addtofaction", {
     teamIds,

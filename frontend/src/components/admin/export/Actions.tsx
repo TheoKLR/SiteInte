@@ -1,7 +1,9 @@
-import React from 'react';
 import Papa from 'papaparse';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useGoogleSheetsAPI } from '../../../services/GoogleSheetsAPI';
+import { getAllUsers, getUserWishes } from '../../../services/requests'
+import { getAllTeams, getTeam } from '../../../services/requests/teams';
 
 export const ExportDb = () => {
 
@@ -36,3 +38,61 @@ export const ExportDb = () => {
         </div>
     );
 };
+
+export const SyncDb = () => {
+
+    
+    const { appendDataToSheet } = useGoogleSheetsAPI();
+    
+    const Sync = async () => {
+
+        
+      try {
+
+        const response = await getAllUsers();
+
+        const usersWithWishes = await Promise.all(
+            response.map(async (user: any) => {
+                let userWishes = await getUserWishes(user.id);
+                userWishes = userWishes.map((role: any) => ({
+                ID: role.desires.id,
+                name: role.desires.name,
+                }))
+
+                let teamName = await getTeam(user.id);
+                if(!teamName){
+                  teamName = 'No Team';
+                }
+                else{
+                  teamName=teamName.name;
+                }
+
+
+            return {
+                ...user,
+                userWishes: userWishes.map((wish: { ID: any; name: any; }) => `${wish.ID}: ${wish.name}`).join(', '),
+                teamName
+              };
+            })
+          );
+
+        const AllTeam = await getAllTeams();
+
+        const resultUSER = await appendDataToSheet(usersWithWishes, 'DB_USER');
+        const resultTEAM = await appendDataToSheet(AllTeam, 'DB_TEAM');
+
+        toast.success('Data synchronized successfully!');
+      } catch (error) {
+        console.error('Error syncing data:', error);
+        toast.error('Error syncing data. Please try again.');
+      }
+    };
+  
+    return (
+      <div>
+        <div><p color='red'>Soyez sûr de vous connecter avec le compte 'integrationbureau@bdeassosutt.fr'</p></div>
+        <button className="button-36" onClick={Sync}>Sync</button>
+        <ToastContainer position="bottom-right"/>
+      </div>
+    );
+  };

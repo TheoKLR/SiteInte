@@ -18,3 +18,12 @@ export const changePermission = async (id: number, perm: string) => {
         perm,
     })
 }
+
+export const updateUser = async (first_name: string, last_name: string, birthday: string, contact: string) => {
+    return await api.put('user/updateuser', {
+        first_name, 
+        last_name,  
+        birthday, 
+        contact
+    })
+}
