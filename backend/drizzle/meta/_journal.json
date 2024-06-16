@@ -43,6 +43,13 @@
       "when": 1713020099457,
       "tag": "0005_quick_doorman",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1718178424536,
+      "tag": "0006_huge_pride",
+      "breakpoints": true
     }
   ]
 }

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { PermType } from '../schemas/user.schema'
 import * as service from '../services/user.service'
 import * as bcrypt from 'bcrypt'
-import { Error, Created, Ok } from '../utils/responses'
+import { Error, Created, Ok, Unauthorized } from '../utils/responses'
 import { sign } from 'jsonwebtoken'
 import { jwtSecret } from '../utils/secret'
 import { decodeToken } from '../utils/token'
@@ -91,4 +91,22 @@ export const getRole = async (req: Request, res: Response) => {
     } catch (error) {
         Error(res, { error })
     }
+}
+
+export const isTokenValid = async (req: Request, res: Response)=> {
+    try {
+        const token = req.headers['authorization']?.split(' ')[1];
+        if (!token) {
+            return Error(res, { msg: 'Unauthorized: Invalid token' });
+        }
+        const decodedToken = decodeToken(req);
+        if (!decodedToken) {
+            return Unauthorized(res, { msg: 'Unauthorized: Token has expired' });
+        }else{
+            return Ok(res, {data: {isValid: true}});
+        }
+    } catch (error) {
+        return Error(res, { msg: 'Unauthorized: Invalid token' });
+    }
+    
 }
