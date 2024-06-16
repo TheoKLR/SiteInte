@@ -8,6 +8,7 @@ userRouter.get('/all', isAdmin, sc.getAllUsers);
 userRouter.get('/:id', isAdmin, sc.getUser);
 userRouter.delete('/:id', isAdmin, sc.deleteUser);
 userRouter.put('/addtoteam', isAdmin, sc.addToTeam);
+userRouter.put('/updateuser', sc.updateUser);
 userRouter.put('/permission', isAdmin, sc.changePermission);
 userRouter.get('/:id/wish', isAdmin, sc.getUserWish);
 userRouter.get('/current', sc.getCurentUser);

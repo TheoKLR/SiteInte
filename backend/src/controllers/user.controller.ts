@@ -59,6 +59,21 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
     }
 };
 
+export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
+    const {first_name, last_name, birthday, contact } = req.body;
+    const token = decodeToken(req)
+    if (token === null) {
+      return Error(res, { msg: 'No email' });
+    }
+
+    try {
+        await service.updateUser(token.id, first_name, last_name, birthday, contact);
+        Ok(res, { msg: "User updated" });
+    } catch (error) {
+        Error(res, { error });
+    }
+};
+
 export const addToTeam = async (req: Request, res: Response, next: NextFunction) => {
     const { userIds, teamId } = req.body;
 
@@ -101,9 +116,9 @@ export const sendEmail = async (req: Request, res: Response, next: NextFunction)
     try {
         const { roles, all, content } = req.body;
         if (all) {
-            service.sendEmailToAllUser(content)
+            service.SendEmailToAll(content)
         } else {
-            service.sendEmailToRoles(roles, content)
+            service.SendEmailToPerms(content)
         }
         Ok(res, {});
     } catch (error) {
