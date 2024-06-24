@@ -34,17 +34,18 @@ export const submitChoices = async (choiceIds: number[]) => {
 }
 
 // Enregistrement d'un étudiant
-export const registerStudent = async (fName: string, lName: string, mail: string, mdp: string) => {
-    api.post('/auth/register', {
+export const registerStudent = async (fName: string, lName: string, mail: string, pwd: string, birthday: string, uuid: string) => {
+
+    const response = await api.post('/auth/register', {
         first_name: fName,
         last_name: lName,
         email: mail,
-        password: mdp
-    }).then(function (response) {
-        console.log('Utilisateur enregistré avec succès');
-    }).catch(function (error) {
-        console.error('Erreur lors de l\'enregistrement de l\'utilisateur :', error);
+        password: pwd,
+        birthday: birthday,
+        uuid: uuid
     });
+
+    return response?.data;
 }
 
 export const newStudentLogin = async (email: string, password: string) => {

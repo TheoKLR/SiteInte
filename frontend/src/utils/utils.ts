@@ -19,7 +19,6 @@ export const useAuth = () => {
       const token = localStorage.getItem('authToken');
       if (token) {
         const data = await isTokenValid(token);
-        console.log(data);
         if (data.isValid) {
           setIsAuthenticated(true);
         } else {

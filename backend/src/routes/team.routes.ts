@@ -12,5 +12,6 @@ teamRouter.delete('/:id', isAdmin, tc.deleteTeam);
 teamRouter.put('/addtofaction', isAdmin, tc.addToFaction);
 teamRouter.put('/timestamp', tc.addTimestamp);
 teamRouter.get('/timestamp', tc.getTimestamp);
+teamRouter.post('/rename', isAdmin, tc.renameTeam);
 
 export default teamRouter;

@@ -27,6 +27,14 @@ export const registerTeam = async (name: string, userIds: number[]) => {
   });
 };
 
+export const renameTeam = async (name: string, id: number[]) => {
+  return await api.post("team/rename", {
+    name,
+    id
+  });
+};
+
+
 export const setTimestamp = async (timestamp: number, id: number) =>
   api.put("/team/timestamp", { timestamp, id });
 

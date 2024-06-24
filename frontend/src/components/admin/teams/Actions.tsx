@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Select from 'react-select'
-import { createTeam, addToFaction, deleteTeam, getAllTeams } from '../../../services/requests/teams';
+import { createTeam, addToFaction, deleteTeam, getAllTeams, renameTeam } from '../../../services/requests/teams';
 import { toArray, toId, handleError } from '../../utils/Submit'
 import { Teams, Factions } from '../../utils/Select'
 import { ToastContainer, toast } from 'react-toastify';
@@ -82,6 +82,37 @@ export const DeleteTeam = () => {
           options={Teams()}
           onChange={team => setTeam(team)}
         />
+      </div>
+      <button className="submit-button" onClick={Submit}>Soumettre</button>
+      <ToastContainer position="bottom-right"/>
+    </div>
+  )
+}
+
+export const RenameTeam = () => {
+  const [team, setTeam] = useState({} as any)
+  const [name, setName] = useState("");
+
+  const Submit = async () => {
+    const id = toId(team)
+    await handleError("Equipe renommée !", "Une erreur est survenue", renameTeam, name, id)
+    setTeam({});
+    setName("");
+  }
+
+  return (
+    <div>
+      <div className="input">
+        <label>Choisis l'équipe
+        <Select
+          value={team}
+          options={Teams()}
+          onChange={team => setTeam(team)}
+        />
+        </label>
+        <label>Nom
+        <input type="text" value={name} onChange={e => setName(e.target.value)} />
+        </label>
       </div>
       <button className="submit-button" onClick={Submit}>Soumettre</button>
       <ToastContainer position="bottom-right"/>

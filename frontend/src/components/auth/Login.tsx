@@ -1,16 +1,24 @@
 import "./Login.css";
 import { FaUser, FaLock } from "react-icons/fa";
 import { useRef, useState, useEffect } from "react";
-import { newStudentLogin, studentLogin } from "../../services/requests";
+import { newStudentLogin, studentLogin, registerStudent } from "../../services/requests";
+import { ToastContainer } from "react-toastify";
+import { handleError } from "../utils/Submit";
 
 const LoginForm = () => {
   const userRef = useRef<HTMLInputElement>(null);
   const errRef = useRef<HTMLInputElement>(null);
 
-  const [user, setUser] = useState("");
+  const [first_name, setFirstName]= useState("");
+  const [last_name, setLastName]= useState("");
+  const [email, setEmail]= useState("");
   const [pwd, setPwd] = useState("");
+  const [birthday, setBirthday]= useState("");
+  const [uuid, setUUID]= useState("");
+
   const [errMsg, setErrMsg] = useState("");
-  const [state, setState] = useState(false);
+  const [stateNewLogin, setStateNewLogin] = useState(false);
+  const [stateNewRegister, setStateNewRegister] = useState(false);
 
   useEffect(() => {
     const login = async () => {
@@ -25,7 +33,7 @@ const LoginForm = () => {
   const NSLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const token = await newStudentLogin(user, pwd);
+      const token = await newStudentLogin(email, pwd);
       if (token !== null) {
         localStorage.setItem("authToken", token);
         window.location.href = "/Home";
@@ -37,6 +45,17 @@ const LoginForm = () => {
       else setErrMsg("Login failed");
       if (errRef.current) errRef.current.focus();
     }
+  };
+
+  const NSRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await handleError("Utilisateur ajouté !", "Une erreur est survenue", registerStudent, first_name, last_name, email, pwd, birthday, uuid)
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setBirthday("");
+    setPwd("");
+    setUUID("");
   };
 
   const getAuthCode = () => {
@@ -59,8 +78,12 @@ const LoginForm = () => {
     }
   };
 
-  const handleClick = () => {
-    setState(!state);
+  const handleClick_NouveauLogin = () => {
+    setStateNewLogin(!stateNewLogin);
+  };
+
+  const handleClick_NouveauRegister = () => {
+    setStateNewRegister(!stateNewRegister);
   };
 
   const ETUconnection = () => {
@@ -68,35 +91,52 @@ const LoginForm = () => {
     window.location.href = `https://etu.utt.fr/api/oauth/authorize?client_id=${process.env.REACT_APP_ETUUTT_CLIENT_ID}&scope=public&response_type=code&state=xyz`;
   };
 
+
+  const getContainerClass = () => {
+    if (stateNewLogin) return "#container active login";
+    if (stateNewRegister) return "#container active register";
+    return "container";
+  };
+
   // Frontend
   return (
-    <div id="container" className={state ? "#container active" : "#container"}>
+    <div>
+    <div id="container" 
+      className={getContainerClass()}>
+      
+      
       <h1>Bienvenue!</h1>
-      <button className="login-button" onClick={handleClick}>
-        Je suis nouveau
-      </button>
-      <button className="login-button" onClick={ETUconnection}>
-        Je suis étudiant à l'UTT
-      </button>
+        <button className="login-button" onClick={handleClick_NouveauLogin}>
+          Je suis nouveau et je connecte
+        </button>
+        <button className="login-button" onClick={handleClick_NouveauRegister}>
+          Je suis nouveau et je m'inscrit
+        </button>
+        <button className="login-button" onClick={ETUconnection}>
+          Je suis étudiant à l'UTT
+        </button>
+
+      
+      
+      
       <div
         id="formNouveau"
-        className={state ? "#formNouveau active" : "#formNouveau"}
+        className={stateNewLogin ? "#formNouveau active" : "#formNouveau"}
       >
         <form onSubmit={NSLogin}>
           <h1>Connection</h1>
           <h4>
-            Tu as normalement reçu ton mot de passe par e-mail sur l'adresse que
-            tu as fournie à l'UTT.
+            Connecte toi avec les identifiants que tu as renseigné !
           </h4>
-          <p>Pas de mail ? Contacte-nous à l'adresse mail integration@utt.fr</p>
+          <p>Un problème ? Contacte-nous à l'adresse mail integration@utt.fr</p>
           <div className="input-box">
             <input
               type="text"
               placeholder="E-mail"
               ref={userRef}
               autoComplete="off"
-              onChange={(e) => setUser(e.target.value)}
-              value={user}
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
               required
             />
             <FaUser className="icon" />
@@ -119,13 +159,105 @@ const LoginForm = () => {
             {errMsg}
           </p>
           <button className="login-button" type="submit">
-            Connection
+            Connexion
           </button>
         </form>
-        <button className="login-button" onClick={handleClick}>
+        <button className="login-button" onClick={handleClick_NouveauLogin}>
           Retour
         </button>
       </div>
+
+
+      <div
+        id="formNouveau"
+        className={stateNewRegister ? "#formNouveau active" : "#formNouveau"}
+      >
+          <h1>Inscription</h1>
+          <h4>
+            Tu as normalement reçu un identifiant de connexion unique par email sur l'adresse que
+            tu as fournie à l'UTT.
+          </h4>
+          <p>Pas de mail ? Contacte-nous à l'adresse mail integration@utt.fr</p>
+          <form onSubmit={NSRegister}>
+            <div className="input-box">
+              <label>
+                  Prénom:
+                  <input
+                      type="text"
+                      value={first_name}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      required
+                  />
+                </label>
+            </div>
+            <div className="input-box">
+              <label>
+                  Nom:
+                  <input
+                      type="text"
+                      value={last_name}
+                      onChange={(e) => setLastName(e.target.value)}
+                      required
+                  />
+              </label>
+            </div>
+            <div className="input-box">
+              <label>Email:
+                  <input
+                      type="text"
+                      value={email}
+                      required
+                      onChange={(e)=> setEmail(e.target.value)}
+                  />
+              </label>
+            </div>
+            <div className="input-box">
+              <label>
+                Date de naissance:
+                  <input
+                      type="date"
+                      value={birthday}
+                      onChange={(e) => setBirthday(e.target.value)}
+                      required
+                  />
+              </label>
+            </div>
+            <div className="input-box">
+              <label>
+                  Mot de passe:
+                  <input
+                      type="text"
+                      value={pwd}
+                      onChange={(e) => setPwd(e.target.value)}
+                      required
+                  />
+              </label>
+            </div>
+            <div className="input-box">
+              <label>
+                  UUID:
+                  <input
+                      type="text"
+                      value={uuid}
+                      onChange={(e) => setUUID(e.target.value)}
+                      required
+                  />
+              </label>
+            </div>
+            <p
+              ref={errRef}
+              className={errMsg ? "errmsg" : "offscreen"}
+              aria-live="assertive">
+              {errMsg}
+            </p>
+            <div>
+              <button className="login-button" type="submit">Valider</button>
+              <button className="login-button" onClick={handleClick_NouveauRegister}>Retour</button>
+            </div>
+          </form>
+      </div>
+    </div>
+    <ToastContainer position="bottom-right" />
     </div>
   );
 };

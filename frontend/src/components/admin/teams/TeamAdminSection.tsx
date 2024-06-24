@@ -1,7 +1,7 @@
 import React from 'react';
 import AdminSection from '../AdminSection';
 import { AdminAction } from '../AdminSection';
-import { CreateTeam, AddToFaction, DeleteTeam, TableTeams } from './Actions';
+import { CreateTeam, AddToFaction, DeleteTeam, TableTeams, RenameTeam } from './Actions';
 
 const TeamAdminSection: React.FC = () => {
   const actions: AdminAction[] = [
@@ -20,6 +20,10 @@ const TeamAdminSection: React.FC = () => {
     {
       title: 'Affichage équipes',
       form: <TableTeams/>,
+    },
+    {
+      title: 'Renommer une équipe',
+      form: <RenameTeam/>,
     },
   ];
 

@@ -1,13 +1,14 @@
-import { Users, Teams } from '../../utils/Select'
+import { Users, Teams, UUIDs } from '../../utils/Select'
 import Select from 'react-select'
 import { useEffect, useState } from 'react'
-import { toArray, toId } from '../../utils/Submit'
+import { toArray, toId, tochainString } from '../../utils/Submit'
 import { addToTeam, changePermission } from '../../../services/requests/users';
 import { handleError } from '../../utils/Submit'
 import { ToastContainer } from 'react-toastify'
-import { User } from '../../../services/interfaces'
+import { User, newStudent } from '../../../services/interfaces'
 import { getAllUsers } from '../../../services/requests'
 import { toTable } from '../../utils/Tables'
+import { createUUID, deleteUUID, getAllUUID } from '../../../services/requests/newstudent';
 
 export const AddToTeam = () => {
   const [users, setUsers] = useState([] as any)
@@ -101,4 +102,66 @@ export const TableUser = () => {
   }, []);
 
   return users.length > 0 ? toTable(users) : null;
+}
+
+export const ManageUUIDs = () => {
+
+  const [count, setCount] = useState(0);
+  const [uuids, setUUIDs] = useState([] as any )
+
+  const handleCreation = async () => {
+    if (count !== 0) {
+      await handleError("UUIDs créés", "Une erreur est survenue", createUUID, count)
+      setCount(0);
+    }
+  };
+
+  const handleDeletion = async () => {
+    const strUUIds = tochainString(uuids);
+    await handleError("UUIDs supprimés", "Une erreur est survenue", deleteUUID, strUUIds);
+    setUUIDs([]);
+  };
+
+  return (
+    <div>
+      <div className="input">
+        <h3>Creéation UUIDs</h3>
+        <p>Combien voulez-vous créer de clés unique ?</p>
+        <input type="number" value={count} onChange={e => setCount(Number(e.target.value))} />
+        <button className="submit-button" onClick={handleCreation}>Soumettre</button>
+      </div>
+      <h3>Suppression UUIDs</h3>
+      <p>Sélectionner les clées unique à supprimer ?</p>
+      <div className="select-container">
+        <Select
+          value={uuids}
+          closeMenuOnSelect={false}
+          isMulti
+          options={UUIDs()}
+          onChange={uuids => setUUIDs(uuids)}
+        />
+        <button className="submit-button" onClick={handleDeletion}>Suppression</button>
+      </div>
+
+      <ToastContainer position="bottom-right"/>
+    </div>
+  );
+};
+
+export const TableUUIDs = () => {
+  const [UUIDs, setUUIDs] = useState<newStudent[]>([]);
+
+  useEffect(() => {
+    const fetchRole = async () => {
+      try {
+        const response = await getAllUUID();
+        setUUIDs(response)
+      } catch (error) {
+        console.error('Error fetching role:', error);
+      }
+    };
+    fetchRole();
+  }, []);
+
+  return UUIDs.length > 0 ? toTable(UUIDs) : null;
 }

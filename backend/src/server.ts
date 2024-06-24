@@ -4,6 +4,7 @@ import userRouter from "./routes/user.routes";
 import teamRouter from "./routes/team.routes";
 import factionRouter from "./routes/faction.routes";
 import authRouter from "./routes/auth.routes";
+import newStudentRouter from "./routes/newstudent.route";
 import { roleRouter, wishRouter } from "./routes/role.routes";
 import eventRouter from "./routes/event.routes";
 import { isTokenValid } from "./middlewares/permissions";
@@ -21,13 +22,13 @@ async function startServer() {
   app.use(api_prefix, router);
   app.use(log)
   router.use("/auth", authRouter);
-  router.use(isTokenValid);
   router.use("/user", userRouter);
   router.use("/team", teamRouter);
   router.use("/faction", factionRouter);
   router.use("/role", roleRouter);
   router.use("/event", eventRouter);
   router.use("/wish", wishRouter);
+  router.use("/newstudent", newStudentRouter);
 
   await init();
 
