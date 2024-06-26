@@ -66,13 +66,8 @@ export const getRole = async () => {
     return response?.data?.data
 }
 
-export const getCurrentUser = async () => {
-    const response = await api.get('/user/current')
-    return response?.data?.data
-}
-
-export const DeleteUsers = async (id: number) => {
-    const response = await api.delete('/user')
+export const deleteUsers = async (id: number) => {
+    const response = await api.delete('/user/delete'+id)
     return response
 }
 

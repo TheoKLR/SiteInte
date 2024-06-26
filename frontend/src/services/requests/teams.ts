@@ -34,7 +34,6 @@ export const renameTeam = async (name: string, id: number[]) => {
   });
 };
 
-
 export const setTimestamp = async (timestamp: number, id: number) =>
   api.put("/team/timestamp", { timestamp, id });
 

@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import Select from "react-select";
-import { getAllTeams, getCurrentUser } from "../../services/requests";
+import { getAllTeams} from "../../services/requests";
 import { UserLight } from "../../services/interfaces";
 import { registerTeam } from "../../services/requests/teams";
 import { handleError } from "../utils/Submit";
 import { toArray } from "../utils/Submit";
 import { ToastContainer, toast } from "react-toastify";
-import { getUserLight } from "../../services/requests/users";
+import { getUserLight,getCurrentUser } from "../../services/requests/users";
 import "./events.css";
 
 // Formulaire pour que les étudiants de l'utt puissent choisir les rôles qui les intérresseraient pour l'inté

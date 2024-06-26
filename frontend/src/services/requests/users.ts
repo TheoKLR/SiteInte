@@ -27,3 +27,21 @@ export const updateUser = async (first_name: string, last_name: string, birthday
         contact
     })
 }
+
+export const getCurrentUser = async () => {
+    const response = await api.get("user/current")
+    return response?.data.data ;
+};
+
+
+export const getUsersbyTeam = async (teamId : number) => {
+    const response = await api.get("user/getbyteam/"+teamId)
+    return response?.data.data ;
+};
+
+export const modifyUserTeam = async (members: [], teamId: number[]) => {
+    return await api.post("user/modifyteam", {
+      members,
+      teamId
+    });
+  };

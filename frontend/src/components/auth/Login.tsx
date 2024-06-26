@@ -226,7 +226,8 @@ const LoginForm = () => {
               <label>
                   Mot de passe:
                   <input
-                      type="text"
+                      type="password"
+                      placeholder="Password"
                       value={pwd}
                       onChange={(e) => setPwd(e.target.value)}
                       required

@@ -44,6 +44,8 @@ export const getUser = async (id: number) => {
             first_name: userSchema.first_name,
             last_name: userSchema.last_name,
             email: userSchema.email,
+            birthday : userSchema.birthday,
+            contact : userSchema.contact,
             permission: userSchema.permission,
             connection_number: userSchema.connection_number,
             team_id: userSchema.team,
@@ -198,3 +200,22 @@ export const getUserWish = async (id: number) => {
     }
 }
 
+export async function getUserbyTeam(teamID: any) {
+    try {
+
+        const users = await db.select().from(userSchema).where(eq(userSchema.team, teamID));
+        return users.length === 0 ? null : users;
+    } catch (error) {
+        throw new Error("Failed to fetch user by team. Please try again later.");
+    }
+}
+
+export async function updateTeam(id: number, teamId: any) {
+    try {
+        await db.update(userSchema).set({ 
+            team: teamId  })
+        .where(eq(userSchema.id, id));
+    } catch (error) {
+        throw new Error("Failed to update user. Please try again later.");
+    }
+}

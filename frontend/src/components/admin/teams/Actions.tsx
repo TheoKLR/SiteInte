@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import Select from 'react-select'
-import { createTeam, addToFaction, deleteTeam, getAllTeams, renameTeam } from '../../../services/requests/teams';
+import { createTeam, addToFaction, deleteTeam, getAllTeams, renameTeam} from '../../../services/requests/teams';
 import { toArray, toId, handleError } from '../../utils/Submit'
-import { Teams, Factions } from '../../utils/Select'
+import { Teams, Factions, Users } from '../../utils/Select'
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { Team } from '../../../services/interfaces';
 import { toTable } from '../../utils/Tables';
+import {getUsersbyTeam, modifyUserTeam  } from '../../../services/requests/users';
 
 export const CreateTeam = () => {
   const [name, setName] = useState('');
@@ -119,6 +120,60 @@ export const RenameTeam = () => {
     </div>
   )
 }
+
+export const ModifyTeam = () => {
+  const [team, setTeam] = useState({} as any);
+  const [members, setMembers] = useState([] as any);
+
+  const Submit = async () => {
+    const teamId = toId(team);
+    await handleError("Equipe mise à jour !", "Une erreur est survenue", modifyUserTeam, members, teamId);
+    setTeam({});
+    setMembers([]);
+  };
+
+  const handleTeamChange = async (selectedTeam: any) => {
+    setTeam(selectedTeam);
+    if (selectedTeam) {
+      const teamMembers = await getUsersbyTeam(toId(selectedTeam));
+      if (teamMembers) {
+        setMembers(teamMembers.map((user: any) => ({ value: user.id, label: user.first_name + " " + user.last_name })));
+      } else {
+        setMembers([]);
+      }
+    } else {
+      setMembers([]);
+    }
+  };
+
+  const handleMembersChange = (selectedMembers: any) => {
+    setMembers(selectedMembers);
+  };
+
+  return (
+    <div>
+      <div className="input">
+        <label>Choisissez l'équipe
+          <Select
+            value={team}
+            options={Teams()}
+            onChange={handleTeamChange}
+          />
+        </label>
+        <label>Personnes dans l'équipe
+          <Select
+            value={members}
+            isMulti
+            options={Users()}
+            onChange={handleMembersChange}
+          />
+        </label>
+      </div>
+      <button className="submit-button" onClick={Submit}>Soumettre</button>
+      <ToastContainer position="bottom-right" />
+    </div>
+  );
+};
 
 export const TableTeams = () => {
 

@@ -39,7 +39,6 @@ export const handleError = async (
 ) => {
   try {
     const response = await func(...args);
-
     if (!response || response.status >= 400) {
       const errorMessage = response?.data?.message || 'Unknown error';
       toast.error(`${error_msg} : ${errorMessage}`);
