@@ -103,3 +103,18 @@ export const getTimestamp = async (req: Request, res: Response, next: NextFuncti
     Error(res, { error });
   }
 };
+
+
+export const renameTeam = async (req: Request, res: Response, next: NextFunction) => {
+  const { id, name } = req.body;
+
+  name ?? Error(res, { msg: "No name" });
+
+  try {
+    await service.renameTeam(name, id);
+    Ok(res, {msg : "Team renamed !"})
+  } catch (error) {
+    Error(res, { error });
+  }
+};
+

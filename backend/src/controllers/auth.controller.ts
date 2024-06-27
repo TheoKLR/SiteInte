@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { PermType } from '../schemas/user.schema'
 import * as service from '../services/user.service'
+import * as newstudentservice from '../services/newstudent.service'
 import * as bcrypt from 'bcrypt'
 import { Error, Created, Ok, Unauthorized } from '../utils/responses'
 import { sign } from 'jsonwebtoken'
@@ -9,18 +10,31 @@ import { decodeToken } from '../utils/token'
 import { getToken, getUserData } from '../utils/api_etu'
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
-    const { first_name, last_name, email, password } = req.body
+    
+    const { first_name, last_name, email, birthday, password, uuid } = req.body
+    console.log(birthday);
 
     first_name ?? Error(res, { msg: "No first name" })
     last_name ?? Error(res, { msg: "No last name" })
+    uuid ?? Error (res, {msg: "No UUID"})
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
     try {
-        await service.createUser(first_name, last_name, email, hashedPassword, PermType.NewStudent)
-        Created(res, {})
+        await service.createUser(first_name, last_name, email, birthday, hashedPassword, PermType.NewStudent)
+        
+        const newUser = await service.getUserByEmail(email);
+
+        if(newUser){
+
+        await  newstudentservice.setUUID(uuid, true, newUser.id);
+        Created(res, {msg : "User created ! Welcome !"})
+
+        }else{
+        Error(res, {msg : "User not created"});
+        }
     } catch (error) {
-        Error(res, { error })
+        Error(res, { error, msg: "Erreur lors de l\'enregistrement de l\'utilisateur"})
     }
 }
 
@@ -60,11 +74,11 @@ export const studentLogin = async (req: Request, res: Response, next: NextFuncti
             return
         }
 
-        const { email, firstName, lastName } = user_data
+        const { email, firstName, lastName, birthday } = user_data
         let user = await service.getUserByEmail(email)
 
         if (!user) {
-            await service.createUser(firstName, lastName, email, "default", PermType.Student)
+            await service.createUser(firstName, lastName, email, birthday, "default", PermType.Student)
             user = await service.getUserByEmail(email)
         }
 

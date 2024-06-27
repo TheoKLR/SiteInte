@@ -1,8 +1,10 @@
 
 import { userSchema, User, PermType } from '../schemas/user.schema';
+import { newstudentSchema } from '../schemas/newstudent.schema';
 import { roleSchema, userToRoleSchema } from '../schemas/role.schema';
 import { db } from "../database/db"
 import { eq, and } from 'drizzle-orm'
+import { uuid } from 'drizzle-orm/pg-core';
 
 export const getAllUsers = async () => {
     try {
@@ -42,6 +44,8 @@ export const getUser = async (id: number) => {
             first_name: userSchema.first_name,
             last_name: userSchema.last_name,
             email: userSchema.email,
+            birthday : userSchema.birthday,
+            contact : userSchema.contact,
             permission: userSchema.permission,
             connection_number: userSchema.connection_number,
             team_id: userSchema.team,
@@ -78,12 +82,12 @@ export const getUserByEmail = async (email: string) => {
     }
 }
 
-export const createUser = async (first_name: string, last_name: string, email: string, password: string, permission: PermType) => {
+export const createUser = async (first_name: string, last_name: string, email: string, birthday: string, password: string, permission: PermType) => {
     try {
         const allUser = await getAllUsers();
         if (allUser.length === 0) permission = PermType.Admin;
 
-        const newUser: User = { first_name, last_name, email, contact: null, birthday: null, connection_number: 0, permission, password, team: null };
+        const newUser: User = { first_name, last_name, email, contact: null, birthday: birthday, connection_number: 0, permission, password, team: null };
         await db.insert(userSchema).values(newUser);
     } catch (error) {
         throw new Error("Failed to create user. Please try again later.");
@@ -193,5 +197,25 @@ export const getUserWish = async (id: number) => {
             ));
     } catch (error) {
         throw new Error("Failed to fetch user wish. Please try again later.");
+    }
+}
+
+export async function getUserbyTeam(teamID: any) {
+    try {
+
+        const users = await db.select().from(userSchema).where(eq(userSchema.team, teamID));
+        return users.length === 0 ? null : users;
+    } catch (error) {
+        throw new Error("Failed to fetch user by team. Please try again later.");
+    }
+}
+
+export async function updateTeam(id: number, teamId: any) {
+    try {
+        await db.update(userSchema).set({ 
+            team: teamId  })
+        .where(eq(userSchema.id, id));
+    } catch (error) {
+        throw new Error("Failed to update user. Please try again later.");
     }
 }

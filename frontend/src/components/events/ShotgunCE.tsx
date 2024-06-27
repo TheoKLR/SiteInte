@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { handleError } from "../utils/Submit";
 import { setTimestamp } from "../../services/requests/teams";
 import { ToastContainer, toast } from "react-toastify";
-import { getCurrentUser } from "../../services/requests";
+import { getCurrentUser } from "../../services/requests/users";
 
 // Formulaire pour que les étudiants de l'utt puissent choisir les rôles qui les intérresseraient pour l'inté
 export const ShotgunCE = () => {

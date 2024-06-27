@@ -1,6 +1,6 @@
 import React from 'react';
 import AdminSection from '../AdminSection';
-import { AddToTeam, ChangePermission, TableUser } from './Actions';
+import { AddToTeam, ChangePermission, ManageUUIDs, TableUUIDs, TableUser } from './Actions';
 import { AdminAction } from '../AdminSection';
 
 const UserAdminSection: React.FC = () => {
@@ -16,6 +16,14 @@ const UserAdminSection: React.FC = () => {
     {
       title: 'Affichage utilisateurs',
       form: <TableUser/>,
+    },
+    {
+      title: 'Gestion cléfs de connexions unique',
+      form: <ManageUUIDs/>,
+    },
+    {
+      title: 'Affichage cléfs de connexions unique',
+      form: <TableUUIDs/>,
     },
   ];
 

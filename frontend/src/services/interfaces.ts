@@ -41,3 +41,9 @@ export interface Event {
     name: string;
 }
 
+export interface newStudent{
+    uuid : string;
+    isUsed : boolean;
+    userID:number;
+}
+

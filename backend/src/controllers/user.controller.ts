@@ -37,8 +37,20 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
 
 export const getCurentUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const decodedToken = decodeToken(req)
+        const decodedToken = decodeToken(req);
+
         const data = await service.getUser(decodedToken.id);
+        Ok(res, { data });
+    } catch (error) {
+        Error(res, { error });
+    }
+}
+
+export const getUserbyTeam = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const {teamId} = req.params;
+
+        const data = await service.getUserbyTeam(teamId);
         Ok(res, { data });
     } catch (error) {
         Error(res, { error });
@@ -138,4 +150,24 @@ export const getUserWish = async (req: Request, res: Response, next: NextFunctio
     } catch (error) {
         Error(res, { error });
     }
+}
+
+export const modifyTeam = async(req : Request, res: Response) => {
+
+    const {teamId, members} = req.body
+    try{
+    const old_members = await service.getUserbyTeam(teamId);
+
+    old_members?.forEach(async (old_member)=>{
+        await service.updateTeam(old_member.id, null);
+    })
+
+    members.forEach(async (user: any) => {
+        await service.updateTeam(user.value, teamId);
+    });
+    Ok(res, { msg: "Team modified" });
+
+    }catch(error){
+        Error(res, { error });
+    }   
 }

@@ -3,7 +3,7 @@ import { Navbar } from "../components/shared/Navbar";
 import { Section } from "../components/shared/Section";
 import { JoinUs } from "../components/home/JoinUs";
 import { Welcome } from "../components/home/Welcome";
-import { getCurrentUser } from '../services/requests';
+import { getCurrentUser } from '../services/requests/users';
 
 //Page d'accueil du site une fois l'utilisateur connecté
 const Home = () => {

@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react"
-import { Role, Faction, User, Team, Event } from '../../services/interfaces'
+import { Role, Faction, User, Team, Event, newStudent } from '../../services/interfaces'
 import { getAllFactions, getAllTeams, getAllUsers } from '../../services/requests'
 import { getAllRoles } from "../../services/requests/roles"
 import { getActiveEvents, getInactiveEvents } from "../../services/requests/events"
+import { getAllUUID } from "../../services/requests/newstudent"
 
 export const Roles = () => {
   const [options, setOptions] = useState([])
@@ -95,6 +96,31 @@ export const Users = () => {
 
   return options
 }
+
+export const UUIDs = () => {
+  const [options, setOptions] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getAllUUID();
+        const newStudentOptions = response.map((newStudent: newStudent) => ({
+          value: newStudent.uuid,
+          label: `${newStudent.uuid}`,
+        }))
+        console.log(newStudentOptions);
+        setOptions(newStudentOptions)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return options
+}
+
 
 export const InactiveEvents = () => {
   const [options, setOptions] = useState([])
