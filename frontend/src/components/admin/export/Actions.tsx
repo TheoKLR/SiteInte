@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useGoogleSheetsAPI } from '../../../services/GoogleSheetsAPI';
 import { getAllUsers, getUserWishes } from '../../../services/requests'
 import { getAllTeams, getTeam } from '../../../services/requests/teams';
+import { getAllUUID } from '../../../services/requests/newstudent';
 
 export const ExportDb = () => {
 
@@ -77,9 +78,11 @@ export const SyncDb = () => {
           );
 
         const AllTeam = await getAllTeams();
+        const AllNewStudent = await getAllUUID();
 
         const resultUSER = await appendDataToSheet(usersWithWishes, 'DB_USER');
         const resultTEAM = await appendDataToSheet(AllTeam, 'DB_TEAM');
+        const resultNEWSTUDENT = await appendDataToSheet(AllNewStudent, 'DB_NEWSTUDENT');
 
         toast.success('Data synchronized successfully!');
       } catch (error) {

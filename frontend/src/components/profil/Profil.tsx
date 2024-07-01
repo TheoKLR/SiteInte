@@ -77,7 +77,7 @@ export const ProfilForm: React.FC = () => {
                         value={birthday}
                         placeholder={birthday}
                         onChange={(e) => setBirthday(e.target.value)}
-                        required
+                        disabled
                     />
                 </label>
                 <label>

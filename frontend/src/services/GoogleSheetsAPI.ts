@@ -65,6 +65,18 @@ export const useGoogleSheetsAPI = () => {
       };
       return gapi.client.sheets.spreadsheets.values.update(params, valueRangeBody);
     }
+    else if(sheetname === 'DB_NEWSTUDENT'){
+      const valueRangeBody = {
+        majorDimension: 'ROWS',
+        values: data.map((item: { uuid: any; isused: any; userid: any; }) => [
+          item.uuid ?? 0, 
+          item.isused ?? false, 
+          item.userid ?? 0
+        ]),
+      };
+      return gapi.client.sheets.spreadsheets.values.update(params, valueRangeBody);
+
+    }
 
     
   };
