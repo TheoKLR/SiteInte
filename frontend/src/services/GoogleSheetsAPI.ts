@@ -34,6 +34,7 @@ export const useGoogleSheetsAPI = () => {
     };
 
     if(sheetname === 'DB_USER'){
+      const headers = ['ID', 'First Name', 'Last Name', 'Email', 'Permission', 'Birthday', 'Contact', 'Team ID', 'Team Name', 'User Wishes'];
       const valueRangeBody = {
         majorDimension: 'ROWS',
         values: data.map((item: { id: any; first_name: any; last_name: any; email: any; permission: any; birthday :any; contact:any; team_id: any; userWishes: any; teamName:any; }) => [
@@ -45,14 +46,15 @@ export const useGoogleSheetsAPI = () => {
           item.birthday ?? "No birthday",
           item.contact ?? "No contact", 
           item.team_id ?? 0,
-          item.teamName ?? "No team",
+          item.teamName,
           item.userWishes ?? "No wishes"
         ]),
       };
-      console.log(valueRangeBody.values);
+      valueRangeBody.values.unshift(headers);
       return gapi.client.sheets.spreadsheets.values.update(params, valueRangeBody);  
     }
     else if (sheetname === 'DB_TEAM'){
+      const headers = ['ID', 'Is Official', 'Time Code', 'Name', 'Faction'];
       const valueRangeBody = {
         majorDimension: 'ROWS',
         values: data.map((item: { id: any; isOfficial: any; timeCode: any; name: any; faction: any; }) => [
@@ -63,9 +65,12 @@ export const useGoogleSheetsAPI = () => {
           item.faction ?? 0
         ]),
       };
+      valueRangeBody.values.unshift(headers);
       return gapi.client.sheets.spreadsheets.values.update(params, valueRangeBody);
     }
+
     else if(sheetname === 'DB_NEWSTUDENT'){
+      const headers = ['UUID', 'Is Used', 'User ID'];
       const valueRangeBody = {
         majorDimension: 'ROWS',
         values: data.map((item: { uuid: any; isused: any; userid: any; }) => [
@@ -74,6 +79,7 @@ export const useGoogleSheetsAPI = () => {
           item.userid ?? 0
         ]),
       };
+      valueRangeBody.values.unshift(headers);
       return gapi.client.sheets.spreadsheets.values.update(params, valueRangeBody);
 
     }
