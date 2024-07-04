@@ -36,6 +36,7 @@ export const userSchema = pgTable("user", {
   first_name: text("first_name").notNull(),
   last_name: text("last_name").notNull(),
   email: text("email").notNull().unique(),
+  branch: text("branch"),
   birthday: date("birthday"),
   contact: text("contact"),
   connection_number: integer("connection_num").notNull(),

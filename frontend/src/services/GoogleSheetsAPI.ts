@@ -34,14 +34,15 @@ export const useGoogleSheetsAPI = () => {
     };
 
     if(sheetname === 'DB_USER'){
-      const headers = ['ID', 'First Name', 'Last Name', 'Email', 'Permission', 'Birthday', 'Contact', 'Team ID', 'Team Name', 'User Wishes'];
+      const headers = ['ID', 'First Name', 'Last Name', 'Email','Branch', 'Permission', 'Birthday', 'Contact', 'Team ID', 'Team Name', 'User Wishes'];
       const valueRangeBody = {
         majorDimension: 'ROWS',
-        values: data.map((item: { id: any; first_name: any; last_name: any; email: any; permission: any; birthday :any; contact:any; team_id: any; userWishes: any; teamName:any; }) => [
+        values: data.map((item: { id: any; first_name: any; last_name: any; email: any; branch: any; permission: any; birthday :any; contact:any; team_id: any; userWishes: any; teamName:any; }) => [
           item.id ?? 0, 
           item.first_name ?? "No first name", 
           item.last_name ?? "No last name", 
-          item.email ?? "No email", 
+          item.email ?? "No email",
+          item.branch ?? "No branch", 
           item.permission ?? "No permissions",
           item.birthday ?? "No birthday",
           item.contact ?? "No contact", 
@@ -51,6 +52,7 @@ export const useGoogleSheetsAPI = () => {
         ]),
       };
       valueRangeBody.values.unshift(headers);
+      console.log(valueRangeBody);
       return gapi.client.sheets.spreadsheets.values.update(params, valueRangeBody);  
     }
     else if (sheetname === 'DB_TEAM'){
