@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { newStudentLogin, studentLogin, registerStudent } from "../../services/requests";
 import { ToastContainer } from "react-toastify";
 import { handleError } from "../utils/Submit";
+import { colors } from "react-select/dist/declarations/src/theme";
 
 const LoginForm = () => {
   const userRef = useRef<HTMLInputElement>(null);
@@ -107,10 +108,10 @@ const LoginForm = () => {
       
       <h1>Bienvenue!</h1>
         <button className="login-button" onClick={handleClick_NouveauLogin}>
-          Je suis nouveau et je connecte
+          Je suis nouveau et je me connecte
         </button>
         <button className="login-button" onClick={handleClick_NouveauRegister}>
-          Je suis nouveau et je m'inscrit
+          Je suis nouveau et je m'inscris
         </button>
         <button className="login-button" onClick={ETUconnection}>
           Je suis étudiant à l'UTT
@@ -124,7 +125,7 @@ const LoginForm = () => {
         className={stateNewLogin ? "#formNouveau active" : "#formNouveau"}
       >
         <form onSubmit={NSLogin}>
-          <h1>Connection</h1>
+          <h1>Connexion</h1>
           <h4>
             Connecte toi avec les identifiants que tu as renseigné !
           </h4>
@@ -236,7 +237,7 @@ const LoginForm = () => {
             </div>
             <div className="input-box">
               <label>
-                  UUID:
+                  Clef unique fournis par l'UTT:
                   <input
                       type="text"
                       value={uuid}
@@ -252,6 +253,7 @@ const LoginForm = () => {
               {errMsg}
             </p>
             <div>
+              <p style={{ fontSize: '10px', color:"black", }}>En m'inscrivant j'accepte que les données renseignées ci-dessus soient sotcké et traités par le BDE UTT dans le cadre de l'intégration UTT</p>
               <button className="login-button" type="submit">Valider</button>
               <button className="login-button" onClick={handleClick_NouveauRegister}>Retour</button>
             </div>
