@@ -13,6 +13,7 @@ export const getAllUsers = async () => {
             first_name: userSchema.first_name,
             last_name: userSchema.last_name,
             email: userSchema.email,
+            branch: userSchema.branch,
             permission: userSchema.permission,
             birthday: userSchema.birthday,
             contact: userSchema.contact,
@@ -44,6 +45,7 @@ export const getUser = async (id: number) => {
             first_name: userSchema.first_name,
             last_name: userSchema.last_name,
             email: userSchema.email,
+            branch: userSchema.branch,
             birthday : userSchema.birthday,
             contact : userSchema.contact,
             permission: userSchema.permission,
@@ -82,12 +84,12 @@ export const getUserByEmail = async (email: string) => {
     }
 }
 
-export const createUser = async (first_name: string, last_name: string, email: string, birthday: string, password: string, permission: PermType) => {
+export const createUser = async (first_name: string, last_name: string, email: string, birthday: string, branch: string, password: string, permission: PermType) => {
     try {
         const allUser = await getAllUsers();
         if (allUser.length === 0) permission = PermType.Admin;
 
-        const newUser: User = { first_name, last_name, email, contact: null, birthday: birthday, connection_number: 0, permission, password, team: null };
+        const newUser: User = { first_name, last_name, email, contact: null, branch: branch, birthday: birthday, connection_number: 0, permission, password, team: null };
         await db.insert(userSchema).values(newUser);
     } catch (error) {
         throw new Error("Failed to create user. Please try again later.");
@@ -96,7 +98,24 @@ export const createUser = async (first_name: string, last_name: string, email: s
 
 export const updateUser = async (id: number, first_name: string, last_name: string, birthday: string, contact: string) => {
     try {
-        await db.update(userSchema).set({ first_name: first_name, last_name: last_name, birthday: birthday, contact: contact }).where(eq(userSchema.id, id));
+        await db.update(userSchema).set({ 
+            first_name: first_name, 
+            last_name: last_name, 
+            birthday: birthday, 
+            contact: contact }).where(eq(userSchema.id, id));
+    } catch (error) {
+        throw new Error("Failed to update user. Please try again later.");
+    }
+}
+
+export const updateUserStudent = async (id: any, first_name: string, last_name: string, email: string, branch: string, birthday: string) => {
+    try {
+        await db.update(userSchema).set({ 
+            first_name: first_name, 
+            last_name: last_name, 
+            email:email, 
+            branch: branch, 
+            birthday: birthday }).where(eq(userSchema.id, id));
     } catch (error) {
         throw new Error("Failed to update user. Please try again later.");
     }
