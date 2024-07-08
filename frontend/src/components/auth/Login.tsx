@@ -253,7 +253,7 @@ const LoginForm = () => {
               {errMsg}
             </p>
             <div>
-              <p style={{ fontSize: '10px', color:"black", }}>En m'inscrivant j'accepte que les données renseignées ci-dessus soient sotcké et traités par le BDE UTT dans le cadre de l'intégration UTT</p>
+              <p style={{ fontSize: '10px', color:"black", }}>En m'inscrivant j'accepte que les données renseignées ci-dessus soient stockées et traitées par le BDE UTT dans le cadre de l'intégration UTT</p>
               <button className="login-button" type="submit">Valider</button>
               <button className="login-button" onClick={handleClick_NouveauRegister}>Retour</button>
             </div>

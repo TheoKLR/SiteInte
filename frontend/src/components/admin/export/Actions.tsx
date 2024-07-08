@@ -60,7 +60,7 @@ export const SyncDb = () => {
                 name: role.desires.name,
                 }))
 
-                let teamName = await getTeam(user.id);
+                let teamName = await getTeam(user.team_id);
                 if(!teamName){
                   teamName = 'No Team';
                 }
