@@ -84,9 +84,9 @@ export const SyncDb = () => {
         const AllTeam = await getAllTeams();
         const AllNewStudent = await getAllUUID();
 
-        /*const resultUSER = await appendDataToSheet(usersWithWishes, 'DB_USER');
+        const resultUSER = await appendDataToSheet(usersWithWishes, 'DB_USER');
         const resultTEAM = await appendDataToSheet(AllTeam, 'DB_TEAM');
-        const resultNEWSTUDENT = await appendDataToSheet(AllNewStudent, 'DB_NEWSTUDENT');*/
+        const resultNEWSTUDENT = await appendDataToSheet(AllNewStudent, 'DB_NEWSTUDENT');
 
         toast.success('Data synchronized successfully!');
       } catch (error) {
