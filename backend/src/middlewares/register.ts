@@ -14,19 +14,22 @@ export const registerMiddleware = async (req: Request, res: Response, next: Next
             return Error(res, { msg: "Invalid email address" });
         }
 
-        if (!uuidValidate(uuid)) {
+        //Verification for UUID, not used in 2024, uncomment to use it
+        /*if (!uuidValidate(uuid)) {
             return Error(res, { msg: "Incorrect UUID" });
         }
-
-        const user = await getUserByEmail(email);
         const isUsed = await getIsUsedbyUUID(uuid);
-
-        if (isUsed === null) {
+                if (isUsed === null) {
             return Error(res, { msg: "Incorrect UUID" });
-        }
+        }*/
+       
+        const user = await getUserByEmail(email);
+        
 
-        if (user !== null || isUsed.isUsed === true) {
-            return Error(res, { msg: "User already exists or UUID already used" });
+
+
+        if (user !== null) {
+            return Error(res, { msg: "User already exists" });
         }
 
         if (password.length < 8) {

@@ -40,7 +40,8 @@ export const ProfilForm: React.FC = () => {
 
     return (
         <div className="profil-form-container">
-            <form onSubmit={handleSubmit} className="profil-form">
+            <p style={{textAlign: "center"}}>Si tu as le moindre soucis avec ton profil n'hésite pas à contacter : integration@utt.fr</p>
+            <form onSubmit={handleSubmit} className="form-group">
                 <label>
                     Prénom:
                     <input
@@ -81,11 +82,10 @@ export const ProfilForm: React.FC = () => {
                     />
                 </label>
                 <label>
-                    Contact:
-                    <input
-                        type="text"
+                    Tes moyens de contact (tu peux en mettre plusieurs 😊):
+                    <textarea
                         value={contact}
-                        placeholder={contact}
+                        placeholder="Entre tes moyens de contact ici..."
                         onChange={(e) => setContact(e.target.value)}
                     />
                 </label>

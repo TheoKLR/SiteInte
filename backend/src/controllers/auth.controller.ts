@@ -11,11 +11,11 @@ import { getToken, getUserData } from '../utils/api_etu'
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
     
-    const { first_name, last_name, email, birthday, password, uuid } = req.body
+    const { first_name, last_name, email, birthday, password /*, uuid*/ } = req.body
 
     first_name ?? Error(res, { msg: "No first name" })
     last_name ?? Error(res, { msg: "No last name" })
-    uuid ?? Error (res, {msg: "No UUID"})
+    //uuid ?? Error (res, {msg: "No UUID"})
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
@@ -26,7 +26,8 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
         if(newUser){
 
-        await  newstudentservice.setUUID(uuid, true, newUser.id);
+        //Used for check a specific UUID for avoid to used the same UUID twice, not used in 2024, uncomment to use it
+        //await  newstudentservice.setUUID(uuid, true, newUser.id);
         Created(res, {msg : "User created ! Welcome !"})
 
         }else{
