@@ -105,3 +105,13 @@ export const getTimestamp = async (id: number) => {
         throw new Error("Failed to get the team's timecode. Please try again later.");
     }
 }
+
+export const validateTeam = async (id: number, isOfficial: boolean) => {
+    try {
+        await db.update(teamSchema)
+            .set({isOfficial: isOfficial})
+            .where(eq(teamSchema.id, id));
+    } catch (error) {
+        throw new Error("Failed to get the team's timecode. Please try again later.");
+    }
+}
