@@ -18,11 +18,11 @@ const UserAdminSection: React.FC = () => {
       form: <TableUser/>,
     },
     {
-      title: 'Gestion cléfs de connexions unique',
+      title: 'Gestion cléfs de connexions unique (Not used)',
       form: <ManageUUIDs/>,
     },
     {
-      title: 'Affichage cléfs de connexions unique',
+      title: 'Affichage cléfs de connexions unique (Not used)',
       form: <TableUUIDs/>,
     },
   ];

@@ -25,7 +25,7 @@ export const Profil = () => {
     return (
         <div className="ProfilForm">
             <Navbar />
-            <Section titre="Complète ton profil !" contenu={ProfilForm} />
+            <Section titre="Voici ton profil !" contenu={ProfilForm} />
         </div>
     )
 }

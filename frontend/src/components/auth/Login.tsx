@@ -235,7 +235,7 @@ const LoginForm = () => {
                   />
               </label>
             </div>
-            <div className="input-box">
+            {/*<div className="input-box">
               <label>
                   Clef unique fournis par l'UTT:
                   <input
@@ -245,7 +245,7 @@ const LoginForm = () => {
                       required
                   />
               </label>
-            </div>
+            </div>*/}
             <p
               ref={errRef}
               className={errMsg ? "errmsg" : "offscreen"}

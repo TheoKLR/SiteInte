@@ -35,8 +35,8 @@ export const Admin = () => {
         <div className="Admin">
             <Navbar />
             {(role === 'Admin') && <Section titre="Utilisateurs" contenu={UserAdminSection} />}
-            {(role === 'Admin' || 'RespoCE') && <Section titre="Equipes" contenu={TeamAdminSection} />}
-            {(role === 'Admin' || 'RespoCE') && <Section titre="Factions" contenu={FactionAdminSection} />}
+            {(role === ('Admin' || 'RespoCE')) && <Section titre="Equipes" contenu={TeamAdminSection} />}
+            {(role === ('Admin' || 'RespoCE')) && <Section titre="Factions" contenu={FactionAdminSection} />}
             {(role === 'Admin') &&<Section titre="Rôles" contenu={DesireAdminSection} />}
             {(role === 'Admin') && <Section titre="Events" contenu={EventsAdminSection} />}
             {(role === 'Admin') && <Section titre="Exports" contenu={ExportAdminSection} />}
