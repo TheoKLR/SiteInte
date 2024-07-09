@@ -118,3 +118,14 @@ export const renameTeam = async (req: Request, res: Response, next: NextFunction
   }
 };
 
+
+export const validateTeam = async (req: Request, res: Response, next: NextFunction) => {
+  const { id, isOfficial } = req.body;
+
+  try {
+    await service.validateTeam(id, isOfficial);
+    Ok(res, {msg : "Team updated !"})
+  } catch (error) {
+    Error(res, { error });
+  }
+};

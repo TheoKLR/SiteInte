@@ -13,5 +13,6 @@ teamRouter.put('/addtofaction', isAdmin, tc.addToFaction);
 teamRouter.put('/timestamp', tc.addTimestamp);
 teamRouter.get('/timestamp', tc.getTimestamp);
 teamRouter.post('/rename', isAdmin, tc.renameTeam);
+teamRouter.post('/validate', isAdmin, tc.validateTeam);
 
 export default teamRouter;

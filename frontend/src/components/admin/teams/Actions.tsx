@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Select from 'react-select'
-import { createTeam, addToFaction, deleteTeam, getAllTeams, renameTeam} from '../../../services/requests/teams';
+import { createTeam, addToFaction, deleteTeam, getAllTeams, renameTeam, validateTeam} from '../../../services/requests/teams';
 import { toArray, toId, handleError } from '../../utils/Submit'
 import { Teams, Factions, Users } from '../../utils/Select'
 import { ToastContainer, toast } from 'react-toastify';
@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Team } from '../../../services/interfaces';
 import { toTable } from '../../utils/Tables';
 import {getUsersbyTeam, modifyUserTeam  } from '../../../services/requests/users';
+import './Teams.css';
 
 export const CreateTeam = () => {
   const [name, setName] = useState('');
@@ -167,6 +168,57 @@ export const ModifyTeam = () => {
             options={Users()}
             onChange={handleMembersChange}
           />
+        </label>
+      </div>
+      <button className="submit-button" onClick={Submit}>Soumettre</button>
+      <ToastContainer position="bottom-right" />
+    </div>
+  );
+};
+
+export const ValidateTeam = () => {
+
+  const [team, setTeam] = useState({} as any);
+  const [official, setOfficial] = useState(false);
+
+  const Submit = async () => {
+    const teamId = toId(team);
+    console.log(teamId,official);
+    await handleError("Equipe mise à jour !", "Une erreur est survenue", validateTeam, teamId, official);
+    setTeam({});
+    setOfficial(false);
+  };
+
+  const handleTeamChange = async (selectedTeam: any) => {
+    setTeam(selectedTeam);
+  }
+
+  return (
+    <div>
+      <div className="input">
+        <label>Choisissez l'équipe
+          <Select
+            value={team}
+            options={Teams()}
+            onChange={handleTeamChange}
+          />
+        </label>
+        <label>
+          Valider la Team ?
+          <div className="button-container">
+            <button
+              className={`toggle-button ${official === true ? 'active' : ''}`}
+              onClick={() => setOfficial(true)}
+            >
+              Validée
+            </button>
+            <button
+              className={`toggle-button ${official === false ? 'active' : ''}`}
+              onClick={() => setOfficial(false)}
+            >
+              Pas validée
+            </button>
+        </div>
         </label>
       </div>
       <button className="submit-button" onClick={Submit}>Soumettre</button>

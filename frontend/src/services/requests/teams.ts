@@ -33,6 +33,12 @@ export const renameTeam = async (name: string, id: number[]) => {
     id
   });
 };
+export const validateTeam = async (id: number, isOfficial: boolean) => {
+  return await api.post("team/validate", {
+    id,
+    isOfficial
+  });
+};
 
 export const setTimestamp = async (timestamp: number, id: number) =>
   api.put("/team/timestamp", { timestamp, id });
