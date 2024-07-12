@@ -1,6 +1,4 @@
-import './Login.css';
 import LoginForm from '../components/auth/Login';
-;
 
 // Page de login du site
 export const Login = () => {

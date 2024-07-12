@@ -72,14 +72,14 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
 };
 
 export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
-    const {first_name, last_name, birthday, contact } = req.body;
+    const {first_name, last_name, birthday, contact, discord_id } = req.body;
     const token = decodeToken(req)
     if (token === null) {
       return Error(res, { msg: 'No email' });
     }
 
     try {
-        await service.updateUser(token.id, first_name, last_name, birthday, contact);
+        await service.updateUser(token.id, first_name, last_name, birthday, contact, discord_id);
         Ok(res, { msg: "User updated" });
     } catch (error) {
         Error(res, { error });

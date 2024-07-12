@@ -34,7 +34,7 @@ export const submitChoices = async (choiceIds: number[]) => {
 }
 
 // Enregistrement d'un étudiant
-export const registerStudent = async (fName: string, lName: string, mail: string, pwd: string, birthday: string, uuid: string) => {
+export const registerStudent = async (fName: string, lName: string, mail: string, pwd: string, birthday: string, contact: string, discord_id: string /*uuid: string*/) => {
 
     const response = await api.post('/auth/register', {
         first_name: fName,
@@ -42,7 +42,9 @@ export const registerStudent = async (fName: string, lName: string, mail: string
         email: mail,
         password: pwd,
         birthday: birthday,
-        uuid: uuid
+        contact: contact,
+        discord_id: discord_id
+        //uuid: uuid
     });
 
     return response?.data;

@@ -10,7 +10,7 @@ export interface SectionProps {
 export const Section: React.FC<SectionProps> = ({titre, contenu: Contenu}) => {
     return (
         <>
-            <div className='container'>
+            <div className='container-section'>
                 <div className='titre'>
                     <h2>{titre}</h2>
                     <hr />
