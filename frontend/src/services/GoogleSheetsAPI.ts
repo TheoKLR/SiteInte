@@ -34,10 +34,10 @@ export const useGoogleSheetsAPI = () => {
     };
 
     if(sheetname === 'DB_USER'){
-      const headers = ['ID', 'First Name', 'Last Name', 'Email','Branch', 'Permission', 'Birthday', 'Contact', 'Team ID', 'Team Name', 'User Wishes'];
+      const headers = ['ID', 'First Name', 'Last Name', 'Email','Branch', 'Permission', 'Birthday', 'Contact', 'Discord Tag','Team ID', 'Team Name', 'User Wishes'];
       const valueRangeBody = {
         majorDimension: 'ROWS',
-        values: data.map((item: { id: any; first_name: any; last_name: any; email: any; branch: any; permission: any; birthday :any; contact:any; team_id: any; userWishes: any; teamName:any; }) => [
+        values: data.map((item: { id: any; first_name: any; last_name: any; email: any; branch: any; permission: any; birthday :any; contact:any; discord_id: any ;team_id: any; userWishes: any; teamName:any; }) => [
           item.id ?? 0, 
           item.first_name ?? "No first name", 
           item.last_name ?? "No last name", 
@@ -46,6 +46,7 @@ export const useGoogleSheetsAPI = () => {
           item.permission ?? "No permissions",
           item.birthday ?? "No birthday",
           item.contact ?? "No contact", 
+          item.discord_id ?? "No discord_id",
           item.team_id ?? 0,
           item.teamName,
           item.userWishes ?? "No wishes"

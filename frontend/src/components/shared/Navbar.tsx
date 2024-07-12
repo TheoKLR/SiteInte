@@ -42,8 +42,8 @@ export const Navbar: React.FC = () => {
                     {<li><a href="/Events">Events</a></li>}
                     {<li><a href="/Mails">Mails</a></li>}
                     {<li><a href="/Parrainage">Parrainage</a></li>}
+                    {<li><a href="/Profil">Profil</a></li>}
                     {<li><a href="/Wei">WEI</a></li>}
-                    {role == 'Admin' && <li><a href="/Profil">Profil</a></li>}
                     {role !== 'newStudent' && <li><a href="Souhait">Souhait</a></li>}
                     <li><img src="ressources/logout_button.png" alt="Logout_Button" className="logout" onClick={handleLogout}></img></li>
                 </ul>

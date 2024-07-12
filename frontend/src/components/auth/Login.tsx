@@ -1,5 +1,4 @@
 import "./Login.css";
-import { FaUser, FaLock } from "react-icons/fa";
 import { useRef, useState, useEffect } from "react";
 import { newStudentLogin, studentLogin, registerStudent } from "../../services/requests";
 import { ToastContainer } from "react-toastify";
@@ -15,7 +14,9 @@ const LoginForm = () => {
   const [email, setEmail]= useState("");
   const [pwd, setPwd] = useState("");
   const [birthday, setBirthday]= useState("");
-  const [uuid, setUUID]= useState("");
+  const [discord_id, setDiscordId]= useState("");
+  const [contact, setContact]= useState("");
+  //const [uuid, setUUID]= useState("");
 
   const [errMsg, setErrMsg] = useState("");
   const [stateNewLogin, setStateNewLogin] = useState(false);
@@ -50,13 +51,14 @@ const LoginForm = () => {
 
   const NSRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    await handleError("Utilisateur ajouté !", "Une erreur est survenue", registerStudent, first_name, last_name, email, pwd, birthday, uuid)
+    await handleError("Utilisateur ajouté !", "Une erreur est survenue", registerStudent, first_name, last_name, email, pwd, birthday, contact, discord_id)
     setFirstName("");
     setLastName("");
     setEmail("");
     setBirthday("");
     setPwd("");
-    setUUID("");
+    setDiscordId("");
+    setContact("");
   };
 
   const getAuthCode = () => {
@@ -94,17 +96,16 @@ const LoginForm = () => {
 
 
   const getContainerClass = () => {
-    if (stateNewLogin) return "#container active login";
-    if (stateNewRegister) return "#container active register";
-    return "container";
+    if (stateNewLogin) return "active login";
+    if (stateNewRegister) return "active register";
+    return "container-login";
   };
+  
 
   // Frontend
   return (
-    <div>
-    <div id="container" 
-      className={getContainerClass()}>
-      
+    <div className="Login">
+    <div id="container-login" className={getContainerClass()}>
       
       <h1>Bienvenue!</h1>
         <button className="login-button" onClick={handleClick_NouveauLogin}>
@@ -117,13 +118,8 @@ const LoginForm = () => {
           Je suis étudiant à l'UTT
         </button>
 
-      
-      
-      
-      <div
-        id="formNouveau"
-        className={stateNewLogin ? "#formNouveau active" : "#formNouveau"}
-      >
+    </div>  
+    <div className={stateNewLogin ? "formNouveau login active" : "formNouveau"}>
         <form onSubmit={NSLogin}>
           <h1>Connexion</h1>
           <h4>
@@ -140,7 +136,6 @@ const LoginForm = () => {
               value={email}
               required
             />
-            <FaUser className="icon" />
           </div>
           <div className="input-box">
             <input
@@ -150,7 +145,6 @@ const LoginForm = () => {
               value={pwd}
               required
             />
-            <FaLock className="icon" />
           </div>
           <p
             ref={errRef}
@@ -162,22 +156,15 @@ const LoginForm = () => {
           <button className="login-button" type="submit">
             Connexion
           </button>
-        </form>
-        <button className="login-button" onClick={handleClick_NouveauLogin}>
+          <button className="login-button" onClick={handleClick_NouveauLogin}>
           Retour
         </button>
+        </form>
       </div>
 
 
-      <div
-        id="formNouveau"
-        className={stateNewRegister ? "#formNouveau active" : "#formNouveau"}
-      >
+    <div className={stateNewRegister ? "formNouveau register active" : "formNouveau"}>
           <h1>Inscription</h1>
-          <h4>
-            Tu as normalement reçu un identifiant de connexion unique par email sur l'adresse que
-            tu as fournie à l'UTT.
-          </h4>
           <p>Pas de mail ? Contacte-nous à l'adresse mail integration@utt.fr</p>
           <form onSubmit={NSRegister}>
             <div className="input-box">
@@ -235,6 +222,27 @@ const LoginForm = () => {
                   />
               </label>
             </div>
+            <div className="input-box">
+              <label>
+                  Tag Discord (Utile pour pouvoir rejoindre le discord de l'intégration et prendre contact avec ton équipe):
+                  <input
+                      type="text"
+                      placeholder="Discord Tag"
+                      value={discord_id}
+                      onChange={(e) => setDiscordId(e.target.value)}
+                  />
+              </label>
+            </div>
+            <div className="input-box">
+              <label>
+              Tes moyens de contact (tu peux en mettre plusieurs si tu le souhaites😊):
+                    <textarea
+                        value={contact}
+                        placeholder="Entre tes moyens de contact ici..."
+                        onChange={(e) => setContact(e.target.value)}
+                    />
+              </label>
+            </div>
             {/*<div className="input-box">
               <label>
                   Clef unique fournis par l'UTT:
@@ -253,12 +261,11 @@ const LoginForm = () => {
               {errMsg}
             </p>
             <div>
-              <p style={{ fontSize: '10px', color:"black", }}>En m'inscrivant j'accepte que les données renseignées ci-dessus soient stockées et traitées par le BDE UTT dans le cadre de l'intégration UTT</p>
+              <p style={{ fontSize: '10px', color:"black"}}>En m'inscrivant j'accepte que les données renseignées ci-dessus soient stockées et traitées par le BDE UTT dans le cadre de l'intégration UTT</p>
               <button className="login-button" type="submit">Valider</button>
               <button className="login-button" onClick={handleClick_NouveauRegister}>Retour</button>
             </div>
           </form>
-      </div>
     </div>
     <ToastContainer position="bottom-right" />
     </div>
