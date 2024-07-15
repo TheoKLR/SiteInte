@@ -21,7 +21,7 @@ export const getPermanence = async (id: number) => {
 export const createPermanence = async (
     name: string, 
     desc: string, 
-    startingTime: number, 
+    startingTime: string, 
     duration: number, 
     studentNumber: number
 ) => {

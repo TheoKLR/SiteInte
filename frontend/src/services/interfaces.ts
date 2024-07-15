@@ -25,6 +25,15 @@ export interface Faction {
     points: number;
 }
 
+export interface Perm {
+    id: number;
+    name: string;
+    desc: string;
+    startingTime: string,
+    duration: number,
+    studentNumber: number,
+}
+
 export interface Role {
     id: number;
     name: string;

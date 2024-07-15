@@ -31,6 +31,10 @@ export const createPermanence = async (req: Request, res: Response, next: NextFu
   const { name, desc, startingTime, duration, studentNumber } = req.body;
   name ?? Error(res, { msg: "No name" });
 
+  if (!name || !desc || !startingTime || !duration || !studentNumber) {
+    return res.status(400).json({ message: 'Invalid data format' });
+  }
+
   try {
     await service.createPermanence(name, desc, startingTime, duration, studentNumber);
     Created(res, {})

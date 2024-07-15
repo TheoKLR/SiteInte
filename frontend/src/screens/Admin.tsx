@@ -8,6 +8,7 @@ import { Section } from "../components/shared/Section";
 import { useEffect, useState } from "react";
 import { getRole } from "../services/requests";
 import ExportAdminSection from "../components/admin/export/ExportAdminSection";
+import PermsAdminSection from "../components/admin/perms/PermsAdmin";
 
 export const Admin = () => {
 
@@ -40,6 +41,7 @@ export const Admin = () => {
             {(role === 'Admin') &&<Section titre="Rôles" contenu={DesireAdminSection} />}
             {(role === 'Admin') && <Section titre="Events" contenu={EventsAdminSection} />}
             {(role === 'Admin') && <Section titre="Exports" contenu={ExportAdminSection} />}
+            {(role === 'Admin') && <Section titre="Perms" contenu={PermsAdminSection} />}
         </div>
     )
 }
