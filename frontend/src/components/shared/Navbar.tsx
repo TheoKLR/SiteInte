@@ -36,7 +36,7 @@ export const Navbar: React.FC = () => {
             <a href="/Home"><img src="ressources/integration.png" alt="Logo" className="logo"></img></a>
             <div>
                 <ul id="navbar" className={clicked ? "#navbar active" : "#navbar"}>
-                    {(role === 'Admin'|| 'RespoCE') && <li><a href="/Admin">Admin</a></li>}
+                    {(role === 'Admin' || role === 'RespoCE') && <li><a href="/Admin">Admin</a></li>}
                     {<li><a href="/Defis">Défis</a></li>}
                     {<li><a href="/Factions">Factions</a></li>}
                     {<li><a href="/Events">Events</a></li>}
