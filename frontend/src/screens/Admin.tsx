@@ -8,6 +8,7 @@ import { Section } from "../components/shared/Section";
 import { useEffect, useState } from "react";
 import { getRole } from "../services/requests";
 import ExportAdminSection from "../components/admin/export/ExportAdminSection";
+import PermsAdminSection from "../components/admin/perms/PermsAdmin";
 
 export const Admin = () => {
 
@@ -17,7 +18,8 @@ export const Admin = () => {
         const fetchRole = async () => {
             try {
                 const role = await getRole();
-                if (role !== ("Admin"|| "RespoCE")) {
+                if ((role !== ('Admin')) && (role !== 'RespoCE')) {
+                    console.log(role)
                     window.location.href = '/Home';
                     return null;
                 }
@@ -35,11 +37,12 @@ export const Admin = () => {
         <div className="Admin">
             <Navbar />
             {(role === 'Admin') && <Section titre="Utilisateurs" contenu={UserAdminSection} />}
-            {(role === ('Admin' || 'RespoCE')) && <Section titre="Equipes" contenu={TeamAdminSection} />}
-            {(role === ('Admin' || 'RespoCE')) && <Section titre="Factions" contenu={FactionAdminSection} />}
+            {(role === 'Admin' || role === 'RespoCE')  && <Section titre="Equipes" contenu={TeamAdminSection} />}
+            {(role === 'Admin' || role === 'RespoCE')  && <Section titre="Factions" contenu={FactionAdminSection} />}
             {(role === 'Admin') &&<Section titre="Rôles" contenu={DesireAdminSection} />}
             {(role === 'Admin') && <Section titre="Events" contenu={EventsAdminSection} />}
             {(role === 'Admin') && <Section titre="Exports" contenu={ExportAdminSection} />}
+            {(role === 'Admin') && <Section titre="Perms" contenu={PermsAdminSection} />}
         </div>
     )
 }

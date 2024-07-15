@@ -1,6 +1,6 @@
 {
-  "id": "fc1d1d52-59e5-4a7d-972f-424eda5d471e",
-  "prevId": "b10c3708-4e2a-47ef-9596-b8b1101c53f6",
+  "id": "a4c1bccd-bfb7-4633-ac6c-7f90f62030c3",
+  "prevId": "fc1d1d52-59e5-4a7d-972f-424eda5d471e",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -141,53 +141,28 @@
           "primaryKey": true,
           "notNull": true
         },
-        "faction_name": {
-          "name": "faction_name",
+        "team_name": {
+          "name": "team_name",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "desc": {
-          "name": "desc",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "startingTime": {
-          "name": "startingTime",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "duartion": {
-          "name": "duartion",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "studenNumber": {
-          "name": "studenNumber",
+        "points": {
+          "name": "points",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "faction_name_unique": {
-          "name": "faction_name_unique",
+        "faction_team_name_unique": {
+          "name": "faction_team_name_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "name"
-          ]
-        },
-        "faction_desc_unique": {
-          "name": "faction_desc_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "desc"
+            "team_name"
           ]
         }
       }
@@ -260,21 +235,21 @@
         },
         "startingTime": {
           "name": "startingTime",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "duration": {
+          "name": "duration",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "duartion": {
-          "name": "duartion",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "studenNumber": {
-          "name": "studenNumber",
+        "studentNumber": {
+          "name": "studentNumber",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -286,98 +261,6 @@
           "nullsNotDistinct": false,
           "columns": [
             "name"
-          ]
-        },
-        "permanence_desc_unique": {
-          "name": "permanence_desc_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "desc"
-          ]
-        }
-      }
-    },
-    "userToPermanence": {
-      "name": "userToPermanence",
-      "schema": "",
-      "columns": {
-        "user_id": {
-          "name": "user_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "perm_id": {
-          "name": "perm_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "userToPermanence_user_id_user_id_fk": {
-          "name": "userToPermanence_user_id_user_id_fk",
-          "tableFrom": "userToPermanence",
-          "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "userToPermanence_perm_id_permanence_id_fk": {
-          "name": "userToPermanence_perm_id_permanence_id_fk",
-          "tableFrom": "userToPermanence",
-          "tableTo": "permanence",
-          "columnsFrom": [
-            "perm_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "role": {
-      "name": "role",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "role_name": {
-          "name": "role_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "role_desc": {
-          "name": "role_desc",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "role_role_name_unique": {
-          "name": "role_role_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "role_name"
           ]
         }
       }
@@ -577,12 +460,6 @@
         },
         "contact": {
           "name": "contact",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "discord_id": {
-          "name": "discord_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false

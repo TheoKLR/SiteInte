@@ -13,6 +13,7 @@ import { Wei } from './screens/Wei';
 import { Login } from './screens/Login';
 import { Souhait } from './screens/Desires';
 import { Profil } from './screens/Profil'
+import { Permanences } from './screens/Permanences';
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
         <Route path='/Profil' element={<ProtectedRoute><Profil /></ProtectedRoute>} />
         <Route path='/Wei' element={<ProtectedRoute><Wei /></ProtectedRoute>} />
         <Route path='/Souhait' element={<ProtectedRoute><Souhait /></ProtectedRoute>} />
+        <Route path='/Permanences' element={<ProtectedRoute><Permanences /></ProtectedRoute>} />
       </Routes>
     </div>
   );

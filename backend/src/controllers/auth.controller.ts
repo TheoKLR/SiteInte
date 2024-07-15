@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { PermType } from '../schemas/user.schema'
 import * as service from '../services/user.service'
 import * as newstudentservice from '../services/newstudent.service'
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcryptjs'
 import { Error, Created, Ok, Unauthorized } from '../utils/responses'
 import { sign } from 'jsonwebtoken'
 import { jwtSecret } from '../utils/secret'
@@ -42,14 +42,14 @@ export const newStudentLogin = async (req: Request, res: Response, next: NextFun
     const { email, password } = req.body
 
     try {
-        const user = await service.getNewStudentByEmail(email)
+        const user = await service.getUserByEmail(email)
         if (!user) {
-            return Error(res, { msg: "user doesn't exists" })
+            return Error(res, { msg: "User doesn't exists" })
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password)
         if (!passwordMatch) {
-            return Error(res, { msg: "password erroned" })
+            return Error(res, { msg: "Password erroned" })
         }
         const id = user.id
         const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
