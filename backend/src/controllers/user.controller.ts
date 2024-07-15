@@ -113,10 +113,13 @@ export const changePermission = async (req: Request, res: Response, next: NextFu
 
     try {
         const user = await service.getUser(id);
-        const permission = user?.permission || "newStudent";
+
+        //This part is to block Admin to promote a newStudent
+        /*const permission = user?.permission || "newStudent";
         if (permission === "newStudent") {
             return Error(res, { msg: "bad permission" });
-        }
+        }*/
+       
         await service.changePermission(id, perm);
         Ok(res, { msg: "User modified" });
     } catch (error) {

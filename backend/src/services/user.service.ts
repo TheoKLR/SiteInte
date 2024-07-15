@@ -78,10 +78,10 @@ export const getNewStudentByEmail = async (email: string) => {
 
 export const getUserByEmail = async (email: string) => {
     try {
-
         const user = await db.select().from(userSchema).where(eq(userSchema.email, email));
         return user.length === 0 ? null : user[0];
     } catch (error) {
+        console.log(error);
         throw new Error("Failed to fetch user by email. Please try again later.");
     }
 }
