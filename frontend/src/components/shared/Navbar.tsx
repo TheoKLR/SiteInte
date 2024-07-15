@@ -42,7 +42,11 @@ export const Navbar: React.FC = () => {
             <a href="/Home"><img src="ressources/integration.png" alt="Logo" className="logo"></img></a>
             <div>
                 <ul id="navbar" className={clicked ? "#navbar active" : "#navbar"}>
+<<<<<<< HEAD
                     {(permission === 'Admin' || permission === 'RespoCE') && <li><a href="/Admin">Admin</a></li>}
+=======
+                    {(role === 'Admin' || role === 'RespoCE') && <li><a href="/Admin">Admin</a></li>}
+>>>>>>> e737c6f1 (Update Navbar.tsx)
                     {<li><a href="/Defis">Défis</a></li>}
                     {permission !== 'newStudent' && <li><a href="Permanences">Permanences</a></li>}
                     {<li><a href="/Factions">Factions</a></li>}
