@@ -141,8 +141,8 @@
           "primaryKey": true,
           "notNull": true
         },
-        "name": {
-          "name": "name",
+        "faction_name": {
+          "name": "faction_name",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -235,6 +235,152 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
+    },
+    "permanence": {
+      "name": "permanence",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "desc": {
+          "name": "desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "startingTime": {
+          "name": "startingTime",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "duartion": {
+          "name": "duartion",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "studenNumber": {
+          "name": "studenNumber",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "permanence_name_unique": {
+          "name": "permanence_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        },
+        "permanence_desc_unique": {
+          "name": "permanence_desc_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "desc"
+          ]
+        }
+      }
+    },
+    "userToPermanence": {
+      "name": "userToPermanence",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "perm_id": {
+          "name": "perm_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userToPermanence_user_id_user_id_fk": {
+          "name": "userToPermanence_user_id_user_id_fk",
+          "tableFrom": "userToPermanence",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "userToPermanence_perm_id_permanence_id_fk": {
+          "name": "userToPermanence_perm_id_permanence_id_fk",
+          "tableFrom": "userToPermanence",
+          "tableTo": "permanence",
+          "columnsFrom": [
+            "perm_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "role": {
+      "name": "role",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "role_name": {
+          "name": "role_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role_desc": {
+          "name": "role_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "role_role_name_unique": {
+          "name": "role_role_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "role_name"
+          ]
+        }
+      }
     },
     "userToRole": {
       "name": "userToRole",
@@ -431,6 +577,12 @@
         },
         "contact": {
           "name": "contact",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "discord_id": {
+          "name": "discord_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false

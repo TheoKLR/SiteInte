@@ -10,8 +10,8 @@ export const Profil = () => {
         const fetchRole = async () => {
             try {
                 const role = await getRole();
-                if (role !== "Admin") {
-                    window.location.href = '/Home';
+                if (!role) {
+                    window.location.href = '/';
                     return null;
                 }
             } catch (error) {

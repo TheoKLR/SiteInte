@@ -10,6 +10,7 @@ export const ProfilForm: React.FC = () => {
     const [email, setEmail] = useState('');
     const [birthday, setBirthday] = useState('');
     const [contact, setContact] = useState('');
+    const [discord_id, setDiscordId] = useState('');
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -20,7 +21,7 @@ export const ProfilForm: React.FC = () => {
             setEmail(currentUser.email);
             setBirthday(currentUser.birthday);
             setContact(currentUser.contact);
-            console.log(currentUser);
+            setDiscordId(currentUser.discord_id);
           } catch (error) {
             toast.error('Erreur lors de la récupération du profil. Veuillez réessayer plus tard.');
           }
@@ -32,7 +33,8 @@ export const ProfilForm: React.FC = () => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         try {
-            handleError("Profil mis à jour avec succès !", "Une erreur est survenue", updateUser, firstName, lastName, birthday, contact);
+            console.log(discord_id);
+            handleError("Profil mis à jour avec succès !", "Une erreur est survenue", updateUser, firstName, lastName, birthday, contact, discord_id);
         } catch (error) {
             toast.error('Erreur lors de la mise à jour du profil. Veuillez réessayer plus tard.');
         }
@@ -81,6 +83,14 @@ export const ProfilForm: React.FC = () => {
                         disabled
                     />
                 </label>
+                <label>Discord Tag (Pour rejoindre le discord de l'intégration et être affecté à ton équipe !):</label>
+                    <input
+                        type="text"
+                        value={discord_id}
+                        placeholder={discord_id}
+                        onChange={(e) => setDiscordId(e.target.value)}
+                    />
+                <label></label>
                 <label>
                     Tes moyens de contact (tu peux en mettre plusieurs 😊):
                     <textarea
