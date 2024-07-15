@@ -61,6 +61,7 @@ export const getUser = async (id: number) => {
     }
 }
 
+//Used to get a newStudent based on the email and the permission
 export const getNewStudentByEmail = async (email: string) => {
     try {
         const user = await db.select().from(userSchema).where(

@@ -42,14 +42,14 @@ export const newStudentLogin = async (req: Request, res: Response, next: NextFun
     const { email, password } = req.body
 
     try {
-        const user = await service.getNewStudentByEmail(email)
+        const user = await service.getUserByEmail(email)
         if (!user) {
-            return Error(res, { msg: "user doesn't exists" })
+            return Error(res, { msg: "User doesn't exists" })
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password)
         if (!passwordMatch) {
-            return Error(res, { msg: "password erroned" })
+            return Error(res, { msg: "Password erroned" })
         }
         const id = user.id
         const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
