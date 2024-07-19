@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { getRole } from "../services/requests";
 import ExportAdminSection from "../components/admin/export/ExportAdminSection";
 import PermsAdminSection from "../components/admin/perms/PermsAdmin";
+import EmailAdminSection from "../components/admin/email/EmailAdminSection";
 
 export const Admin = () => {
 
@@ -36,13 +37,14 @@ export const Admin = () => {
     return (
         <div className="Admin">
             <Navbar />
-            {(role === 'Admin') && <Section titre="Utilisateurs" contenu={UserAdminSection} />}
+            {(role === 'Admin' || role === 'RespoCE') && <Section titre="Utilisateurs" contenu={UserAdminSection} />}
             {(role === 'Admin' || role === 'RespoCE')  && <Section titre="Equipes" contenu={TeamAdminSection} />}
             {(role === 'Admin' || role === 'RespoCE')  && <Section titre="Factions" contenu={FactionAdminSection} />}
             {(role === 'Admin') &&<Section titre="Rôles" contenu={DesireAdminSection} />}
             {(role === 'Admin') && <Section titre="Events" contenu={EventsAdminSection} />}
             {(role === 'Admin') && <Section titre="Exports" contenu={ExportAdminSection} />}
             {(role === 'Admin') && <Section titre="Perms" contenu={PermsAdminSection} />}
+            {(role === 'Admin') && <Section titre="Emails" contenu={EmailAdminSection} />}
         </div>
     )
 }

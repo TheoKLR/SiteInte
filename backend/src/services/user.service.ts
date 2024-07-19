@@ -3,7 +3,7 @@ import { userSchema, User, PermType } from '../schemas/user.schema';
 import { newstudentSchema } from '../schemas/newstudent.schema';
 import { roleSchema, userToRoleSchema } from '../schemas/role.schema';
 import { db } from "../database/db"
-import { eq, and } from 'drizzle-orm'
+import { eq, and, is } from 'drizzle-orm'
 import { uuid } from 'drizzle-orm/pg-core';
 
 export const getAllUsers = async () => {
@@ -21,6 +21,28 @@ export const getAllUsers = async () => {
             connection_number: userSchema.connection_number,
             team_id: userSchema.team,
         }).from(userSchema);
+    } catch (error) {
+        throw new Error("Failed to fetch users. Please try again later.");
+    }
+}
+
+export const getAllNewStudents = async () => {
+    try {
+        return await db.select({
+            id: userSchema.id,
+            first_name: userSchema.first_name,
+            last_name: userSchema.last_name,
+            email: userSchema.email,
+            branch: userSchema.branch,
+            permission: userSchema.permission,
+            birthday: userSchema.birthday,
+            contact: userSchema.contact,
+            discord_id: userSchema.discord_id,
+            connection_number: userSchema.connection_number,
+            team_id: userSchema.team,
+            
+        }).from(userSchema)
+        .where(eq(userSchema.permission, PermType.NewStudent ));
     } catch (error) {
         throw new Error("Failed to fetch users. Please try again later.");
     }

@@ -12,6 +12,15 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
     }
 }
 
+export const getAllNewSudents = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const data = await service.getAllNewStudents();
+        Ok(res, { data });
+    } catch (error) {
+        Error(res, { error });
+    }
+}
+
 export const getUserLight = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const data = await service.getUserLight();

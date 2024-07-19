@@ -46,3 +46,13 @@ export const modifyUserTeam = async (members: [], teamId: number[]) => {
       teamId
     });
   };
+
+  export const deleteUser = async (id: number) => {
+    const response = await api.delete("user/delete/"+id)
+    return response ;
+};
+
+export const getAllNewSudents = async () => {
+    const response = await api.get("user/allnewstudents")
+    return response?.data.data ;
+};
