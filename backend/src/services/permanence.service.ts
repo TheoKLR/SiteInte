@@ -24,15 +24,11 @@ export const createPermanence = async (
     startingTime: string, 
     duration: number, 
     studentNumber: number
-) => {
+    ) => {
     try {
         const newPermanence: Permanence = { name, desc, startingTime, duration, studentNumber };
+
         const result = await db.insert(permanenceSchema).values(newPermanence);
-        
-        if (!result) {
-            throw new Error("Failed to insert new Permanence into the database.");
-        }
-        return result; 
     } catch (error) {
         throw new Error("Failed to create Permanence. Please try again later."); 
     }

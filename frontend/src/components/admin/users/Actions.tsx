@@ -2,7 +2,7 @@ import { Users, Teams, UUIDs } from '../../utils/Select'
 import Select from 'react-select'
 import { useEffect, useState } from 'react'
 import { toArray, toId, tochainString } from '../../utils/Submit'
-import { addToTeam, changePermission } from '../../../services/requests/users';
+import { addToTeam, changePermission, deleteUser } from '../../../services/requests/users';
 import { handleError } from '../../utils/Submit'
 import { ToastContainer } from 'react-toastify'
 import { User, newStudent } from '../../../services/interfaces'
@@ -164,4 +164,29 @@ export const TableUUIDs = () => {
   }, []);
 
   return UUIDs.length > 0 ? toTable(UUIDs) : null;
+}
+
+export const DeleteUser = () => {
+  const [user, setUser] = useState({} as any)
+
+
+  const Submit = async () => {
+    const id = toId(user)
+    await handleError("Utilisateur supprimer !", "Une erreur est survenue", deleteUser, id)
+    setUser({})
+  }
+
+  return (
+    <div>
+      <div className="select-container">
+        <Select
+          options={Users()}
+          onChange={user => setUser(user)}
+          value={user}
+        />
+      </div>
+      <button className="submit-button" onClick={Submit}>Soumettre</button>
+      <ToastContainer position="bottom-right" />
+    </div>
+  )
 }
