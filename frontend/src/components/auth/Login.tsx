@@ -107,7 +107,7 @@ const LoginForm = () => {
     <div className="Login">
     <div id="container-login" className={getContainerClass()}>
       
-      <h1>Bienvenue!</h1>
+      <h1>Bienvenue !</h1>
         <button className="login-button" onClick={handleClick_NouveauLogin}>
           Je suis nouveau et je me connecte
         </button>
@@ -260,8 +260,8 @@ const LoginForm = () => {
               aria-live="assertive">
               {errMsg}
             </p>
-            <div>
-              <p style={{ fontSize: '10px', color:"black"}}>En m'inscrivant j'accepte que les données renseignées ci-dessus soient stockées et traitées par le BDE UTT dans le cadre de l'intégration UTT</p>
+            <div className="submitButton">
+              <p >En m'inscrivant j'accepte que les données renseignées ci-dessus soient stockées et traitées par le BDE UTT dans le cadre de l'intégration UTT</p>
               <button className="login-button" type="submit">Valider</button>
               <button className="login-button" onClick={handleClick_NouveauRegister}>Retour</button>
             </div>
