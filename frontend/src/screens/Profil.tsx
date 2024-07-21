@@ -1,6 +1,6 @@
 import { Navbar } from "../components/shared/Navbar"
 import { Section } from "../components/shared/Section"
-import { ProfilForm } from "../components/profil/Profil"
+import { ProfilForm, TeamDisplay } from "../components/profil/Profil"
 import { useEffect } from "react";
 import { getRole } from "../services/requests";
 
@@ -26,6 +26,7 @@ export const Profil = () => {
         <div className="ProfilForm">
             <Navbar />
             <Section titre="Voici ton profil !" contenu={ProfilForm} />
+            <Section titre="Voici ton équipe !" contenu={TeamDisplay} />
         </div>
     )
 }

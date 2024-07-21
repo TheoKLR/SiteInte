@@ -18,7 +18,7 @@ export const getTeam = async (req: Request, res: Response, next: NextFunction) =
   const { id } = req.params;
   const idNumber = parseInt(id, 10);
 
-  if (isNaN(idNumber)) return Error(res, { msg : 'could not parse Id' });
+  if (isNaN(idNumber)) return Error(res, { msg : 'Could not parse Id' });
 
   try {
     const data = await service.getTeam(idNumber);
@@ -125,6 +125,20 @@ export const validateTeam = async (req: Request, res: Response, next: NextFuncti
   try {
     await service.validateTeam(id, isOfficial);
     Ok(res, {msg : "Team updated !"})
+  } catch (error) {
+    Error(res, { error });
+  }
+};
+
+export const getAllMembersTeam = async (req: Request, res: Response, next: NextFunction) => {
+
+  try {
+    const { id } = req.params;
+    const idNumber = parseInt(id, 10);
+  
+    const members = await user_service.getAllMembersTeam(idNumber);
+    
+    Ok(res, {data : members})
   } catch (error) {
     Error(res, { error });
   }

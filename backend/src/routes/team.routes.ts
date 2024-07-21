@@ -14,5 +14,6 @@ teamRouter.put('/timestamp', tc.addTimestamp);
 teamRouter.get('/timestamp', tc.getTimestamp);
 teamRouter.post('/rename', isAdminCE, tc.renameTeam);
 teamRouter.post('/validate', isAdminCE, tc.validateTeam);
+teamRouter.get('/getallmembers/:id', tc.getAllMembersTeam)
 
 export default teamRouter;

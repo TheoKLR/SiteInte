@@ -6,7 +6,7 @@ const factionRouter = express.Router();
 
 factionRouter.post('', isAdminCE, fc.createFaction);
 factionRouter.get('/all', fc.getAllFactions);
-factionRouter.get('/:id', isAdminCE, fc.getFaction);
+factionRouter.get('/:id', fc.getFaction);
 factionRouter.delete('/:id', isAdminCE, fc.deleteFaction);
 
 export default factionRouter;
