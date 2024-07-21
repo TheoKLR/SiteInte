@@ -1,6 +1,6 @@
 /* Styles généraux */
 .Login {
-    background: url("../../../public/ressources/bg_Login.jpg");
+    background: url("../../../public/ressources/bg_Login.png");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -11,17 +11,14 @@
     justify-content: center;
 }
 
-#container-login {
-    background: rgba(0, 0, 0, 0); /* Fond semi-transparent pour améliorer la lisibilité des formulaires */
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+#container-login { /* Fond semi-transparent pour améliorer la lisibilité des formulaires */
     width: 100%;
-    max-width: 520px;
+    max-width: 350px;
     min-height: 350px;
-    position: relative;
-    color: #fff;
-    padding: 30px 40px;
+    position: absolute;
+    top: 200px; right: 560px;
+    color: #CE8547;
+    padding: 20px 10px;
     transition: all 0.3s ease;
     visibility: visible;
     opacity: 1;
@@ -47,12 +44,12 @@
     font-weight: 700;
     margin: 20px 0;
     align-items: center;
-    background-color: #FCFCFD;
+    background-color: #CE8547;
     border-radius: 6px;
     border-width: 0;
-    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #CE8547 0 -3px 0 inset;
     box-sizing: border-box;
-    color: #36395A;
+    color: #000000;
     cursor: pointer;
     display: inline-flex;
     justify-content: center;
@@ -65,12 +62,12 @@
 }
 
 .login-button:hover {
-    box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+    box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #CE8547 0 -3px 0 inset;
     transform: translateY(-2px);
 }
 
 .login-button:active {
-    box-shadow: #D6D6E7 0 3px 7px inset;
+    box-shadow: #CE8547 0 3px 7px inset;
     transform: translateY(2px);
 }
 
@@ -78,6 +75,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
+    color: #ffffff;
     transform: translate(-50%, -50%);
     background: transparent;
     border: 2px solid rgba(255, 255, 255, .2);
@@ -105,14 +103,17 @@
 
 .formNouveau h1 {
     text-align: center;
+    color: #ffffff;
 }
 
 .formNouveau h4 {
     text-align: center;
+    color: #ffffff;
 }
 
 .formNouveau p {
     text-align: center;
+    color: #ffffff;
 }
 
 .input-box input {
@@ -129,23 +130,32 @@
 }
 
 .input-box input::placeholder {
-    color: #fff;
+    color: #ffffff;
 }
+
+.input-box textarea::placeholder{
+    color: #ffffff;
+}
+
 
 .formNouveau button {
     margin: 10px 0;
     height: 35px;
 }
+.submitButton p{
+    font-size: 55% ;
+}
 
 .input-box textarea {
     width: 100%;
     border: 1px solid #ffffff;
+    color: #ffffff;
     border-radius: 4px;
     box-sizing: border-box;
     background: transparent;
     margin-bottom: 10px;
-    color: #fff;
 }
+
 
 .errmsg {
     color: red;
