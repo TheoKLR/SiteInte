@@ -18,7 +18,7 @@ export const Permanences = () => {
                 const role = await getRole();
                 const perms = await getAllPerms();
                 setPerms(perms)
-                if (!role) {
+                if (!role || role === 'newStudent') {
                     window.location.href = '/';
                     return null;
                 }

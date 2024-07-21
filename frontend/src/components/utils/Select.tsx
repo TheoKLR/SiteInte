@@ -110,6 +110,7 @@ export const Users = () => {
         const usersOptions = response.map((user: User) => ({
           value: user.id,
           label: `${user.first_name} ${user.last_name}`,
+          email : user.email,
         }))
         setOptions(usersOptions)
       } catch (error) {

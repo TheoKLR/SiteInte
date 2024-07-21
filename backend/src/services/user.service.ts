@@ -264,3 +264,21 @@ export async function updateTeam(id: number, teamId: any) {
         throw new Error("Failed to update user. Please try again later.");
     }
 }
+
+export const getAllMembersTeam = async (team_id: number) => {
+    try {
+        const members = await db.select({
+                        id: userSchema.id,
+                        first_name: userSchema.first_name,
+                        last_name: userSchema.last_name,
+                        email: userSchema.email,
+                        team_id: userSchema.team,
+                        })
+                        .from(userSchema)
+                        .where(eq(userSchema.team, team_id));
+
+        return members;
+    } catch (error) {
+        throw new Error("Failed to get the team's timecode. Please try again later.");
+    }
+}

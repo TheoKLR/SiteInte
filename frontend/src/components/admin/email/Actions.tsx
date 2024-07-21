@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { NewStudents, Users } from '../../utils/Select';
+import {useState } from 'react';
+import { Users } from '../../utils/Select';
 import Select from 'react-select/creatable';
 import {handleError } from '../../utils/Submit'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import {sendEmail  } from '../../../services/requests/email';
 import { EmailOptions, User } from '../../../services/interfaces';
@@ -23,9 +23,9 @@ export const SendEmailCustom = () => {
     try {
         const emailOptions : EmailOptions = 
           {from, 
-            to : to.map((option: { value: any; }) => option.value), 
-            cc : cc.map((option: { value: any; }) => option.value), 
-            bcc: bcc.map((option: { value: any; }) => option.value), 
+            to : to.map((option: any ) => option.email ? option.email : option.value), //Email = Existing user, value = option created
+            cc : cc.map((option : any) => option.email ? option.email : option.value), 
+            bcc: bcc.map((option: any) => option.email ? option.email : option.value), 
             subject, 
             text, 
             html};
