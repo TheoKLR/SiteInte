@@ -1,7 +1,7 @@
 import React from "react";
 import "./Parrainage.css";
 
-export const ParrainageStudent = () => {
+export const ParrainageNewStudent = () => {
     return (
         <div className="container-parrainage">
             <div className="header-parrainage">
