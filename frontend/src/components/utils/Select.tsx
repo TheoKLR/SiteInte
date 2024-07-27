@@ -5,7 +5,7 @@ import { getAllRoles } from "../../services/requests/roles"
 import { getActiveEvents, getInactiveEvents } from "../../services/requests/events"
 import { getAllUUID } from "../../services/requests/newstudent"
 import { getAllPerms } from "../../services/requests/perms"
-import { getAllNewSudents } from "../../services/requests/users"
+import { getAllByPermission } from "../../services/requests/users"
 
 export const Roles = () => {
   const [options, setOptions] = useState([])
@@ -130,7 +130,7 @@ export const NewStudents = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getAllNewSudents()
+        const response = await getAllByPermission("NewStudent");
         const usersOptions = response.map((user: User) => ({
           value: user.id,
           label: `${user.first_name} ${user.last_name}`,

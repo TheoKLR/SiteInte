@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AdminSection from '../AdminSection';
 import { AdminAction } from '../AdminSection';
-import { SendEmailtoNewStudent, SendEmailCustom } from './Actions';
+import { SendEmailtoAPermission, SendEmailCustom } from './Actions';
 
 const EmailAdminSection: React.FC = () => {
   
@@ -11,8 +11,8 @@ const EmailAdminSection: React.FC = () => {
       form: <SendEmailCustom/>,
     },
     {
-      title: 'Envoyer un email à tous les nouveaux',
-      form: <SendEmailtoNewStudent/>,
+      title: 'Envoyer un email à un groupe Users',
+      form: <SendEmailtoAPermission/>,
     },
   ];
    
