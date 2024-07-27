@@ -14,8 +14,8 @@ userRouter.get('/:id/wish', isAdmin, sc.getUserWish);
 userRouter.get('/current', sc.getCurentUser);
 userRouter.get('/all/light', sc.getUserLight);
 userRouter.get('/getbyteam/:teamId',isAdmin ,sc.getUserbyTeam);
-userRouter.post('/modifyteam', isAdmin, sc.modifyTeam)
-userRouter.get('/allnewstudents', isAdmin, sc.getAllNewSudents)
+userRouter.post('/modifyteam', isAdmin, sc.modifyTeam);
+userRouter.get('/allbypermission/:permission', isAdmin, sc.getAllByPermission);
 
 
 export default userRouter;

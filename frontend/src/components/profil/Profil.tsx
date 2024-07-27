@@ -11,6 +11,7 @@ export const ProfilForm: React.FC = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [branch, setBranch] = useState('');
     const [birthday, setBirthday] = useState('');
     const [contact, setContact] = useState('');
     const [discord_id, setDiscordId] = useState('');
@@ -22,6 +23,7 @@ export const ProfilForm: React.FC = () => {
             setFirstName(currentUser.first_name);
             setLastName(currentUser.last_name);
             setEmail(currentUser.email);
+            setBranch(currentUser.branch);
             setBirthday(currentUser.birthday);
             setContact(currentUser.contact);
             setDiscordId(currentUser.discord_id);
@@ -36,7 +38,7 @@ export const ProfilForm: React.FC = () => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         try {
-            handleError("Profil mis à jour avec succès !", "Une erreur est survenue", updateUser, firstName, lastName, birthday, contact, discord_id);
+            handleError("Profil mis à jour avec succès !", "Une erreur est survenue", updateUser, contact, discord_id);
         } catch (error) {
             toast.error('Erreur lors de la mise à jour du profil. Veuillez réessayer plus tard.');
         }
@@ -85,6 +87,13 @@ export const ProfilForm: React.FC = () => {
                         disabled
                     />
                 </label>
+                <label>Ta branche:</label>
+                    <input
+                        type="text"
+                        placeholder={branch}
+                        value={branch}
+                        disabled
+                    />
                 <label>Discord Tag (Pour rejoindre le discord de l'intégration et être affecté à ton équipe !):</label>
                     <input
                         type="text"
@@ -92,7 +101,6 @@ export const ProfilForm: React.FC = () => {
                         placeholder={discord_id}
                         onChange={(e) => setDiscordId(e.target.value)}
                     />
-                <label></label>
                 <label>
                     Tes moyens de contact (tu peux en mettre plusieurs 😊):
                     <textarea

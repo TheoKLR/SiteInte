@@ -11,7 +11,7 @@ import { getToken, getUserData } from '../utils/api_etu'
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
     
-    const { first_name, last_name, email, birthday, password, contact, discord_id /*, uuid*/ } = req.body
+    const { first_name, last_name, email, branch, birthday, password, contact, discord_id /*, uuid*/ } = req.body
 
     first_name ?? Error(res, { msg: "No first name" })
     last_name ?? Error(res, { msg: "No last name" })
@@ -20,7 +20,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     const hashedPassword = await bcrypt.hash(password, 10)
 
     try {
-        await service.createUser(first_name, last_name, email, birthday, "NewStudent", contact, discord_id, hashedPassword, PermType.NewStudent)
+        await service.createUser(first_name, last_name, email, birthday, branch, contact, discord_id, hashedPassword, PermType.NewStudent)
         
         const newUser = await service.getUserByEmail(email);
 

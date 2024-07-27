@@ -26,7 +26,8 @@ export const getAllUsers = async () => {
     }
 }
 
-export const getAllNewStudents = async () => {
+export const getAllByPermission = async (permission : PermType) => {
+
     try {
         return await db.select({
             id: userSchema.id,
@@ -42,7 +43,7 @@ export const getAllNewStudents = async () => {
             team_id: userSchema.team,
             
         }).from(userSchema)
-        .where(eq(userSchema.permission, PermType.NewStudent ));
+        .where(eq(userSchema.permission, permission ));
     } catch (error) {
         throw new Error("Failed to fetch users. Please try again later.");
     }
@@ -121,12 +122,9 @@ export const createUser = async (first_name: string, last_name: string, email: s
     }
 }
 
-export const updateUser = async (id: number, first_name: string, last_name: string, birthday: string, contact: string, discord_id: string) => {
+export const updateUser = async (id: number, contact: string, discord_id: string) => {
     try {
         await db.update(userSchema).set({ 
-            first_name: first_name, 
-            last_name: last_name, 
-            birthday: birthday, 
             contact: contact, 
             discord_id: discord_id}).where(eq(userSchema.id, id));
     } catch (error) {

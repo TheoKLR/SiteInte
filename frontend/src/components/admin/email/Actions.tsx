@@ -2,11 +2,11 @@ import {useState } from 'react';
 import { Users } from '../../utils/Select';
 import Select from 'react-select/creatable';
 import {handleError } from '../../utils/Submit'
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import {sendEmail  } from '../../../services/requests/email';
 import { EmailOptions, User } from '../../../services/interfaces';
-import { getAllNewSudents } from '../../../services/requests/users';
+import { getAllByPermission } from '../../../services/requests/users';
 
 
 export const SendEmailCustom = () => {
@@ -118,7 +118,8 @@ export const SendEmailCustom = () => {
 };
 
 
-export const SendEmailtoNewStudent = () => {
+export const SendEmailtoAPermission = () => {
+
   const [from, setFrom] = useState('');
   const [to, setTo] = useState([] as any);
   const [subject, setSubject] = useState('');
@@ -126,12 +127,21 @@ export const SendEmailtoNewStudent = () => {
   const [html, setHtml] = useState('');
   const [cc, setCc] = useState([] as any);
   const [bcc, setBcc] = useState([] as any);
+  const [permission, setPermission] = useState(null);
+
+  const options = [
+    { value: 'newStudent', label: 'New Student' },
+    { value: 'RespoCE', label: 'RespoCE' },
+    { value: 'Admin', label: 'Admin' },
+    { value: 'Student', label: 'Student' },
+  ];
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   try {
-      const newStudents = await getAllNewSudents();
-      setBcc(newStudents.map((user: User) => user.email));
+      if(permission){
+      const receivers = await getAllByPermission(permission);
+      setBcc(receivers.map((user: User) => user.email));
       const emailOptions : EmailOptions = 
         {from, 
           to, 
@@ -142,14 +152,22 @@ const handleSubmit = async (e: React.FormEvent) => {
           html};
 
       await handleError('Mail envoyé !','Un problème est survenu', sendEmail,emailOptions);
+      }
+      else{
+        toast.error("Aucun role selectionné !")
+      }
   } catch (error) {
     console.log(error);
   }
 };
 
+const handlePermissionSelected = async (selectedOption : any) => {
+  setPermission(selectedOption.value);
+}
+
 return (
   <div className="App">
-    <h1>Envoyer un Email à tous les nouveaux</h1>
+    <h1>Envoyer un Email à une catégorie de user</h1>
     <form onSubmit={handleSubmit}>
       <div>
         <label>De:</label>
@@ -159,6 +177,16 @@ return (
           onChange={(e) => setFrom(e.target.value)}
           required
         />
+      </div>
+      <div>
+        <label>A:</label>
+        <Select
+            isMulti ={false}
+            value={permission}
+            onChange={handlePermissionSelected}
+            options={options}
+            placeholder={permission}
+          />
       </div>
       <div>
         <label>Sujet:</label>
