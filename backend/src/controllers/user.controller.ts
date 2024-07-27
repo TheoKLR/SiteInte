@@ -2,11 +2,30 @@ import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/user.service';
 import { Error, Ok } from '../utils/responses';
 import { decodeToken } from '../utils/token';
+import { parsePermType, PermType } from '../schemas/user.schema';
 
 export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const data = await service.getAllUsers();
         Ok(res, { data });
+    } catch (error) {
+        Error(res, { error });
+    }
+}
+
+export const getAllByPermission= async (req: Request, res: Response, next: NextFunction) => {
+
+        const {permission} = req.params;
+        const permissionParse = parsePermType(permission);
+        
+    try {
+        if(permissionParse){
+        const data = await service.getAllByPermission(permissionParse);
+        Ok(res, { data });
+        }
+        else{
+            Error(res, {msg : "Not a good perm"})
+        }
     } catch (error) {
         Error(res, { error });
     }
@@ -72,14 +91,14 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
 };
 
 export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
-    const {first_name, last_name, birthday, contact, discord_id } = req.body;
+    const {contact, discord_id } = req.body;
     const token = decodeToken(req)
     if (token === null) {
       return Error(res, { msg: 'No email' });
     }
 
     try {
-        await service.updateUser(token.id, first_name, last_name, birthday, contact, discord_id);
+        await service.updateUser(token.id, contact, discord_id);
         Ok(res, { msg: "User updated" });
     } catch (error) {
         Error(res, { error });

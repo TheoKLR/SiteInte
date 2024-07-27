@@ -3,11 +3,15 @@ import { getCurrentUser, updateUser } from '../../services/requests/users';
 import { handleError } from '../utils/Submit';
 import { ToastContainer, toast } from 'react-toastify';
 import './Profil.css';
+import { Faction, Team } from '../../services/interfaces';
+import { getAllMembersTeam, getTeam } from '../../services/requests/teams';
+import { getFaction } from '../../services/requests/factions';
 
 export const ProfilForm: React.FC = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [branch, setBranch] = useState('');
     const [birthday, setBirthday] = useState('');
     const [contact, setContact] = useState('');
     const [discord_id, setDiscordId] = useState('');
@@ -19,6 +23,7 @@ export const ProfilForm: React.FC = () => {
             setFirstName(currentUser.first_name);
             setLastName(currentUser.last_name);
             setEmail(currentUser.email);
+            setBranch(currentUser.branch);
             setBirthday(currentUser.birthday);
             setContact(currentUser.contact);
             setDiscordId(currentUser.discord_id);
@@ -33,8 +38,7 @@ export const ProfilForm: React.FC = () => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         try {
-            console.log(discord_id);
-            handleError("Profil mis à jour avec succès !", "Une erreur est survenue", updateUser, firstName, lastName, birthday, contact, discord_id);
+            handleError("Profil mis à jour avec succès !", "Une erreur est survenue", updateUser, contact, discord_id);
         } catch (error) {
             toast.error('Erreur lors de la mise à jour du profil. Veuillez réessayer plus tard.');
         }
@@ -83,6 +87,13 @@ export const ProfilForm: React.FC = () => {
                         disabled
                     />
                 </label>
+                <label>Ta branche:</label>
+                    <input
+                        type="text"
+                        placeholder={branch}
+                        value={branch}
+                        disabled
+                    />
                 <label>Discord Tag (Pour rejoindre le discord de l'intégration et être affecté à ton équipe !):</label>
                     <input
                         type="text"
@@ -90,7 +101,6 @@ export const ProfilForm: React.FC = () => {
                         placeholder={discord_id}
                         onChange={(e) => setDiscordId(e.target.value)}
                     />
-                <label></label>
                 <label>
                     Tes moyens de contact (tu peux en mettre plusieurs 😊):
                     <textarea
@@ -106,4 +116,49 @@ export const ProfilForm: React.FC = () => {
     );
 };
 
-export default ProfilForm;
+export const TeamDisplay: React.FC = () => {
+    
+    const [userTeam, setTeam] = useState<Team>();
+    const [teamMembers, setTeamMembers] = useState([]);
+    const [userFaction, setFaction] = useState<Faction>();
+
+    useEffect(() => {
+        const fetchUserTeamData = async () => {
+            try {
+                const currentUser = await getCurrentUser();
+                const team = await getTeam(currentUser.team_id);
+                setTeam(team);
+                if (team) {
+                    setFaction(await getFaction(team.faction));
+                    setTeamMembers(await getAllMembersTeam(team.id))
+                }
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchUserTeamData();
+    }, []);    
+
+    return (
+        <>
+            <div className='containerTeam'>
+                <div className='affichageTeam'>
+                    <h3 id='msgTeams'> { userTeam?.name ? userTeam.name : "Tu n'as pas d'équipe d'attribuée pour l'instant"}</h3>
+                        {teamMembers?.length !== 0 ? (
+                            teamMembers?.map((member : any) => (
+                               <p key={member.id}>{member.first_name +' '+ member.last_name}</p>
+                            ))
+                        ) : (
+                            <p>Tu n'as pas de coéquipier pour l'instant</p>
+                        )}
+                </div>
+                <div className='affichageFaction'>
+                    <h3 id='msgFaction'>Ta faction</h3>
+                    <p id='nameFaction'>{userFaction?.name}</p>
+                </div>
+            </div>
+        </>
+    );
+};
+

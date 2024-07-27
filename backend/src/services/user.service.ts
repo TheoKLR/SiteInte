@@ -3,7 +3,7 @@ import { userSchema, User, PermType } from '../schemas/user.schema';
 import { newstudentSchema } from '../schemas/newstudent.schema';
 import { roleSchema, userToRoleSchema } from '../schemas/role.schema';
 import { db } from "../database/db"
-import { eq, and } from 'drizzle-orm'
+import { eq, and, is } from 'drizzle-orm'
 import { uuid } from 'drizzle-orm/pg-core';
 
 export const getAllUsers = async () => {
@@ -21,6 +21,29 @@ export const getAllUsers = async () => {
             connection_number: userSchema.connection_number,
             team_id: userSchema.team,
         }).from(userSchema);
+    } catch (error) {
+        throw new Error("Failed to fetch users. Please try again later.");
+    }
+}
+
+export const getAllByPermission = async (permission : PermType) => {
+
+    try {
+        return await db.select({
+            id: userSchema.id,
+            first_name: userSchema.first_name,
+            last_name: userSchema.last_name,
+            email: userSchema.email,
+            branch: userSchema.branch,
+            permission: userSchema.permission,
+            birthday: userSchema.birthday,
+            contact: userSchema.contact,
+            discord_id: userSchema.discord_id,
+            connection_number: userSchema.connection_number,
+            team_id: userSchema.team,
+            
+        }).from(userSchema)
+        .where(eq(userSchema.permission, permission ));
     } catch (error) {
         throw new Error("Failed to fetch users. Please try again later.");
     }
@@ -99,12 +122,9 @@ export const createUser = async (first_name: string, last_name: string, email: s
     }
 }
 
-export const updateUser = async (id: number, first_name: string, last_name: string, birthday: string, contact: string, discord_id: string) => {
+export const updateUser = async (id: number, contact: string, discord_id: string) => {
     try {
         await db.update(userSchema).set({ 
-            first_name: first_name, 
-            last_name: last_name, 
-            birthday: birthday, 
             contact: contact, 
             discord_id: discord_id}).where(eq(userSchema.id, id));
     } catch (error) {
@@ -240,5 +260,23 @@ export async function updateTeam(id: number, teamId: any) {
         .where(eq(userSchema.id, id));
     } catch (error) {
         throw new Error("Failed to update user. Please try again later.");
+    }
+}
+
+export const getAllMembersTeam = async (team_id: number) => {
+    try {
+        const members = await db.select({
+                        id: userSchema.id,
+                        first_name: userSchema.first_name,
+                        last_name: userSchema.last_name,
+                        email: userSchema.email,
+                        team_id: userSchema.team,
+                        })
+                        .from(userSchema)
+                        .where(eq(userSchema.team, team_id));
+
+        return members;
+    } catch (error) {
+        throw new Error("Failed to get the team's timecode. Please try again later.");
     }
 }

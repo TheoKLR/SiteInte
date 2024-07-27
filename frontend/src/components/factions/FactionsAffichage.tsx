@@ -15,7 +15,7 @@ const FactionsAffichage: React.FC<FactionsAffichageProps> = ({ faction }) => {
         const fetchData = async () => {
             try {
                 const response = await getAllTeams();
-                const filteredTeams = response.data.filter((team:Team) => team.faction === faction.id);
+                const filteredTeams = response.filter((team:Team) => team.faction === faction.id);
                 setAllTeams(filteredTeams);
             } catch (error) {
                 console.error('Error fetching data:', error);

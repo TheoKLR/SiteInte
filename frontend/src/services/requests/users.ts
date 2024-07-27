@@ -19,11 +19,8 @@ export const changePermission = async (id: number, perm: string) => {
     })
 }
 
-export const updateUser = async (first_name: string, last_name: string, birthday: string, contact: string, discord_id: string) => {
+export const updateUser = async (contact: string, discord_id: string) => {
     return await api.put('user/updateuser', {
-        first_name, 
-        last_name,  
-        birthday, 
         contact,
         discord_id
     })
@@ -46,3 +43,13 @@ export const modifyUserTeam = async (members: [], teamId: number[]) => {
       teamId
     });
   };
+
+  export const deleteUser = async (id: number) => {
+    const response = await api.delete("user/delete/"+id)
+    return response ;
+};
+
+export const getAllByPermission = async (permission : string) => {
+    const response = await api.get(`user/allbypermission/${permission}`);
+    return response?.data.data ;
+};

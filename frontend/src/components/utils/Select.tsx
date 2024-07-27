@@ -5,6 +5,7 @@ import { getAllRoles } from "../../services/requests/roles"
 import { getActiveEvents, getInactiveEvents } from "../../services/requests/events"
 import { getAllUUID } from "../../services/requests/newstudent"
 import { getAllPerms } from "../../services/requests/perms"
+import { getAllByPermission } from "../../services/requests/users"
 
 export const Roles = () => {
   const [options, setOptions] = useState([])
@@ -106,6 +107,30 @@ export const Users = () => {
     const fetchData = async () => {
       try {
         const response = await getAllUsers()
+        const usersOptions = response.map((user: User) => ({
+          value: user.id,
+          label: `${user.first_name} ${user.last_name}`,
+          email : user.email,
+        }))
+        setOptions(usersOptions)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return options
+}
+
+export const NewStudents = () => {
+  const [options, setOptions] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getAllByPermission("NewStudent");
         const usersOptions = response.map((user: User) => ({
           value: user.id,
           label: `${user.first_name} ${user.last_name}`,

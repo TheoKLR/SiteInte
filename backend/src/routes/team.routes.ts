@@ -1,18 +1,19 @@
 import express from 'express';
 import  * as tc  from '../controllers/team.controller';
-import { isAdmin } from '../middlewares/permissions';
+import { isAdmin, isAdminCE } from '../middlewares/permissions';
 
 const teamRouter = express.Router();
 
 teamRouter.post('/register', tc.registerTeam);
-teamRouter.post('', isAdmin, tc.createTeam);
+teamRouter.post('', isAdminCE, tc.createTeam);
 teamRouter.get('/all', tc.getAllTeams);
-teamRouter.get('/:id', isAdmin, tc.getTeam);
-teamRouter.delete('/:id', isAdmin, tc.deleteTeam);
-teamRouter.put('/addtofaction', isAdmin, tc.addToFaction);
+teamRouter.get('/:id', isAdminCE, tc.getTeam);
+teamRouter.delete('/:id', isAdminCE, tc.deleteTeam);
+teamRouter.put('/addtofaction', isAdminCE, tc.addToFaction);
 teamRouter.put('/timestamp', tc.addTimestamp);
 teamRouter.get('/timestamp', tc.getTimestamp);
-teamRouter.post('/rename', isAdmin, tc.renameTeam);
-teamRouter.post('/validate', isAdmin, tc.validateTeam);
+teamRouter.post('/rename', isAdminCE, tc.renameTeam);
+teamRouter.post('/validate', isAdminCE, tc.validateTeam);
+teamRouter.get('/getallmembers/:id', tc.getAllMembersTeam)
 
 export default teamRouter;
