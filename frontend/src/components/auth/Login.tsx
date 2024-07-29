@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import { handleError } from "../utils/Submit";
 import { colors } from "react-select/dist/declarations/src/theme";
 import Select from "react-select";
+import { handleCASTicket } from "../../services/requests/auth";
 
 const LoginForm = () => {
   const userRef = useRef<HTMLInputElement>(null);
@@ -45,6 +46,7 @@ const LoginForm = () => {
     };
     if (userRef.current) userRef.current.focus();
     login();
+
   }, []);
 
   const NSLogin = async (e: React.FormEvent) => {
@@ -86,12 +88,24 @@ const LoginForm = () => {
   const TryLogin = async () => {
     localStorage.setItem("tryLogin", "false");
     try {
+    
+    //CAS CONNEXTION  
+    const urlParams = new URLSearchParams(window.location.search);
+    const ticket = urlParams.get("ticket");
+
+    if(ticket){
+      const {token} = await handleCASTicket(ticket);
+      localStorage.setItem("authToken", token);
+      window.location.href = "/Home";
+    }
+
+    /*OLD ETUTT CONNEXION
       const code = getAuthCode();
       if (code !== null) {
         const token = await studentLogin(code);
         localStorage.setItem("authToken", token);
         window.location.href = "/Home";
-      }
+      }*/
     } catch (err: any) {
       console.log(err);
     }
@@ -105,10 +119,22 @@ const LoginForm = () => {
     setStateNewRegister(!stateNewRegister);
   };
 
-  const ETUconnection = () => {
+  //OLD : Connexion by EtuUTT (down in July 2024)
+  /*const ETUconnection = () => {
     localStorage.setItem("tryLogin", "true");
     window.location.href = `https://etu.utt.fr/api/oauth/authorize?client_id=${process.env.REACT_APP_ETUUTT_CLIENT_ID}&scope=public&response_type=code&state=xyz`;
-  };
+  };*/
+
+  const CASConnection = () =>{
+
+    const SERVICE_URL = "https://integration.utt.fr/";
+    const CAS_LOGIN_URL =  "https://cas.utt.fr/cas/login";
+
+    const loginUrl = `${CAS_LOGIN_URL}?service=${encodeURIComponent(SERVICE_URL)}`;
+    window.location.href = loginUrl;
+    localStorage.setItem("tryLogin", "true");
+
+  }
 
 
   const getContainerClass = () => {
@@ -121,7 +147,7 @@ const LoginForm = () => {
     setBranch(selectedOption.value);
   };
   
-
+  
   // Frontend
   return (
     <div className="Login">
@@ -134,7 +160,7 @@ const LoginForm = () => {
         <button className="login-button" onClick={handleClick_NouveauRegister}>
           Je suis nouveau et je m'inscris
         </button>
-        <button className="login-button" onClick={ETUconnection}>
+        <button className="login-button" onClick={CASConnection}>
           Je suis étudiant à l'UTT
         </button>
 

@@ -8,6 +8,8 @@ import { sign } from 'jsonwebtoken'
 import { jwtSecret } from '../utils/secret'
 import { decodeToken } from '../utils/token'
 import { getToken, getUserData } from '../utils/api_etu'
+import { validateCASTicket } from '../services/auth.service'
+import { isNotNull } from 'drizzle-orm'
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
     
@@ -125,4 +127,42 @@ export const isTokenValid = async (req: Request, res: Response)=> {
         return Error(res, { msg: 'Unauthorized: Invalid token' });
     }
     
+}
+
+export const handlecasticket = async (req: Request, res: Response) => {
+    try {
+        const ticket = req.query.ticket as string;
+
+        if (ticket) {
+            const CASuser = await validateCASTicket(ticket);
+
+            if (CASuser && CASuser.email && CASuser.givenName && CASuser.sn) {
+                // Assurez-vous que user.email est un string
+                let user = await service.getUserByEmail(CASuser.email);
+                if(!user){
+                    await service.createUser(CASuser.givenName, CASuser.sn, CASuser.email, null ,null,"", null, "default", PermType.Student)
+                    user = await service.getUserByEmail(CASuser.email)
+                }
+
+                const id = user?.id
+                const email = CASuser.email
+                if (!id) return Error(res, {})
+                    
+                await service.updateUserStudent(id, CASuser.givenName, CASuser.sn, CASuser.email, null, null);
+                
+                const token =  sign({ id, email }, jwtSecret, { expiresIn: '1h' })
+                service.incrementConnection(id)
+
+                Ok(res, { data: { token } })
+            
+            
+            } else {
+                return Error(res, { msg: 'Unauthorized: Invalid user email' });
+            }
+        } else {
+            return Error(res, { msg: 'Unauthorized: No ticket provided' });
+        }
+    } catch (error) {
+        return Error(res, { msg: 'Unauthorized: Invalid token' });
+    }
 }
