@@ -10,3 +10,6 @@ export const api_secret = process.env.ETU_UTT_CLIENT_SECRET || "default";
 export const zimbra_host = process.env.ZIMBRA_HOST || "default";
 export const zimbra_user = process.env.ZIMBRA_USER || "default";
 export const zimbra_password = process.env.ZIMBRA_PASSWORD || "default";
+export const cas_login_url = process.env.CAS_LOGIN_URL || "default";
+export const cas_validate_url = process.env.CAS_VALIDATE_URL || "default";
+export const service_url = process.env.SERVICE_URL || "default";
