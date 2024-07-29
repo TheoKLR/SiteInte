@@ -110,7 +110,7 @@ export const getUserByEmail = async (email: string) => {
     }
 }
 
-export const createUser = async (first_name: string, last_name: string, email: string, birthday: string | null, branch: string | null, contact: string, discord_id: string | null, password: string, permission: PermType) => {
+export const createUser = async (first_name: string, last_name: string, email: string, birthday: string | null, branch: string| null, contact: string| null, discord_id: string| null, password: string, permission: PermType) => {
     try {
         const allUser = await getAllUsers();
         if (allUser.length === 0) permission = PermType.Admin;
@@ -132,7 +132,7 @@ export const updateUser = async (id: number, contact: string, discord_id: string
     }
 }
 
-export const updateUserStudent = async (id: any, first_name: string, last_name: string, email: string, branch: string | null, birthday: string | null) => {
+export const updateUserStudent = async (id: any, first_name: string, last_name: string, email: string, branch: string| null, birthday: string| null) => {
     try {
         await db.update(userSchema).set({ 
             first_name: first_name, 
