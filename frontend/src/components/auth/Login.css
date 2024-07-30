@@ -39,7 +39,7 @@
 
 .login-button {
     width: 100%;
-    height: 40px;
+    height: 50px;
     font-size: 16px;
     font-weight: 700;
     margin: 20px 0;
@@ -126,7 +126,7 @@
 
 .input-box input {
     width: 100%;
-    height: 110%;
+    height: auto;
     background: transparent;
     border: none;
     outline: none;
@@ -156,6 +156,7 @@
 
 .input-box textarea {
     width: 100%;
+    height: auto;
     border: 1px solid #ffffff;
     color: #ffffff;
     border-radius: 4px;
@@ -165,12 +166,12 @@
 }
 
 .input-box .custom-select__control {
-width: 100%;
+  width: 100%;
   height: auto; /* Utilisez auto pour permettre au contenu de déterminer la hauteur */
   background: transparent;
   border: 2px solid rgb(255, 255, 255);
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 12px;
   color: #fff;
   padding: 5px;
   box-shadow: none;
@@ -265,20 +266,20 @@ width: 100%;
     }
 
     .formNouveau.login.active, .formNouveau.register.active {
-        width: 95%;
+        width: 70%;
         height: auto;
         overflow-y: auto; /* Ajout du défilement vertical si nécessaire */
         max-height: 80vh; /* Limiter la hauteur maximale à 80% de la hauteur de la fenêtre de visualisation */
     }
 
     .login-button {
-        font-size: 12px;
-        height: 30px;
+        font-size: 15px;
+        height: 50px;
     }
 
     .input-box input, .input-box textarea {
         font-size: 12px;
-        height: 30px;
+        height: auto;
     }
 
     .formNouveau button {

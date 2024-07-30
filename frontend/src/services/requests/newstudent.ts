@@ -1,7 +1,7 @@
 import { api } from "../api";
 
-export const createUUID = async (count: number) => {
-     return await api.post('/newstudent/createUUID/', {count} );
+export const syncUUID = async () => {
+     return await api.post('/newstudent/syncUUID' );
 }
 
 export const deleteUUID = async (UUID : string) => {

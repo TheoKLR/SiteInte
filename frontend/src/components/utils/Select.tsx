@@ -156,9 +156,8 @@ export const UUIDs = () => {
         const response = await getAllUUID();
         const newStudentOptions = response.map((newStudent: newStudent) => ({
           value: newStudent.uuid,
-          label: `${newStudent.uuid}`,
+          label: newStudent.email,
         }))
-        console.log(newStudentOptions);
         setOptions(newStudentOptions)
       } catch (error) {
         console.error('Error fetching data:', error)

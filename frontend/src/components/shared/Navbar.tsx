@@ -41,7 +41,6 @@ export const Navbar: React.FC = () => {
                     {role !== 'newStudent' && <li><a href="Permanences">Permanences</a></li>}
                     {<li><a href="/Factions">Factions</a></li>}
                     {<li><a href="/Events">Events</a></li>}
-                    {<li><a href="/Mails">Mails</a></li>}
                     {<li><a href="/Parrainage">Parrainage</a></li>}
                     {<li><a href="/Profil">Profil</a></li>}
                     {<li><a href="/Wei">WEI</a></li>}

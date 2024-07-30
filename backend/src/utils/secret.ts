@@ -13,3 +13,7 @@ export const zimbra_password = process.env.ZIMBRA_PASSWORD || "default";
 export const cas_login_url = process.env.CAS_LOGIN_URL || "default";
 export const cas_validate_url = process.env.CAS_VALIDATE_URL || "default";
 export const service_url = process.env.SERVICE_URL || "default";
+export const api_utt_username = process.env.API_UTT_USERNAME || "default";
+export const api_utt_password = process.env.API_UTT_PASSWORD || "default";
+export const api_utt_auth_url = process.env.API_UTT_AUTH_URL || "default";
+export const api_utt_admis_url = process.env.API_UTT_ADMIS_URL || "default";

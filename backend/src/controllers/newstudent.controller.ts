@@ -3,15 +3,18 @@ import { Error, Created, Ok, Unauthorized } from '../utils/responses'
 import { Request, Response, NextFunction } from 'express'
 import * as service from '../services/newstudent.service';
 
-export const createNewstudent = async (req: Request, res: Response) => {
+export const syncNewstudent = async (req: Request, res: Response) => {
     try {
-        const {count} = req.body;
-        count ?? Error(res, {msg: "Count is null"});
-
-        for(let i = 0; i < count ;i++){
-            await service.createUUID();
-        }
-        Ok(res, { msg:"All UUID created" })
+        
+        const token = await service.getTokenUTTAPI();
+        const newStudents = await service.getNewStudentsFromUTTAPI(token);
+        newStudents.forEach( async (element: any) => {
+            let user = await service.getNewStudentbyEmail(element.email)
+            if (!user){
+                await service.createUUID(element.email)
+            }
+        });
+        Ok(res, { msg:"All UUID created and synced" })
     } catch (error) {
         Error(res, { error })
     }

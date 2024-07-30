@@ -44,11 +44,11 @@ const UserAdminSection: React.FC = () => {
       form: <DeleteUser/>,
     },
     {
-      title: 'Gestion cléfs de connexions unique (Not used)',
+      title: 'Gestion cléfs de connexions unique',
       form: <ManageUUIDs/>,
     },
     {
-      title: 'Affichage cléfs de connexions unique (Not used)',
+      title: 'Affichage cléfs de connexions unique',
       form: <TableUUIDs/>,
     },
   ];
