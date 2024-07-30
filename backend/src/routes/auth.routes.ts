@@ -10,5 +10,6 @@ authRouter.post('/newStudentLogin', ac.newStudentLogin);
 authRouter.get('/studentLogin/:authorization_code', ac.studentLogin);
 authRouter.get('/role', ac.getRole);
 authRouter.get('/istokenvalid/:token',ac.isTokenValid);
+authRouter.get('/handlecasticket', ac.handlecasticket)
 
 export default authRouter;

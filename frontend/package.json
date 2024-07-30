@@ -14,6 +14,7 @@
     "@types/react-select": "^5.0.1",
     "axios": "^1.6.7",
     "gapi-script": "^1.2.0",
+    "handlebars": "^4.7.8",
     "papaparse": "^5.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

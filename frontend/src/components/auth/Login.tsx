@@ -4,6 +4,8 @@ import { newStudentLogin, studentLogin, registerStudent } from "../../services/r
 import { ToastContainer } from "react-toastify";
 import { handleError } from "../utils/Submit";
 import { colors } from "react-select/dist/declarations/src/theme";
+import Select from "react-select";
+import { handleCASTicket } from "../../services/requests/auth";
 
 const LoginForm = () => {
   const userRef = useRef<HTMLInputElement>(null);
@@ -12,15 +14,29 @@ const LoginForm = () => {
   const [first_name, setFirstName]= useState("");
   const [last_name, setLastName]= useState("");
   const [email, setEmail]= useState("");
+  const [branch, setBranch]= useState(null);
   const [pwd, setPwd] = useState("");
   const [birthday, setBirthday]= useState("");
   const [discord_id, setDiscordId]= useState("");
   const [contact, setContact]= useState("");
-  //const [uuid, setUUID]= useState("");
+  const [uuid, setUUID]= useState("");
 
   const [errMsg, setErrMsg] = useState("");
   const [stateNewLogin, setStateNewLogin] = useState(false);
   const [stateNewRegister, setStateNewRegister] = useState(false);
+
+
+
+  const branchoptions = [
+    { value: 'TC', label: 'Tronc Commun' },
+    { value: 'RT', label: 'Branche RT' },
+    { value: 'ISI', label: 'Branche ISI' },
+    { value: 'GM', label: 'Branche GM' },
+    { value: 'GI', label: 'Branche GI' },
+    { value: 'MTE', label: 'Branche MTE' },
+    { value: 'A2I', label: 'Branche A2I' },
+    { value: 'SN', label: 'Branche SN' },
+  ];
 
   useEffect(() => {
     const login = async () => {
@@ -30,6 +46,7 @@ const LoginForm = () => {
     };
     if (userRef.current) userRef.current.focus();
     login();
+
   }, []);
 
   const NSLogin = async (e: React.FormEvent) => {
@@ -51,14 +68,16 @@ const LoginForm = () => {
 
   const NSRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    await handleError("Utilisateur ajouté !", "Une erreur est survenue", registerStudent, first_name, last_name, email, pwd, birthday, contact, discord_id)
+    await handleError("Utilisateur ajouté !", "Une erreur est survenue", registerStudent, first_name, last_name, email,branch, pwd, birthday, contact, discord_id, uuid)
     setFirstName("");
     setLastName("");
     setEmail("");
     setBirthday("");
+    setBranch(null);
     setPwd("");
     setDiscordId("");
     setContact("");
+    setUUID("");
   };
 
   const getAuthCode = () => {
@@ -70,12 +89,24 @@ const LoginForm = () => {
   const TryLogin = async () => {
     localStorage.setItem("tryLogin", "false");
     try {
+    
+    //CAS CONNEXTION  
+    const urlParams = new URLSearchParams(window.location.search);
+    const ticket = urlParams.get("ticket");
+
+    if(ticket){
+      const {token} = await handleCASTicket(ticket);
+      localStorage.setItem("authToken", token);
+      window.location.href = "/Home";
+    }
+
+    /*OLD ETUTT CONNEXION
       const code = getAuthCode();
       if (code !== null) {
         const token = await studentLogin(code);
         localStorage.setItem("authToken", token);
         window.location.href = "/Home";
-      }
+      }*/
     } catch (err: any) {
       console.log(err);
     }
@@ -89,10 +120,22 @@ const LoginForm = () => {
     setStateNewRegister(!stateNewRegister);
   };
 
-  const ETUconnection = () => {
+  //OLD : Connexion by EtuUTT (down in July 2024)
+  /*const ETUconnection = () => {
     localStorage.setItem("tryLogin", "true");
     window.location.href = `https://etu.utt.fr/api/oauth/authorize?client_id=${process.env.REACT_APP_ETUUTT_CLIENT_ID}&scope=public&response_type=code&state=xyz`;
-  };
+  };*/
+
+  const CASConnection = () =>{
+
+    const SERVICE_URL = process.env.REACT_APP_SERVICE_URL || "default";
+    const CAS_LOGIN_URL =  process.env.REACT_APP_CAS_LOGIN_URL || "default";
+
+    const loginUrl = `${CAS_LOGIN_URL}?service=${encodeURIComponent(SERVICE_URL)}`;
+    window.location.href = loginUrl;
+    localStorage.setItem("tryLogin", "true");
+
+  }
 
 
   const getContainerClass = () => {
@@ -100,8 +143,12 @@ const LoginForm = () => {
     if (stateNewRegister) return "active register";
     return "container-login";
   };
-  
 
+  const handleBranchChange = (selectedOption : any) => {
+    setBranch(selectedOption.value);
+  };
+  
+  
   // Frontend
   return (
     <div className="Login">
@@ -114,7 +161,7 @@ const LoginForm = () => {
         <button className="login-button" onClick={handleClick_NouveauRegister}>
           Je suis nouveau et je m'inscris
         </button>
-        <button className="login-button" onClick={ETUconnection}>
+        <button className="login-button" onClick={CASConnection}>
           Je suis étudiant à l'UTT
         </button>
 
@@ -170,82 +217,97 @@ const LoginForm = () => {
             <div className="input-box">
               <label>
                   Prénom:
-                  <input
-                      type="text"
-                      value={first_name}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      required
-                  />
-                </label>
+              </label>
+              <input
+                  type="text"
+                  value={first_name}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
+              />
+
             </div>
             <div className="input-box">
               <label>
                   Nom:
-                  <input
-                      type="text"
-                      value={last_name}
-                      onChange={(e) => setLastName(e.target.value)}
-                      required
-                  />
               </label>
+              <input
+                  type="text"
+                  value={last_name}
+                  onChange={(e) => setLastName(e.target.value)}
+                  required
+              />
             </div>
             <div className="input-box">
-              <label>Email:
-                  <input
-                      type="text"
-                      value={email}
-                      required
-                      onChange={(e)=> setEmail(e.target.value)}
-                  />
+              <label>
+                Email:
               </label>
+              <input
+                  type="text"
+                  value={email}
+                  required
+                  onChange={(e)=> setEmail(e.target.value)}
+              />
             </div>
             <div className="input-box">
               <label>
                 Date de naissance:
-                  <input
-                      type="date"
-                      value={birthday}
-                      onChange={(e) => setBirthday(e.target.value)}
-                      required
-                  />
               </label>
+              <input
+                  type="date"
+                  value={birthday}
+                  onChange={(e) => setBirthday(e.target.value)}
+                  required
+              />
+            </div>
+            <div className="input-box">
+              <label>
+                Ta branche à ton arrivée à l'UTT:
+              </label>
+              <Select
+                isMulti = {false}
+                value={branch}
+                onChange={handleBranchChange}
+                options={branchoptions}
+                placeholder={branch}
+                classNamePrefix="custom-select"
+              />
             </div>
             <div className="input-box">
               <label>
                   Mot de passe:
-                  <input
-                      type="password"
-                      placeholder="Password"
-                      value={pwd}
-                      onChange={(e) => setPwd(e.target.value)}
-                      required
-                  />
               </label>
+              <input
+                  type="password"
+                  placeholder="Password"
+                  value={pwd}
+                  onChange={(e) => setPwd(e.target.value)}
+                  required
+              />
             </div>
             <div className="input-box">
               <label>
                   Tag Discord (Utile pour pouvoir rejoindre le discord de l'intégration et prendre contact avec ton équipe):
-                  <input
-                      type="text"
-                      placeholder="Discord Tag"
-                      value={discord_id}
-                      onChange={(e) => setDiscordId(e.target.value)}
-                  />
               </label>
+              <input
+                  type="text"
+                  placeholder="Discord Tag"
+                  value={discord_id}
+                  onChange={(e) => setDiscordId(e.target.value)}
+              />
             </div>
             <div className="input-box">
               <label>
               Tes moyens de contact (tu peux en mettre plusieurs si tu le souhaites😊):
-                    <textarea
-                        value={contact}
-                        placeholder="Entre tes moyens de contact ici..."
-                        onChange={(e) => setContact(e.target.value)}
-                    />
               </label>
+              <textarea
+                  value={contact}
+                  placeholder="Entre tes moyens de contact ici..."
+                  onChange={(e) => setContact(e.target.value)}
+              />
             </div>
-            {/*<div className="input-box">
+            <div className="input-box">
               <label>
-                  Clef unique fournis par l'UTT:
+                  Clé unique que tu as reçu par mail (Tu n'as rien reçu ? Contacte : integration.utt.fr):
                   <input
                       type="text"
                       value={uuid}
@@ -253,7 +315,7 @@ const LoginForm = () => {
                       required
                   />
               </label>
-            </div>*/}
+            </div>
             <p
               ref={errRef}
               className={errMsg ? "errmsg" : "offscreen"}

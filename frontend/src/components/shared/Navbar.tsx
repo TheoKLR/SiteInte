@@ -38,9 +38,9 @@ export const Navbar: React.FC = () => {
                 <ul id="navbar" className={clicked ? "#navbar active" : "#navbar"}>
                     {(role === 'Admin' || role === 'RespoCE') && <li><a href="/Admin">Admin</a></li>}
                     {<li><a href="/Defis">Défis</a></li>}
+                    {role !== 'newStudent' && <li><a href="Permanences">Permanences</a></li>}
                     {<li><a href="/Factions">Factions</a></li>}
                     {<li><a href="/Events">Events</a></li>}
-                    {<li><a href="/Mails">Mails</a></li>}
                     {<li><a href="/Parrainage">Parrainage</a></li>}
                     {<li><a href="/Profil">Profil</a></li>}
                     {<li><a href="/Wei">WEI</a></li>}

@@ -11,6 +11,7 @@ import permanenceRouter from "./routes/permanence.routes";
 import { init } from "./database/init";
 import { api_prefix } from "./utils/secret";
 import { log } from "./middlewares/log";
+import emailRouter from "./routes/email.routes";
 
 async function startServer() {
   const app = express();
@@ -30,6 +31,7 @@ async function startServer() {
   router.use("/event", eventRouter);
   router.use("/wish", wishRouter);
   router.use("/newstudent", newStudentRouter);
+  router.use("/email", emailRouter);
 
   await init();
 

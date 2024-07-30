@@ -53,6 +53,16 @@ export interface Event {
 export interface newStudent{
     uuid : string;
     isUsed : boolean;
-    userID:number;
+    email: string;
 }
+
+export interface EmailOptions {
+    from: string;
+    to: string[];
+    subject: string;
+    text: string;
+    html: string;
+    cc: string[];
+    bcc: string[];
+  }
 

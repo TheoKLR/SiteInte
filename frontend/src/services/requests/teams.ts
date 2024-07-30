@@ -40,11 +40,16 @@ export const validateTeam = async (id: number, isOfficial: boolean) => {
   });
 };
 
-export const setTimestamp = async (timestamp: number, id: number) =>
-  api.put("/team/timestamp", { timestamp, id });
+export const setTimestamp = async (timestamp: number, id: number) =>{
+  api.put("/team/timestamp", { timestamp, id })};
 
 // Obtention de la liste des équipes enregistrées dans la db
 export const getAllTeams = async () => {
   const response = await api.get("team/all");
+  return response.data.data;
+};
+
+export const getAllMembersTeam = async (id : number) => {
+  const response = await api.get("team/getallmembers/"+id);
   return response.data.data;
 };

@@ -6,7 +6,6 @@ import Home from './screens/Home';
 import { Admin } from './screens/Admin';
 import { Defis } from './screens/Challenges';
 import { Factions } from './screens/Factions';
-import { Mails } from './screens/Emails';
 import { Parrainage } from './screens/Parrainage';
 import { Events } from './screens/Events';
 import { Wei } from './screens/Wei';
@@ -25,7 +24,6 @@ function App() {
         <Route path='/Admin' element={<ProtectedRoute><Admin /></ProtectedRoute>} />
         <Route path='/Defis' element={<ProtectedRoute><Defis /></ProtectedRoute>} />
         <Route path='/Factions' element={<ProtectedRoute><Factions /></ProtectedRoute>} />
-        <Route path='/Mails' element={<ProtectedRoute><Mails /></ProtectedRoute>} />
         <Route path='/Parrainage' element={<ProtectedRoute><Parrainage /></ProtectedRoute>} />
         <Route path='/Events' element={<ProtectedRoute><Events /></ProtectedRoute>} />
         <Route path='/Profil' element={<ProtectedRoute><Profil /></ProtectedRoute>} />
