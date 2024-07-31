@@ -5,32 +5,44 @@ import { Section } from "../components/shared/Section";
 import { ParrainageNewStudent }  from "../components/parrainage/ParrainageNewStudent";
 import { ParrainageStudent } from "../components/parrainage/ParrainageStudent";
 import { Default } from "../components/shared/Default";
+import { getCurrentUser } from "../services/requests/users";
+import { RI_list } from "../utils/RI_list";
 
 export const Parrainage = () => {
 
-    const [role, setRole] = useState<string | null>(null);
+    const [permission, setPermission] = useState<string | null>(null);
+    const [userEmail, setUserEmail] = useState<string | null>(null);
+
     useEffect(() => {
-        const fetchRole = async () => {
+        const fetchUser = async () => {
             try {
-                const role = await getRole();
-                if (!role) {
+                const user = await getCurrentUser()
+                const email = user.email;
+                const permission = user.permission;
+
+                if (RI_list.includes(email)) {
+                    window.location.href = '/'; 
+                    return;
+                }
+                
+                if (!permission ) {
                     window.location.href = '/';
                     return null;
                 }
-                setRole(role);
+                setPermission(permission);
             } catch (error) {
                 console.error('Error fetching role:', error);
             }
         };
 
-        fetchRole();
+        fetchUser();
     }, []);
 
     return (
         <div className="Parrainage">
             <Navbar/>
-            {(role === 'Admin'|| role === 'Student') && <Section titre="Tu souhaites devenir parrain ?" contenu={ParrainageStudent} />} 
-            {role === 'newStudent' && <Section titre="Tu souhaites avoir un parrain ?" contenu={ParrainageNewStudent} />}
+            {(permission === 'Admin'|| permission === 'Student') && <Section titre="Tu souhaites devenir parrain ?" contenu={ParrainageStudent} />} 
+            {permission === 'newStudent' && <Section titre="Tu souhaites avoir un parrain ?" contenu={ParrainageNewStudent} />}
         </div>
     )
 }

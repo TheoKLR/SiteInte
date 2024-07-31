@@ -10,41 +10,44 @@ import { getRole } from "../services/requests";
 import ExportAdminSection from "../components/admin/export/ExportAdminSection";
 import PermsAdminSection from "../components/admin/perms/PermsAdmin";
 import EmailAdminSection from "../components/admin/email/EmailAdminSection";
+import { getCurrentUser } from "../services/requests/users";
 
 export const Admin = () => {
 
-    const [role, setRole] = useState<string | null>(null);
+    const [permission, setPermission] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchRole = async () => {
+        const fetchUser = async () => {
             try {
-                const role = await getRole();
-                if ((role !== ('Admin')) && (role !== 'RespoCE')) {
-                    console.log(role)
+                const user = await getCurrentUser();
+                const permission = user.permission;
+                
+                if ((permission !== ('Admin')) && (permission !== 'RespoCE')) {
+                    console.log(permission)
                     window.location.href = '/Home';
                     return null;
                 }
-                setRole(role);
+                setPermission(permission);
                 
             } catch (error) {
-                console.error('Error fetching role:', error);
+                console.error('Error fetching permission:', error);
             }
         };
 
-        fetchRole();
+        fetchUser();
     }, []);
 
     return (
         <div className="Admin">
             <Navbar />
-            {(role === 'Admin' || role === 'RespoCE') && <Section titre="Utilisateurs" contenu={UserAdminSection} />}
-            {(role === 'Admin' || role === 'RespoCE')  && <Section titre="Equipes" contenu={TeamAdminSection} />}
-            {(role === 'Admin' || role === 'RespoCE')  && <Section titre="Factions" contenu={FactionAdminSection} />}
-            {(role === 'Admin') &&<Section titre="Rôles" contenu={DesireAdminSection} />}
-            {(role === 'Admin') && <Section titre="Events" contenu={EventsAdminSection} />}
-            {(role === 'Admin') && <Section titre="Exports" contenu={ExportAdminSection} />}
-            {(role === 'Admin') && <Section titre="Perms" contenu={PermsAdminSection} />}
-            {(role === 'Admin') && <Section titre="Emails" contenu={EmailAdminSection} />}
+            {(permission === 'Admin' || permission === 'RespoCE') && <Section titre="Utilisateurs" contenu={UserAdminSection} />}
+            {(permission === 'Admin' || permission === 'RespoCE')  && <Section titre="Equipes" contenu={TeamAdminSection} />}
+            {(permission === 'Admin' || permission === 'RespoCE')  && <Section titre="Factions" contenu={FactionAdminSection} />}
+            {(permission === 'Admin') &&<Section titre="Rôles" contenu={DesireAdminSection} />}
+            {(permission === 'Admin') && <Section titre="Events" contenu={EventsAdminSection} />}
+            {(permission === 'Admin') && <Section titre="Exports" contenu={ExportAdminSection} />}
+            {(permission === 'Admin') && <Section titre="Perms" contenu={PermsAdminSection} />}
+            {(permission === 'Admin') && <Section titre="Emails" contenu={EmailAdminSection} />}
         </div>
     )
 }

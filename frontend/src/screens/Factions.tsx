@@ -1,10 +1,10 @@
 import { Navbar } from "../components/shared/Navbar"
 import { useEffect, useState } from "react";
-import { getRole } from "../services/requests";
 import { Section } from "../components/shared/Section";
 import { getAllFactions } from "../services/requests/factions";
 import { Faction } from "../services/interfaces";
 import FactionsAffichage from "../components/factions/FactionsAffichage";
+import { getCurrentUser } from "../services/requests/users";
 
 export const Factions = () => {
 
@@ -13,15 +13,16 @@ export const Factions = () => {
     useEffect(() => {
         const fetchRole = async () => {
             try {
-                const role = await getRole();
+                const user = await getCurrentUser();
+                const permission = user.permission;
                 const factions = await getAllFactions();
                 setFactions(factions)
-                if (!role) {
+                if (!permission) {
                     window.location.href = '/';
                     return null;
                 }
             } catch (error) {
-                console.error('Error fetching role:', error);
+                console.error('Error fetching permission:', error);
             }
         };
         fetchRole();

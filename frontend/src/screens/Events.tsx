@@ -1,6 +1,5 @@
 import { Navbar } from "../components/shared/Navbar"
 import { useEffect, useState } from "react";
-import { getRole } from "../services/requests";
 import { ShotgunCE} from "../components/events/ShotgunCE";
 import { Barbecue } from "../components/events/Barbecue";
 import { ShotgunPerm } from "../components/events/ShotgunPerm";
@@ -9,6 +8,7 @@ import { Section } from "../components/shared/Section";
 import { getActiveEvents } from "../services/requests/events";
 import { toIdArray } from "../utils/utils";
 import { Default } from "../components/events/Default";
+import { getCurrentUser } from "../services/requests/users";
 
 export const Events =  () => {
     const [activeEvents, setEvent] = useState<number[]>([]); 
@@ -17,10 +17,11 @@ export const Events =  () => {
     useEffect(() => {
         const init = async () => {
             try {
-                const role = await getRole();
+                const user = await getCurrentUser();
+                const permission = user.permission;
                 //tableau avec les noms des events actifs
                 const activeEvents = await getActiveEvents();
-                if (!role) {
+                if (!permission) {
                     window.location.href = '/';
                     return null;
                 }
@@ -28,7 +29,7 @@ export const Events =  () => {
                 setEventArray(activeEventsArray)
                 return activeEventsArray;
             } catch (error) {
-                console.error('Error fetching role:', error);
+                console.error('Error fetching permission:', error);
             }
 
         };

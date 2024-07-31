@@ -10,20 +10,20 @@ const Home = () => {
     const [title, setTitle] = useState<string>("");
     
     useEffect(() => {
-        const fetchName = async () => {
+        const fetchUser = async () => {
             try {
                 const user = await getCurrentUser();
-                if (!user) {
+                const permission = user.permission
+                if (!permission) {
                     window.location.href = '/';
                     return null;
                 }
-                setTitle("Bienvenue " + user.first_name +" !");
             } catch (error) {
-                console.error('Error fetching role:', error);
+                console.error('Error fetching permission:', error);
             }
         };
 
-        fetchName();
+        fetchUser();
     }, []);
 
     return (
