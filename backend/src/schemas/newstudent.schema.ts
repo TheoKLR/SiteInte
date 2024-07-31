@@ -1,10 +1,10 @@
-import { pgTable, boolean, integer, uuid } from "drizzle-orm/pg-core";
+import { pgTable, boolean, integer, uuid, text } from "drizzle-orm/pg-core";
 import { userSchema } from "./user.schema";
 
 export const newstudentSchema = pgTable('newstudent', {
     uuid: uuid('uuid').primaryKey().defaultRandom(),
     isUsed: boolean("isUsed").notNull().default(false),
-    userId: integer('user_id').references(() => userSchema.id),
+    email: text("email").notNull().unique()
 });
 
 export type newstudentUUID = typeof newstudentSchema.$inferInsert;

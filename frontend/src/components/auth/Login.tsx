@@ -19,7 +19,7 @@ const LoginForm = () => {
   const [birthday, setBirthday]= useState("");
   const [discord_id, setDiscordId]= useState("");
   const [contact, setContact]= useState("");
-  //const [uuid, setUUID]= useState("");
+  const [uuid, setUUID]= useState("");
 
   const [errMsg, setErrMsg] = useState("");
   const [stateNewLogin, setStateNewLogin] = useState(false);
@@ -68,7 +68,7 @@ const LoginForm = () => {
 
   const NSRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    await handleError("Utilisateur ajouté !", "Une erreur est survenue", registerStudent, first_name, last_name, email,branch, pwd, birthday, contact, discord_id)
+    await handleError("Utilisateur ajouté !", "Une erreur est survenue", registerStudent, first_name, last_name, email,branch, pwd, birthday, contact, discord_id, uuid)
     setFirstName("");
     setLastName("");
     setEmail("");
@@ -77,6 +77,7 @@ const LoginForm = () => {
     setPwd("");
     setDiscordId("");
     setContact("");
+    setUUID("");
   };
 
   const getAuthCode = () => {
@@ -127,8 +128,8 @@ const LoginForm = () => {
 
   const CASConnection = () =>{
 
-    const SERVICE_URL = "https://integration.utt.fr/";
-    const CAS_LOGIN_URL =  "https://cas.utt.fr/cas/login";
+    const SERVICE_URL = process.env.REACT_APP_SERVICE_URL || "default";
+    const CAS_LOGIN_URL =  process.env.REACT_APP_CAS_LOGIN_URL || "default";
 
     const loginUrl = `${CAS_LOGIN_URL}?service=${encodeURIComponent(SERVICE_URL)}`;
     window.location.href = loginUrl;
@@ -267,8 +268,9 @@ const LoginForm = () => {
                 value={branch}
                 onChange={handleBranchChange}
                 options={branchoptions}
-                placeholder="Sélectionne ta branche"
+                placeholder={branch}
                 classNamePrefix="custom-select"
+                required
               />
             </div>
             <div className="input-box">
@@ -304,9 +306,9 @@ const LoginForm = () => {
                   onChange={(e) => setContact(e.target.value)}
               />
             </div>
-            {/*<div className="input-box">
+            <div className="input-box">
               <label>
-                  Clef unique fournis par l'UTT:
+                  Clé unique que tu as reçu par mail (Tu n'as rien reçu ? Contacte : integration.utt.fr):
                   <input
                       type="text"
                       value={uuid}
@@ -314,7 +316,7 @@ const LoginForm = () => {
                       required
                   />
               </label>
-            </div>*/}
+            </div>
             <p
               ref={errRef}
               className={errMsg ? "errmsg" : "offscreen"}

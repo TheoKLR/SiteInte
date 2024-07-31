@@ -13,11 +13,11 @@ import { isNotNull } from 'drizzle-orm'
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
     
-    const { first_name, last_name, email, branch, birthday, password, contact, discord_id /*, uuid*/ } = req.body
+    const { first_name, last_name, email, branch, birthday, password, contact, discord_id , uuid} = req.body
 
     first_name ?? Error(res, { msg: "No first name" })
     last_name ?? Error(res, { msg: "No last name" })
-    //uuid ?? Error (res, {msg: "No UUID"})
+    uuid ?? Error (res, {msg: "No UUID"})
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
@@ -28,9 +28,9 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
         if(newUser){
 
-        //Used for check a specific UUID for avoid to used the same UUID twice, not used in 2024, uncomment to use it
-        //await  newstudentservice.setUUID(uuid, true, newUser.id);
-        Created(res, {msg : "User created ! Welcome !"})
+        //Used for check a specific UUID for avoid to used the same UUID twice
+            await  newstudentservice.setUUID(uuid, true, email);
+            Created(res, {msg : "User created ! Welcome !"})
 
         }else{
         Error(res, {msg : "User not created"});
@@ -140,7 +140,7 @@ export const handlecasticket = async (req: Request, res: Response) => {
                 // Assurez-vous que user.email est un string
                 let user = await service.getUserByEmail(CASuser.email);
                 if(!user){
-                    await service.createUser(CASuser.givenName, CASuser.sn, CASuser.email, null ,null,"", null, "default", PermType.Student)
+                    await service.createUser(CASuser.givenName, CASuser.sn, CASuser.email, null , null, "", null, "default", PermType.Student)
                     user = await service.getUserByEmail(CASuser.email)
                 }
 

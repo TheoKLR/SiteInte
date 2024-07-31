@@ -14,14 +14,14 @@ export const registerMiddleware = async (req: Request, res: Response, next: Next
             return Error(res, { msg: "Invalid email address" });
         }
 
-        //Verification for UUID, not used in 2024, uncomment to use it
-        /*if (!uuidValidate(uuid)) {
+        //Verification for UUID
+        if (!uuidValidate(uuid)) {
             return Error(res, { msg: "Incorrect UUID" });
         }
         const isUsed = await getIsUsedbyUUID(uuid);
-                if (isUsed === null) {
-            return Error(res, { msg: "Incorrect UUID" });
-        }*/
+        if ((isUsed === null || isUsed === true)) {
+            return Error(res, { msg: "Incorrect UUID or already used" });
+        }
        
         const user = await getUserByEmail(email);
         
