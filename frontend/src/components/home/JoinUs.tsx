@@ -7,7 +7,7 @@ export const JoinUs = () => {
         <>
             <div className='containerJoinUs'>
                 <p>Rejoins le discord de l'Inté</p><br />
-                <a href="https://discord.com/channels/690192243113721940"><i className="fa fa-discord"></i></a><br />
+                <a href="https://discord.gg/Ea8XwgX5HS"><i className="fa fa-discord"></i></a><br />
                 <p>Rejoins l'UTT sur les réseaux</p><br />
                 <ul className="socials">
                     <li><a href="https://www.facebook.com/UTTroyes"><i className="fa fa-facebook"></i></a></li>

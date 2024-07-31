@@ -6,6 +6,8 @@ import { handleError } from "../utils/Submit";
 import { colors } from "react-select/dist/declarations/src/theme";
 import Select from "react-select";
 import { handleCASTicket } from "../../services/requests/auth";
+import { Option } from "../../services/interfaces";
+
 
 const LoginForm = () => {
   const userRef = useRef<HTMLInputElement>(null);
@@ -14,7 +16,7 @@ const LoginForm = () => {
   const [first_name, setFirstName]= useState("");
   const [last_name, setLastName]= useState("");
   const [email, setEmail]= useState("");
-  const [branch, setBranch]= useState(null);
+  const [branch, setBranch]= useState<Option | null>(null);
   const [pwd, setPwd] = useState("");
   const [birthday, setBirthday]= useState("");
   const [discord_id, setDiscordId]= useState("");
@@ -68,7 +70,7 @@ const LoginForm = () => {
 
   const NSRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    await handleError("Utilisateur ajouté !", "Une erreur est survenue", registerStudent, first_name, last_name, email,branch, pwd, birthday, contact, discord_id, uuid)
+    await handleError("Utilisateur ajouté !", "Une erreur est survenue", registerStudent, first_name, last_name, email, branch?.value, pwd, birthday, contact, discord_id, uuid)
     setFirstName("");
     setLastName("");
     setEmail("");
@@ -144,8 +146,8 @@ const LoginForm = () => {
     return "container-login";
   };
 
-  const handleBranchChange = (selectedOption : any) => {
-    setBranch(selectedOption.value);
+  const handleBranchChange = (selectedOption: any) => {
+    setBranch(selectedOption);
   };
   
   
@@ -264,11 +266,11 @@ const LoginForm = () => {
                 Ta branche à ton arrivée à l'UTT:
               </label>
               <Select
-                isMulti = {false}
+                isMulti={false}
                 value={branch}
                 onChange={handleBranchChange}
                 options={branchoptions}
-                placeholder={branch}
+                placeholder="Sélectionnez une branche"
                 classNamePrefix="custom-select"
                 required
               />
