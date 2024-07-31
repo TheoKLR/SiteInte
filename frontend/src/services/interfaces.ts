@@ -66,3 +66,8 @@ export interface EmailOptions {
     bcc: string[];
   }
 
+ export interface Option {
+    value: string;
+    label: string;
+  }
+
