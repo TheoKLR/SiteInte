@@ -1,24 +1,25 @@
 import { Navbar } from "../components/shared/Navbar"
 import { useEffect } from "react";
-import { getRole } from "../services/requests";
 import { Section } from "../components/shared/Section";
 import { Default } from "../components/shared/Default";
+import { getCurrentUser } from "../services/requests/users";
 
 export const Defis = () => {
     useEffect(() => {
-        const fetchRole = async () => {
+        const fetchUser = async () => {
             try {
-                const role = await getRole();
-                if (!role) {
+                const user = await getCurrentUser();
+                const permission = user.permission
+                if (!permission) {
                     window.location.href = '/';
                     return null;
                 }
             } catch (error) {
-                console.error('Error fetching role:', error);
+                console.error('Error fetching permission:', error);
             }
         };
 
-        fetchRole();
+        fetchUser();
     }, []);
 
     return (

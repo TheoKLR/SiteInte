@@ -67,7 +67,7 @@ export const template = `
 
 `;
 
-export const compileTemplate = (data) => {
+export const compileTemplate = (data : any) => {
   const compiledTemplate = Handlebars.compile(template);
   return compiledTemplate(data);
 };

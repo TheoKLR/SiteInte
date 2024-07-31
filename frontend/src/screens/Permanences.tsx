@@ -7,6 +7,7 @@ import { Faction, Perm } from "../services/interfaces";
 import FactionsAffichage from "../components/factions/FactionsAffichage";
 import { getAllPerms } from "../services/requests/perms";
 import PermAffichage from "../components/permanences/PermAffichage";
+import { getCurrentUser } from "../services/requests/users";
 
 export const Permanences = () => {
 
@@ -15,15 +16,16 @@ export const Permanences = () => {
     useEffect(() => {
         const fetchRole = async () => {
             try {
-                const role = await getRole();
+                const user = await getCurrentUser();
+                const permission = user.permission
                 const perms = await getAllPerms();
                 setPerms(perms)
-                if (!role || role === 'newStudent') {
+                if (!permission || permission === 'newStudent') {
                     window.location.href = '/';
                     return null;
                 }
             } catch (error) {
-                console.error('Error fetching role:', error);
+                console.error('Error fetching permission:', error);
             }
         };
         fetchRole();
