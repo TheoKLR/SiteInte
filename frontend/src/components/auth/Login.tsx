@@ -270,6 +270,7 @@ const LoginForm = () => {
                 options={branchoptions}
                 placeholder={branch}
                 classNamePrefix="custom-select"
+                required
               />
             </div>
             <div className="input-box">
