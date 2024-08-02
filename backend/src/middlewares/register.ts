@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { getUserByEmail } from '../services/user.service';
+import * as user_service from '../services/user.service';
 import { Error } from '../utils/responses';
-import { getIsUsedbyUUID } from '../services/newstudent.service';
+import * as newstudent_service from '../services/newstudent.service';
 import { validate as uuidValidate } from 'uuid';
 
 export const registerMiddleware = async (req: Request, res: Response, next: NextFunction) => {
@@ -18,18 +18,20 @@ export const registerMiddleware = async (req: Request, res: Response, next: Next
         if (!uuidValidate(uuid)) {
             return Error(res, { msg: "Incorrect UUID" });
         }
-        const isUsed = await getIsUsedbyUUID(uuid);
+
+        const isUsed = await newstudent_service.getIsUsedbyUUID(uuid);
         if ((isUsed === null || isUsed === true)) {
             return Error(res, { msg: "Incorrect UUID or already used" });
         }
        
-        const user = await getUserByEmail(email);
+        const user = await user_service.getUserByEmail(email);
         
+        if(!user){
+            return Error(res, { msg: "User doesn't exists please contact integration@utt.fr" });
+        }
 
-
-
-        if (user !== null) {
-            return Error(res, { msg: "User already exists" });
+        if (user?.connection_number !== 0) {
+            return Error(res, { msg: "User already exists and already registered" });
         }
 
         if (password.length < 8) {

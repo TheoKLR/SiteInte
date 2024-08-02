@@ -8,7 +8,7 @@ import { ToastContainer } from 'react-toastify'
 import { User, newStudent } from '../../../services/interfaces'
 import { getAllUsers } from '../../../services/requests'
 import { toTable } from '../../utils/Tables'
-import { deleteUUID, getAllUUID, syncUUID } from '../../../services/requests/newstudent';
+import { deleteNewStudent, getAllNewStudent, syncNewStudent } from '../../../services/requests/newstudent';
 
 export const AddToTeam = () => {
   const [users, setUsers] = useState([] as any)
@@ -104,18 +104,18 @@ export const TableUser = () => {
   return users.length > 0 ? toTable(users) : null;
 }
 
-export const ManageUUIDs = () => {
+export const ManageNewStudents = () => {
 
   const [uuids, setUUIDs] = useState([] as any )
   const UUIDsoptions = UUIDs();
 
-  const handleCreation = async () => {
-      await handleError("UUIDs créés", "Une erreur est survenue", syncUUID);
+  const handleSync = async () => {
+      await handleError("NewStudents synchronisé !", "Une erreur est survenue", syncNewStudent);
     }
 
   const handleDeletion = async () => {
     const strUUIds = tochainString(uuids);
-    await handleError("UUIDs supprimés", "Une erreur est survenue", deleteUUID, strUUIds);
+    await handleError("NewStudents supprimés", "Une erreur est survenue", deleteNewStudent, strUUIds);
     setUUIDs([]);
   };
 
@@ -123,8 +123,8 @@ export const ManageUUIDs = () => {
     <div>
       <div className="input">
         <h3>Creéation UUIDs</h3>
-        <p>Voulez vous synchronisez l'API UTT et la table des UUIDs ??</p>
-        <button className="submit-button" onClick={handleCreation}>Synchroniser</button>
+        <p>Voulez vous synchronisez l'API UTT et la table des nouveaux ??</p>
+        <button className="submit-button" onClick={handleSync}>Synchroniser</button>
       </div>
       <div className="input">
         <h3>Suppression UUIDs</h3>
@@ -146,13 +146,13 @@ export const ManageUUIDs = () => {
   );
 };
 
-export const TableUUIDs = () => {
+export const TableNewStudents = () => {
   const [UUIDs, setUUIDs] = useState<newStudent[]>([]);
 
   useEffect(() => {
     const fetchRole = async () => {
       try {
-        const response = await getAllUUID();
+        const response = await getAllNewStudent();
         setUUIDs(response)
       } catch (error) {
         console.error('Error fetching role:', error);

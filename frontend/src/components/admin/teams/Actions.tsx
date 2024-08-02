@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Select from 'react-select'
-import { createTeam, addToFaction, deleteTeam, getAllTeams, renameTeam, validateTeam} from '../../../services/requests/teams';
+import { createTeam, addToFaction, deleteTeam, getAllTeams, renameTeam, validateTeam, teamDistribution} from '../../../services/requests/teams';
 import { toArray, toId, handleError } from '../../utils/Submit'
 import { Teams, Factions, Users } from '../../utils/Select'
 import { ToastContainer, toast } from 'react-toastify';
@@ -91,15 +91,17 @@ export const DeleteTeam = () => {
   )
 }
 
-export const RenameTeam = () => {
+export const ModifyTeam = () => {
   const [team, setTeam] = useState({} as any)
   const [name, setName] = useState("");
+  const [type, setType] = useState("");
 
   const Submit = async () => {
     const id = toId(team)
-    await handleError("Equipe renommée !", "Une erreur est survenue", renameTeam, name, id)
+    await handleError("Equipe modifiée !", "Une erreur est survenue", renameTeam, id, name, type)
     setTeam({});
     setName("");
+    setType("");
   }
 
   return (
@@ -115,6 +117,9 @@ export const RenameTeam = () => {
         <label>Nom
         <input type="text" value={name} onChange={e => setName(e.target.value)} />
         </label>
+        <label>Type
+        <input type="text" value={type} onChange={e => setType(e.target.value)} />
+        </label>
       </div>
       <button className="submit-button" onClick={Submit}>Soumettre</button>
       <ToastContainer position="bottom-right"/>
@@ -122,7 +127,7 @@ export const RenameTeam = () => {
   )
 }
 
-export const ModifyTeam = () => {
+export const ModifyTeamMembers = () => {
   const [team, setTeam] = useState({} as any);
   const [members, setMembers] = useState([] as any);
 
@@ -196,32 +201,51 @@ export const ValidateTeam = () => {
   return (
     <div>
       <div className="input">
-        <label>Choisissez l'équipe
+        <label>Choisissez l'équipe</label>
           <Select
             value={team}
             options={Teams()}
             onChange={handleTeamChange}
           />
-        </label>
         <label>
           Valider la Team ?
-          <div className="button-container">
-            <button
-              className={`toggle-button ${official === true ? 'active' : ''}`}
-              onClick={() => setOfficial(true)}
-            >
-              Validée
-            </button>
-            <button
-              className={`toggle-button ${official === false ? 'active' : ''}`}
-              onClick={() => setOfficial(false)}
-            >
-              Pas validée
-            </button>
-        </div>
         </label>
+        <div className="button-container">
+          <button
+            className={`toggle-button ${official === true ? 'active' : ''}`}
+            onClick={() => setOfficial(true)}
+          >
+            Validée
+          </button>
+          <button
+            className={`toggle-button ${official === false ? 'active' : ''}`}
+            onClick={() => setOfficial(false)}
+          >
+            Pas validée
+          </button>
+        </div>
       </div>
       <button className="submit-button" onClick={Submit}>Soumettre</button>
+      <ToastContainer position="bottom-right" />
+    </div>
+  );
+};
+
+export const DistributeTeam = () => {
+
+
+  const Submit = async () => {
+    await handleError("Equipe mise à jour !", "Une erreur est survenue", teamDistribution);
+  };
+
+  return (
+    <div>
+      <div className="input">
+        <label>Voulez-vous répartir aléatoirement les nouveaux dans leurs équipes ? </label>
+         <p><strong>(Effet que sur ceux qui n'ont toujours d'équipe)</strong></p>
+      </div>
+      
+      <button className="submit-button" onClick={Submit}>Distribuer</button>
       <ToastContainer position="bottom-right" />
     </div>
   );

@@ -71,6 +71,7 @@ export const ProfilForm: React.FC = () => {
                     />
                 </label>
                 <label>Email:</label>
+                <p>Si tu souhaites changer ton email contacte : integration@utt.fr</p>
                     <input
                         type="text"
                         placeholder={email}

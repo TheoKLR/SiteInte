@@ -3,6 +3,7 @@ import * as service from '../services/user.service';
 import { Error, Ok } from '../utils/responses';
 import { decodeToken } from '../utils/token';
 import { parsePermType, PermType } from '../schemas/user.schema';
+import { RI_list } from '../utils/RI_list';
 
 export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -192,4 +193,17 @@ export const modifyTeam = async(req : Request, res: Response) => {
     }catch(error){
         Error(res, { error });
     }   
+}
+
+export const isInRILIst = async(req : Request, res: Response) => {
+
+    const {email} = req.params;
+    const RI_List = RI_list;
+    if(RI_List.includes(email)){
+        Ok(res, {data : true});
+    }
+    else{
+        Ok(res, {data: false});
+    }
+
 }
