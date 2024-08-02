@@ -1,6 +1,86 @@
 import Handlebars from 'handlebars';
 
-export const template = `
+export const TemplateNotebook = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Integration UTT</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Comic Sans', sans-serif;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .header, .footer {
+            text-align: center;
+        }
+        .content {
+            text-align: center;
+            font-size: 15px;
+        }
+        .content p {
+            line-height: 1.4;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            background-color: #e74160;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+        }
+        .social-icons a {
+            margin: 0 10px;
+        }
+        .social-icons img {
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://integration.utt.fr/ressources/logo_original.png" alt="Integration UTT Logo" style="width: 100px;">
+            <h1 style="font-size: 21px; font-weight: bold; margin: 10px 0;">INTEGRATION UTT</h1>
+        </div>
+        <div class="content">
+            <p>Hello petit nouveau ! Pour commencer l’intégration dès maintenant, on t’a préparé un petit cahier de vacances !! Rien de sérieux ni d'obligatoire ne t’inquiète pas, mais de quoi t’occuper avant la rentrée. Alors si tu veux y participer, tu peux le télécharger juste ici et le renvoyer à <a href="mailto:integration+cahier@utt.fr">integration+cahier@utt.fr</a> avant le lundi 26 août. Nous te renverrons ensuite ta correction, et si tu as été assez drôle tu pourras même apparaître dans le best of du cahier de vacances !! Bisous et à la rentrée !!</p>
+            <a href={{notebook}} target="_blank" class="button">Cahier de vacances !</a>
+            <p>Nous serons présents sur les réseaux tout au long de l'été pour te tenir informé(e), te partager des astuces, et plein d'autres trucs trop cools ! Rejoins le site de l'intégration pour bien être informé des actus !</p>
+            <a href="https://integration.utt.fr/" target="_blank" class="button">Inscris toi !</a>
+            <p>Pense aussi à rejoindre notre Discord, tu pourras y discuter avec des nouveaux, et poser tes questions aux étudiants déjà à l'UTT !</p>
+            <a href="https://discord.gg/Ea8XwgX5HS" target="_blank" class="button">Rejoindre Discord</a>
+        </div>
+        <div class="footer">
+            <p style="font-size: 16px; font-weight: bold;">Rejoins nous sur les réseaux !</p>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/bde.utt" target="_blank" rel="noopener"><img src="https://cdn.tools.unlayer.com/social/icons/rounded/facebook.png" alt="Facebook"></a>
+                <a href="https://twitter.com/bdeutt" target="_blank" rel="noopener"><img src="https://cdn.tools.unlayer.com/social/icons/rounded/twitter.png" alt="Twitter"></a>
+                <a href="https://www.instagram.com/bdeutt" target="_blank" rel="noopener"><img src="https://cdn.tools.unlayer.com/social/icons/rounded/instagram.png" alt="Instagram"></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+`;
+
+export const templateWelcome = `
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -67,7 +147,12 @@ export const template = `
 
 `;
 
-export const compileTemplate = (data : any) => {
-  const compiledTemplate = Handlebars.compile(template);
+export const compileTemplateWelcome = (data : any) => {
+  const compiledTemplate = Handlebars.compile(templateWelcome);
+  return compiledTemplate(data);
+};
+
+export const compileTemplateNotebook = (data : any) => {
+  const compiledTemplate = Handlebars.compile(TemplateNotebook);
   return compiledTemplate(data);
 };

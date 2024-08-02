@@ -1,20 +1,36 @@
 import { isNumeric } from 'validator';
 import { Error, Created, Ok, Unauthorized } from '../utils/responses'
 import { Request, Response, NextFunction } from 'express'
+import * as randomstring from 'randomstring';
 import * as service from '../services/newstudent.service';
+import * as user_service from '../services/user.service';
+import * as bcrypt from 'bcryptjs'
+import { PermType } from '../schemas/user.schema';
 
 export const syncNewstudent = async (req: Request, res: Response) => {
     try {
         
         const token = await service.getTokenUTTAPI();
         const newStudents = await service.getNewStudentsFromUTTAPI(token);
+
         newStudents.forEach( async (element: any) => {
             let user = await service.getNewStudentbyEmail(element.email)
             if (!user){
                 await service.createUUID(element.email)
             }
+
+            let isInUserDb = await user_service.getUserByEmail(element.email);
+            if(!isInUserDb){
+                let tmpPassword =  await bcrypt.hash(randomstring.generate(48), 10);
+                await user_service.createUser(element.prenom, element.nom, element.email, null, element.specialite, "", "", tmpPassword, PermType.NewStudent);
+            }
+            
         });
-        Ok(res, { msg:"All UUID created and synced" })
+
+
+        Ok(res, { msg:"All NewStudent created and synced" })
+
+        
     } catch (error) {
         Error(res, { error })
     }
@@ -29,7 +45,7 @@ export const getAllNewStudent = async(req : Request, res: Response)=>{
     }
 }
 
-export const deleteByUUID = async(req : Request, res: Response)=>{
+export const deleteNewStudents = async(req : Request, res: Response)=>{
 
     const {uuids} = req.params;
     uuids ?? Error (res, {msg: "No UUIDs"})

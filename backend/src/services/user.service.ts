@@ -132,6 +132,21 @@ export const updateUser = async (id: number, contact: string, discord_id: string
     }
 }
 
+export const registerUser = async (first_name: string, last_name: string, email: string, birthday: string | null, branch: string| null, contact: string| null, discord_id: string| null, password: string) => {
+    try {
+        await db.update(userSchema).set({ 
+            first_name: first_name,
+            last_name: last_name,
+            birthday: birthday,
+            branch: branch,
+            password: password,
+            contact: contact, 
+            discord_id: discord_id}).where(eq(userSchema.email, email));
+    } catch (error) {
+        throw new Error("Failed to update user. Please try again later.");
+    }
+}
+
 export const updateUserStudent = async (id: any, first_name: string, last_name: string, email: string, branch: string| null, birthday: string| null) => {
     try {
         await db.update(userSchema).set({ 

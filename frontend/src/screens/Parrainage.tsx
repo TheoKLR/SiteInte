@@ -5,8 +5,7 @@ import { Section } from "../components/shared/Section";
 import { ParrainageNewStudent }  from "../components/parrainage/ParrainageNewStudent";
 import { ParrainageStudent } from "../components/parrainage/ParrainageStudent";
 import { Default } from "../components/shared/Default";
-import { getCurrentUser } from "../services/requests/users";
-import { RI_list } from "../utils/RI_list";
+import { getCurrentUser, isInRiList } from "../services/requests/users";
 
 export const Parrainage = () => {
 
@@ -16,11 +15,14 @@ export const Parrainage = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
+                
                 const user = await getCurrentUser()
                 const email = user.email;
                 const permission = user.permission;
 
-                if (RI_list.includes(email)) {
+                const isRI = await isInRiList(email);
+
+                if (isRI) {
                     window.location.href = '/'; 
                     return;
                 }

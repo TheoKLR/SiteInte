@@ -1,14 +1,14 @@
 import { api } from "../api";
 
-export const syncUUID = async () => {
-     return await api.post('/newstudent/syncUUID' );
+export const syncNewStudent = async () => {
+     return await api.post('/newstudent/syncNewStudent' );
 }
 
-export const deleteUUID = async (UUID : string) => {
-    return await api.delete('/newstudent/deleteUUID/' + UUID );
+export const deleteNewStudent = async (UUID : string) => {
+    return await api.delete('/newstudent/deleteNewStudent/' + UUID );
 }
 
-export const getAllUUID = async() => {
-    const response = await api.get('/newstudent/allUUID');
+export const getAllNewStudent= async() => {
+    const response = await api.get('/newstudent/allNewStudent');
     return response?.data?.data;
 }
