@@ -53,3 +53,8 @@ export const getAllByPermission = async (permission : string) => {
     const response = await api.get(`user/allbypermission/${permission}`);
     return response?.data.data ;
 };
+
+export const isInRiList = async (email : string) => {
+    const response = await api.get(`user/isinrilist/${email}`);
+    return response?.data.data ;
+};

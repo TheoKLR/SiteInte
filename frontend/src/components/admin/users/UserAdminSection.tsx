@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AdminSection from '../AdminSection';
-import { AddToTeam, ChangePermission, DeleteUser, ManageUUIDs, TableUUIDs, TableUser } from './Actions';
+import { AddToTeam, ChangePermission, DeleteUser, ManageNewStudents, TableNewStudents, TableUser } from './Actions';
 import { AdminAction } from '../AdminSection';
 import { getRole } from '../../../services/requests';
 
@@ -44,12 +44,12 @@ const UserAdminSection: React.FC = () => {
       form: <DeleteUser/>,
     },
     {
-      title: 'Gestion cléfs de connexions unique',
-      form: <ManageUUIDs/>,
+      title: 'Gestion des nouveaux',
+      form: <ManageNewStudents/>,
     },
     {
-      title: 'Affichage cléfs de connexions unique',
-      form: <TableUUIDs/>,
+      title: 'Affichage des nouveaux',
+      form: <TableNewStudents/>,
     },
   ];
 

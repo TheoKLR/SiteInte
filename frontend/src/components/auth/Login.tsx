@@ -242,7 +242,7 @@ const LoginForm = () => {
             </div>
             <div className="input-box">
               <label>
-                Email:
+                Email (Celle renseignée à l'UTT) :
               </label>
               <input
                   type="text"
@@ -290,11 +290,11 @@ const LoginForm = () => {
             </div>
             <div className="input-box">
               <label>
-                  Tag Discord (Utile pour pouvoir rejoindre le discord de l'intégration et prendre contact avec ton équipe):
+                  Nom d'utilisateur Discord (Utile pour pouvoir rejoindre le discord de l'intégration et prendre contact avec ton équipe):
               </label>
               <input
                   type="text"
-                  placeholder="Discord Tag"
+                  placeholder="ex : integrationutt"
                   value={discord_id}
                   onChange={(e) => setDiscordId(e.target.value)}
               />

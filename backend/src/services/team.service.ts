@@ -56,15 +56,6 @@ export const removeTeamFromFaction = async (id: number) => {
     }
 }
 
-export const renameTeam = async (name: string, id: number) => {
-    try {
-        await db.update(teamSchema)
-            .set({ name: name })
-            .where(eq(teamSchema.id, id));
-    } catch (error) {
-        throw new Error("Failed to rename team. Please try again later.");
-    }
-}
 
 export const addToFaction = async (teamIds: number[], factionId: number) => {
     try {
@@ -110,6 +101,20 @@ export const validateTeam = async (id: number, isOfficial: boolean) => {
     try {
         await db.update(teamSchema)
             .set({isOfficial: isOfficial})
+            .where(eq(teamSchema.id, id));
+    } catch (error) {
+        throw new Error("Failed to get the team's timecode. Please try again later.");
+    }
+}
+
+export const modifyTeam = async (id: number, name: string, type: string) => {
+    try {
+
+        await db.update(teamSchema)
+            .set({
+                name: name,
+                type: type
+            })
             .where(eq(teamSchema.id, id));
     } catch (error) {
         throw new Error("Failed to get the team's timecode. Please try again later.");

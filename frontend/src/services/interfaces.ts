@@ -17,6 +17,7 @@ export interface Team {
     id: number;
     name: string;
     faction:number;
+    type: Text;
 }
 
 export interface Faction {

@@ -9,7 +9,6 @@ import { jwtSecret } from '../utils/secret'
 import { decodeToken } from '../utils/token'
 import { getToken, getUserData } from '../utils/api_etu'
 import { validateCASTicket } from '../services/auth.service'
-import { isNotNull } from 'drizzle-orm'
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
     
@@ -22,7 +21,8 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     const hashedPassword = await bcrypt.hash(password, 10)
 
     try {
-        await service.createUser(first_name, last_name, email, birthday, branch, contact, discord_id, hashedPassword, PermType.NewStudent)
+        
+        await service.registerUser(first_name, last_name, email, birthday, branch, contact, discord_id, hashedPassword)
         
         const newUser = await service.getUserByEmail(email);
 

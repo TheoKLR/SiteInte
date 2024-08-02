@@ -28,12 +28,12 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
 
     const mailOptions = {
       from: options.from,
-      to: options.to.join(', '),
+      to: options.to ? options.to.join(', ') : '',
       subject: options.subject,
       text: options.text,
       html: options.html,
-      cc: options.cc?.join(', '),
-      bcc: options.bcc?.join(', '),
+      cc: options.cc ? options.cc.join(', ') : undefined,
+      bcc: options.bcc ? options.bcc.join(', ') : undefined,
     };
 
     await transporter.sendMail(mailOptions);

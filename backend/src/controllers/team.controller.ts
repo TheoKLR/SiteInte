@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/team.service';
 import * as user_service from '../services/user.service';
 import { Error, Created, Ok } from '../utils/responses';
-import { time } from 'console';
+import { RI_list } from '../utils/RI_list';
+import { PermType } from '../schemas/user.schema';
 
 
 export const getAllTeams = async (req: Request, res: Response, next: NextFunction) => {
@@ -105,16 +106,28 @@ export const getTimestamp = async (req: Request, res: Response, next: NextFuncti
 };
 
 
-export const renameTeam = async (req: Request, res: Response, next: NextFunction) => {
-  const { id, name } = req.body;
-
-  name ?? Error(res, { msg: "No name" });
+export const modifyTeam = async (req: Request, res: Response, next: NextFunction) => {
+  let { id, name, type } = req.body;
 
   try {
-    await service.renameTeam(name, id);
-    Ok(res, {msg : "Team renamed !"})
+    const currentTeam = await service.getTeam(id);
+
+    if (!currentTeam) {
+      return Error(res, { msg: "No team found" });
+    }
+
+    if (!name) {
+      name = currentTeam.name;
+    }
+
+    if (!type) {
+      type = currentTeam.type;
+    }
+
+    await service.modifyTeam(id, name, type);
+    return Ok(res, { msg: "Team renamed!" });
   } catch (error) {
-    Error(res, { error });
+    return next(error);
   }
 };
 
@@ -143,3 +156,56 @@ export const getAllMembersTeam = async (req: Request, res: Response, next: NextF
     Error(res, { error });
   }
 };
+
+
+
+export const teamDistribution = async (req: Request, res: Response) => {
+  try {
+      
+      const newStudents = await user_service.getAllByPermission(PermType.NewStudent);
+      const teams = await service.getAllTeams()
+      const filteredStudents = newStudents
+                                .filter((student: any) => !RI_list.includes(student.email))
+                                .filter((student : any) => !student.team_id);
+
+      // Filtrer les utilisateurs en fonction de la spécialité
+      const tcStudents = filteredStudents
+      .filter((student: any) => student.branch === "TC")
+      .map((student : any) => ({
+        id :student.id,
+        email: student.email,
+        branch: student.branch
+      }));
+
+      const otherStudents = filteredStudents
+      .filter((student:any) => student.branch !== "TC")
+      .map((student:any) => ({
+        id :student.id,
+        email: student.email,
+        branch: student.branch
+      }));
+
+      // Filtrer les équipes en fonction de leur type
+      const tcTeams = teams.filter(team => team.type === "TC");
+      const otherTeams = teams.filter(team => team.type !== "TC");
+
+
+      async function assignUsersToTeams(users: any, teams: any) {
+        let teamIndex = 0;
+        for (const user of users) {
+            await user_service.addToTeam([user.id], teams[teamIndex].id);
+            teamIndex = (teamIndex + 1) % teams.length;
+        }
+    }
+      // Assigner les utilisateurs TC aux équipes TC
+      assignUsersToTeams(tcStudents, tcTeams);
+
+      // Assigner les autres utilisateurs aux équipes non-TC
+      assignUsersToTeams(otherStudents, otherTeams);
+
+
+      Ok(res, {msg : "NewStudents distributed !"})
+  } catch (error) {
+      Error(res, { error })
+  }
+}

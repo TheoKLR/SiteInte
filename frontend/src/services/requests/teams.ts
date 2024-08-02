@@ -27,10 +27,11 @@ export const registerTeam = async (name: string, userIds: number[]) => {
   });
 };
 
-export const renameTeam = async (name: string, id: number[]) => {
-  return await api.post("team/rename", {
+export const renameTeam = async (id: number[], name: string, type: string) => {
+  return await api.post("team/modify", {
+    id,
     name,
-    id
+    type
   });
 };
 export const validateTeam = async (id: number, isOfficial: boolean) => {
@@ -43,13 +44,21 @@ export const validateTeam = async (id: number, isOfficial: boolean) => {
 export const setTimestamp = async (timestamp: number, id: number) =>{
   api.put("/team/timestamp", { timestamp, id })};
 
+
 // Obtention de la liste des équipes enregistrées dans la db
 export const getAllTeams = async () => {
   const response = await api.get("team/all");
   return response.data.data;
 };
 
+
 export const getAllMembersTeam = async (id : number) => {
   const response = await api.get("team/getallmembers/"+id);
   return response.data.data;
 };
+
+export const teamDistribution = async () => {
+  const response = await api.post("team/distributeteam");
+  return response.data
+};
+
