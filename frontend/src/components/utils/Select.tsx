@@ -3,7 +3,7 @@ import { Role, Faction, User, Team, Event, newStudent, Perm } from '../../servic
 import { getAllFactions, getAllTeams, getAllUsers } from '../../services/requests'
 import { getAllRoles } from "../../services/requests/roles"
 import { getActiveEvents, getInactiveEvents } from "../../services/requests/events"
-import { getAllUUID } from "../../services/requests/newstudent"
+import { getAllNewStudent } from "../../services/requests/newstudent"
 import { getAllPerms } from "../../services/requests/perms"
 import { getAllByPermission } from "../../services/requests/users"
 
@@ -153,7 +153,7 @@ export const UUIDs = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getAllUUID();
+        const response = await getAllNewStudent();
         const newStudentOptions = response.map((newStudent: newStudent) => ({
           value: newStudent.uuid,
           label: newStudent.email,

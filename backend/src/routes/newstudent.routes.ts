@@ -4,8 +4,8 @@ import { isAdmin } from '../middlewares/permissions';
 
 const newStudentRouter = express.Router();
 
-newStudentRouter.post('/syncUUID', isAdmin, nsc.syncNewstudent);
-newStudentRouter.get('/allUUID', isAdmin, nsc.getAllNewStudent);
-newStudentRouter.delete('/deleteUUID/:uuids', isAdmin, nsc.deleteByUUID);
+newStudentRouter.post('/syncNewStudent', isAdmin, nsc.syncNewstudent);
+newStudentRouter.get('/allNewStudent', isAdmin, nsc.getAllNewStudent);
+newStudentRouter.delete('/deleteNewStudent/:uuids', isAdmin, nsc.deleteNewStudents);
 
 export default newStudentRouter;
