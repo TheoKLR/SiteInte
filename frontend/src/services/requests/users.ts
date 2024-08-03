@@ -19,8 +19,9 @@ export const changePermission = async (id: number, perm: string) => {
     })
 }
 
-export const updateUser = async (contact: string, discord_id: string) => {
+export const updateUser = async (branch: string, contact: string, discord_id: string) => {
     return await api.put('user/updateuser', {
+        branch,
         contact,
         discord_id
     })

@@ -19,10 +19,24 @@ export const syncNewstudent = async (req: Request, res: Response) => {
                 await service.createUUID(element.email)
             }
 
-            let isInUserDb = await user_service.getUserByEmail(element.email);
-            if(!isInUserDb){
+            let userInDb = await user_service.getUserByEmail(element.email);
+            if(!userInDb){
                 let tmpPassword =  await bcrypt.hash(randomstring.generate(48), 10);
                 await user_service.createUser(element.prenom, element.nom, element.email, null, element.specialite, "", "", tmpPassword, PermType.NewStudent);
+            }
+            else{
+                if(element.diplome === "MA"){ //To be sure that every Master are in the correct branch (Some check TC this condition prevent that)
+                    
+                    await user_service.registerUser(
+                        userInDb.first_name, 
+                        userInDb.last_name, 
+                        userInDb.email,
+                        userInDb.birthday,
+                        "Master",
+                        userInDb.contact,
+                        userInDb.discord_id,
+                        userInDb.password)
+                }
             }
             
         });
