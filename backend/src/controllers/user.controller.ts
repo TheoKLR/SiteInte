@@ -21,8 +21,9 @@ export const getAllByPermission= async (req: Request, res: Response, next: NextF
         
     try {
         if(permissionParse){
-        const data = await service.getAllByPermission(permissionParse);
-        Ok(res, { data });
+            const data = await service.getAllByPermission(permissionParse);
+            const datafiltered = data.filter((user : any)=> !RI_list.includes(user.email)) //Don't include RI
+            Ok(res, {data: datafiltered });
         }
         else{
             Error(res, {msg : "Not a good perm"})
@@ -92,14 +93,14 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
 };
 
 export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
-    const {contact, discord_id } = req.body;
+    const {branch, contact, discord_id } = req.body;
     const token = decodeToken(req)
     if (token === null) {
       return Error(res, { msg: 'No email' });
     }
 
     try {
-        await service.updateUser(token.id, contact, discord_id);
+        await service.updateUser(token.id,branch, contact, discord_id);
         Ok(res, { msg: "User updated" });
     } catch (error) {
         Error(res, { error });
