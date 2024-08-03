@@ -5,7 +5,7 @@ import { toArray, toId, handleError } from '../../utils/Submit'
 import { Teams, Factions, Users } from '../../utils/Select'
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import { Team } from '../../../services/interfaces';
+import { Option, Team } from '../../../services/interfaces';
 import { toTable } from '../../utils/Tables';
 import {getUsersbyTeam, modifyUserTeam  } from '../../../services/requests/users';
 import './Teams.css';
@@ -92,17 +92,29 @@ export const DeleteTeam = () => {
 }
 
 export const ModifyTeam = () => {
+
   const [team, setTeam] = useState({} as any)
   const [name, setName] = useState("");
-  const [type, setType] = useState("");
+  const [type, setType] = useState<Option | null>();
+
+  const teamtypeoptions = [
+    { value: 'TC', label: 'TC' },
+    { value: 'Branche', label: 'Branche' },
+  ];
+
+
 
   const Submit = async () => {
     const id = toId(team)
-    await handleError("Equipe modifiée !", "Une erreur est survenue", renameTeam, id, name, type)
+    await handleError("Equipe modifiée !", "Une erreur est survenue", renameTeam, id, name, type?.value)
     setTeam({});
     setName("");
-    setType("");
+    setType(null);
   }
+
+  const handleTeamTypeChange = (selectedOption: any) => {
+    setType(selectedOption);
+  };
 
   return (
     <div>
@@ -118,7 +130,15 @@ export const ModifyTeam = () => {
         <input type="text" value={name} onChange={e => setName(e.target.value)} />
         </label>
         <label>Type
-        <input type="text" value={type} onChange={e => setType(e.target.value)} />
+        <Select
+                isMulti={false}
+                value={type}
+                onChange={handleTeamTypeChange}
+                options={teamtypeoptions}
+                placeholder={type ? "Pas de type" : type}
+                classNamePrefix="custom-select"
+                required
+              />
         </label>
       </div>
       <button className="submit-button" onClick={Submit}>Soumettre</button>
@@ -128,8 +148,10 @@ export const ModifyTeam = () => {
 }
 
 export const ModifyTeamMembers = () => {
+
   const [team, setTeam] = useState({} as any);
   const [members, setMembers] = useState([] as any);
+
 
   const Submit = async () => {
     const teamId = toId(team);
