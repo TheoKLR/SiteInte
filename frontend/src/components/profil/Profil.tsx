@@ -28,6 +28,7 @@ export const ProfilForm: React.FC = () => {
         { value: 'A2I', label: 'Branche A2I' },
         { value: 'SN', label: 'Branche SN' },
         { value: 'Master', label: 'Master' },
+        { value: 'RI', label: 'International Student'}
       ];
 
     useEffect(() => {
