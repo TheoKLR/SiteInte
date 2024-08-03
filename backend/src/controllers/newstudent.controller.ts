@@ -6,20 +6,22 @@ import * as service from '../services/newstudent.service';
 import * as user_service from '../services/user.service';
 import * as bcrypt from 'bcryptjs'
 import { PermType } from '../schemas/user.schema';
+import { noSyncEmails } from '../utils/email_list_no_sync';
 
 export const syncNewstudent = async (req: Request, res: Response) => {
     try {
         
         const token = await service.getTokenUTTAPI();
         const newStudents = await service.getNewStudentsFromUTTAPI(token);
+        const newStudentfiltered = newStudents.filter((student : any) => !noSyncEmails.includes(student.email));
 
-        newStudents.forEach( async (element: any) => {
-            let user = await service.getNewStudentbyEmail(element.email)
+        newStudentfiltered.forEach( async (element: any) => {
+            let user = await service.getNewStudentbyEmail(element.email.toLowerCase())
             if (!user){
-                await service.createUUID(element.email)
+                await service.createUUID(element.email.toLowerCase() )
             }
 
-            let userInDb = await user_service.getUserByEmail(element.email);
+            let userInDb = await user_service.getUserByEmail(element.email.toLowerCase());
             if(!userInDb){
                 let tmpPassword =  await bcrypt.hash(randomstring.generate(48), 10);
                 await user_service.createUser(element.prenom, element.nom, element.email, null, element.specialite, "", "", tmpPassword, PermType.NewStudent);
@@ -30,7 +32,7 @@ export const syncNewstudent = async (req: Request, res: Response) => {
                     await user_service.registerUser(
                         userInDb.first_name, 
                         userInDb.last_name, 
-                        userInDb.email,
+                        userInDb.email.toLowerCase() ,
                         userInDb.birthday,
                         "Master",
                         userInDb.contact,

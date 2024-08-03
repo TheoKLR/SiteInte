@@ -22,7 +22,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
     try {
         
-        await service.registerUser(first_name, last_name, email, birthday, branch, contact, discord_id, hashedPassword)
+        await service.registerUser(first_name, last_name, email.toLowerCase(), birthday, branch, contact, discord_id, hashedPassword)
         
         const newUser = await service.getUserByEmail(email);
 
@@ -44,7 +44,7 @@ export const newStudentLogin = async (req: Request, res: Response, next: NextFun
     const { email, password } = req.body
 
     try {
-        const user = await service.getUserByEmail(email)
+        const user = await service.getUserByEmail(email.toLowerCase())
         if (!user) {
             return Error(res, { msg: "User doesn't exists" })
         }
@@ -138,10 +138,10 @@ export const handlecasticket = async (req: Request, res: Response) => {
 
             if (CASuser && CASuser.email && CASuser.givenName && CASuser.sn) {
                 // Assurez-vous que user.email est un string
-                let user = await service.getUserByEmail(CASuser.email);
+                let user = await service.getUserByEmail(CASuser.email.toLowerCase());
                 if(!user){
                     await service.createUser(CASuser.givenName, CASuser.sn, CASuser.email, null , null, "", null, "default", PermType.Student)
-                    user = await service.getUserByEmail(CASuser.email)
+                    user = await service.getUserByEmail(CASuser.email.toLowerCase())
                 }
 
                 const id = user?.id
