@@ -6,27 +6,47 @@ import './Profil.css';
 import { Faction, Team } from '../../services/interfaces';
 import { getAllMembersTeam, getTeam } from '../../services/requests/teams';
 import { getFaction } from '../../services/requests/factions';
+import Select from "react-select";
+import { Option } from "../../services/interfaces";
 
 export const ProfilForm: React.FC = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
-    const [branch, setBranch] = useState('');
+    const [branch, setBranch]= useState<Option | null>(null);
     const [birthday, setBirthday] = useState('');
     const [contact, setContact] = useState('');
     const [discord_id, setDiscordId] = useState('');
+
+    const branchoptions = [
+        { value: 'TC', label: 'Tronc Commun' },
+        { value: 'RT', label: 'Branche RT' },
+        { value: 'ISI', label: 'Branche ISI' },
+        { value: 'GM', label: 'Branche GM' },
+        { value: 'GI', label: 'Branche GI' },
+        { value: 'MTE', label: 'Branche MTE' },
+        { value: 'A2I', label: 'Branche A2I' },
+        { value: 'SN', label: 'Branche SN' },
+        { value: 'Master', label: 'Master' },
+      ];
 
     useEffect(() => {
         const fetchUserData = async () => {
           try {
             const currentUser = await getCurrentUser();
+            
             setFirstName(currentUser.first_name);
             setLastName(currentUser.last_name);
             setEmail(currentUser.email);
-            setBranch(currentUser.branch);
+
+            const userBranch = branchoptions.find(option => option.value === currentUser.branch) || null;
+            setBranch(userBranch);
+
             setBirthday(currentUser.birthday);
             setContact(currentUser.contact);
             setDiscordId(currentUser.discord_id);
+
+            console.log(branch);
           } catch (error) {
             toast.error('Erreur lors de la récupération du profil. Veuillez réessayer plus tard.');
           }
@@ -35,10 +55,14 @@ export const ProfilForm: React.FC = () => {
         fetchUserData();
       }, []);
 
+    const handleBranchChange = (selectedOption: any) => {
+        setBranch(selectedOption);
+    };
+      
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         try {
-            handleError("Profil mis à jour avec succès !", "Une erreur est survenue", updateUser, contact, discord_id);
+            handleError("Profil mis à jour avec succès !", "Une erreur est survenue", updateUser,branch?.value, contact, discord_id);
         } catch (error) {
             toast.error('Erreur lors de la mise à jour du profil. Veuillez réessayer plus tard.');
         }
@@ -88,13 +112,16 @@ export const ProfilForm: React.FC = () => {
                         disabled
                     />
                 </label>
-                <label>Ta branche:</label>
-                    <input
-                        type="text"
-                        placeholder={branch}
-                        value={branch}
-                        disabled
-                    />
+                <label>Ton niveau actuel à l'UTT:</label>
+                <Select
+                    isMulti={false}
+                    value={branch}
+                    onChange={handleBranchChange}
+                    options={branchoptions}
+                    placeholder={branch ? "Tu n'as pas sélectionné de branche": branch}
+                    classNamePrefix="custom-select"
+                    required
+                />
                 <label>Discord Tag (Pour rejoindre le discord de l'intégration et être affecté à ton équipe !):</label>
                     <input
                         type="text"

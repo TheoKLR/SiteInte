@@ -122,9 +122,10 @@ export const createUser = async (first_name: string, last_name: string, email: s
     }
 }
 
-export const updateUser = async (id: number, contact: string, discord_id: string) => {
+export const updateUser = async (id: number, branch : string, contact: string, discord_id: string) => {
     try {
         await db.update(userSchema).set({ 
+            branch: branch,
             contact: contact, 
             discord_id: discord_id}).where(eq(userSchema.id, id));
     } catch (error) {
