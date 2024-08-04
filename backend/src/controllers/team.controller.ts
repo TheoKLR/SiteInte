@@ -178,7 +178,7 @@ export const teamDistribution = async (req: Request, res: Response) => {
       }));
 
       const otherStudents = filteredStudents
-      .filter((student:any) => student.branch !== "TC")
+      .filter((student:any) => student.branch !== "TC" && student.branch !== "RI")
       .map((student:any) => ({
         id :student.id,
         email: student.email,
@@ -187,7 +187,7 @@ export const teamDistribution = async (req: Request, res: Response) => {
 
       // Filtrer les équipes en fonction de leur type
       const tcTeams = teams.filter(team => team.type === "TC");
-      const otherTeams = teams.filter(team => team.type !== "TC");
+      const otherTeams = teams.filter(team => team.type !== "TC" && team.type !== "RI");
 
 
       async function assignUsersToTeams(users: any, teams: any) {
