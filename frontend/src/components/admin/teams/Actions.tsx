@@ -100,6 +100,7 @@ export const ModifyTeam = () => {
   const teamtypeoptions = [
     { value: 'TC', label: 'TC' },
     { value: 'Branche', label: 'Branche' },
+    { value: 'RI', label: 'RI' },
   ];
 
 
