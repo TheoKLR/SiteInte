@@ -1,7 +1,13 @@
-import { challengeSchema, challenge, factionTochallengeSchema, factionTochallenge } from "../schemas/challenge.schema"
-import { addPoints } from "./faction.service"
+import {
+    challengeSchema,
+    challenge,
+    factionTochallengeSchema,
+    factionTochallenge,
+    ChallengeType
+} from "../schemas/challenge.schema"
+import {addPoints, removePoints} from "./faction.service"
 import { db } from "../database/db"
-import { eq } from 'drizzle-orm'
+import {and, eq} from 'drizzle-orm'
 
 export const getAllChallenges = async () => {
     try {
@@ -20,8 +26,17 @@ export const getChallenge = async (id: number) => {
     }
 }
 
-export const createChallenge = async (name: string, description: string, points: number) => {
-    const newChallenge: challenge = { name, description, points};
+export const getFactionChallenges = async (factionId: number) => {
+    try {
+        const challs = await db.select().from(factionTochallengeSchema).where(eq(factionTochallengeSchema.factionId, factionId))
+        return challs;
+    } catch (error) {
+        throw new Error("Failed to fetch challenges. Please try again later.");
+    }
+}
+
+export const createChallenge = async (name: string, description: string, points: string, challType: ChallengeType) => {
+    const newChallenge: challenge = {name: name, description: description, points: points, challType: challType};
     try {
         await db.insert(challengeSchema).values(newChallenge);
     } catch (error) {
@@ -38,14 +53,34 @@ export const deleteChallenge = async (id: number) => {
     }
 }
 
-export const validateChallenge = async (challengeId: number, factionId: number) => {
+export const validateChallenge = async (challengeId: number, associatedId: number, attributedPoints: number) => {
+    //First get the type of challenge
+    const challenge = await db.select().from(challengeSchema).where(eq(challengeSchema.id, challengeId));
+    if(!challenge || challenge.length === 0) throw new Error("No challenge with id '" + challengeId + "'")
+    const challType = challenge[0].challType
+    const newFacToChall: factionTochallenge = { challengeId, factionId: associatedId, attributedPoints};
+    const alreadyValidate = await db.select().from(factionTochallengeSchema).where(eq(factionTochallengeSchema, newFacToChall));
+    //if(alreadyValidate.length > 0) throw new Error(`Challenge ${challengeId} already validated for team ${factionId}.`)
+    if (alreadyValidate.length === 0) {
+        await addPoints(associatedId, attributedPoints);
+        await db.insert(factionTochallengeSchema).values(newFacToChall);
+    }
+}
+
+export const unvalidateChallenge = async (challengeId: number, factionId: number) => {
     try {
-        const newFacToChall: factionTochallenge = { challengeId, factionId};
-        const alreadyValidate = await db.select().from(factionTochallengeSchema).where(eq(factionTochallengeSchema, newFacToChall));
-        if (alreadyValidate.length === 0) {
-            const points = (await getChallenge(challengeId)).points;
-            addPoints(factionId, points);
-            await db.insert(factionTochallengeSchema).values(newFacToChall);
+        const newFacToChall = { challengeId, factionId};
+        const alreadyValidate = await db.select()
+            .from(factionTochallengeSchema)
+            .where(
+                and(
+                    eq(factionTochallengeSchema.challengeId, challengeId),
+                    eq(factionTochallengeSchema.factionId, factionId)
+                )
+            );
+        if (alreadyValidate.length > 0) {
+            await removePoints(factionId, alreadyValidate[0].attributedPoints);
+            await db.delete(factionTochallengeSchema).where(eq(factionTochallengeSchema, alreadyValidate[0]))
         }
     } catch (error) {
         throw new Error("Failed to create challenge to faction. Please try again later.");
