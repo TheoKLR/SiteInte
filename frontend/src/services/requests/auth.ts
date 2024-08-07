@@ -6,7 +6,7 @@ export const isTokenValid = async (token: string) => {
 }
 
 export const handleCASTicket = async (ticket: string)=>{
-    const response = await api.get('auth/handlecasticket/', { 
+    const response = await api.get('auth/handlecasticket/', {
         params:{
             "ticket" :ticket
         }
