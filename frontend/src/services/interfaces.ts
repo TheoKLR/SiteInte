@@ -5,6 +5,10 @@ export interface User {
     email: string;
     birthday : Date;
     team_id: number;
+    contact: string;
+    discord_id : string;
+    branch : string;
+    
 }
 export interface UserLight {
     id: number;
