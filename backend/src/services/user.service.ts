@@ -287,6 +287,7 @@ export const getAllMembersTeam = async (team_id: number) => {
                         last_name: userSchema.last_name,
                         email: userSchema.email,
                         team_id: userSchema.team,
+                        contact: userSchema.contact
                         })
                         .from(userSchema)
                         .where(eq(userSchema.team, team_id));
