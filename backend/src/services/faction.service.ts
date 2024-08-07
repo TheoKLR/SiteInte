@@ -62,3 +62,14 @@ export const addPoints = async (id: number, points: number) => {
         throw new Error("Failed to add points. Please try again later.");
     }
 }
+
+export const removePoints = async (id: number, points: number) => {
+    const current_points = await getPoints(id);
+    try {
+        await db.update(factionSchema)
+            .set({ points: current_points - points })
+            .where(eq(factionSchema.id, id));
+    } catch (error) {
+        throw new Error("Failed to remove points. Please try again later.");
+    }
+}
