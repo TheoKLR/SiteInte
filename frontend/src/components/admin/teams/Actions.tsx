@@ -101,6 +101,7 @@ export const ModifyTeam = () => {
     { value: 'TC', label: 'TC' },
     { value: 'Branche', label: 'Branche' },
     { value: 'RI', label: 'RI' },
+    { value: 'PMOM', label: 'PMOM' },
   ];
 
 
