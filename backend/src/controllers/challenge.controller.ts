@@ -16,7 +16,7 @@ export const createChallenge = async (req: Request, res: Response, next: NextFun
   name ?? Error(res, { msg: "No name" });
 
   try {
-    await service.createChallenge(name, desc, points);
+    //await service.createChallenge(name, desc, points);
     Created(res, {})
   } catch (error) {
     Error(res, { error });
@@ -38,10 +38,10 @@ export const deleteChallenge = async (req: Request, res: Response, next: NextFun
 };
 
 export const validateChallenge = async (req: Request, res: Response, next: NextFunction) => {
-  const { challengeId, factionId } = req.body;
+  const { challengeId, associatedId, points } = req.body;
 
   try {
-    await service.validateChallenge(challengeId, factionId);
+    await service.validateChallenge(challengeId, associatedId, points);
     Ok(res, { msg: "challenge validated" });
   } catch (error) {
     Error(res, { error });
