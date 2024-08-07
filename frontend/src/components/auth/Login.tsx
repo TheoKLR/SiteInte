@@ -38,6 +38,7 @@ const LoginForm = () => {
     { value: 'MTE', label: 'Branche MTE' },
     { value: 'A2I', label: 'Branche A2I' },
     { value: 'SN', label: 'Branche SN' },
+    { value: 'MM', label: 'Branche MM' },
     { value: 'Master', label: 'Master' },
     { value: 'RI', label: 'International Student'}
   ];

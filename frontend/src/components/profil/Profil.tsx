@@ -3,7 +3,7 @@ import { getCurrentUser, updateUser } from '../../services/requests/users';
 import { handleError } from '../utils/Submit';
 import { ToastContainer, toast } from 'react-toastify';
 import './Profil.css';
-import { Faction, Team } from '../../services/interfaces';
+import { Faction, Team, User } from '../../services/interfaces';
 import { getAllMembersTeam, getTeam } from '../../services/requests/teams';
 import { getFaction } from '../../services/requests/factions';
 import Select from "react-select";
@@ -27,6 +27,7 @@ export const ProfilForm: React.FC = () => {
         { value: 'MTE', label: 'Branche MTE' },
         { value: 'A2I', label: 'Branche A2I' },
         { value: 'SN', label: 'Branche SN' },
+        { value: 'MM', label: 'Branche MM' },
         { value: 'Master', label: 'Master' },
         { value: 'RI', label: 'International Student'}
       ];
@@ -146,22 +147,25 @@ export const ProfilForm: React.FC = () => {
 };
 
 export const TeamDisplay: React.FC = () => {
-    
     const [userTeam, setTeam] = useState<Team>();
     const [teamMembers, setTeamMembers] = useState([]);
     const [userFaction, setFaction] = useState<Faction>();
+    const [permission, setPermission] = useState("");
 
     useEffect(() => {
         const fetchUserTeamData = async () => {
             try {
                 const currentUser = await getCurrentUser();
+                const permission = currentUser.permission;
                 const team = await getTeam(currentUser.team_id);
                 setTeam(team);
                 if (team) {
                     setFaction(await getFaction(team.faction));
-                    setTeamMembers(await getAllMembersTeam(team.id))
+                    setTeamMembers(await getAllMembersTeam(team.id));
                 }
-
+                if(permission){
+                    setPermission(permission);
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -172,15 +176,31 @@ export const TeamDisplay: React.FC = () => {
     return (
         <>
             <div className='containerTeam'>
+                <h2>Voici ton équipe !</h2>
                 <div className='affichageTeam'>
-                    <h3 id='msgTeams'> { userTeam?.name ? userTeam.name : "Tu n'as pas d'équipe d'attribuée pour l'instant"}</h3>
-                        {teamMembers?.length !== 0 ? (
-                            teamMembers?.map((member : any) => (
-                               <p key={member.id}>{member.first_name +' '+ member.last_name}</p>
-                            ))
-                        ) : (
-                            <p>Tu n'as pas de coéquipier pour l'instant</p>
-                        )}
+                    <h3 id='msgTeams'> {userTeam?.name ? userTeam.name : "Tu n'as pas d'équipe d'attribuée pour l'instant"}</h3>
+                    <table className="teamTable">
+                        <thead>
+                            <tr>
+                                <th>MEMBRE</th>
+                                {permission === "Student" || permission === "Admin" ? <th>CONTACT</th> : null}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {teamMembers?.length !== 0 ? (
+                                teamMembers?.map((member: any) => (
+                                    <tr key={member.id}>
+                                        <td>{member.first_name + ' ' + member.last_name}</td>
+                                        {permission === "Student" || permission === "Admin" ? <td>{member.contact}</td> : null}
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={2}>Tu n'as pas de coéquipier pour l'instant</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
                 <div className='affichageFaction'>
                     <h3 id='msgFaction'>Ta faction</h3>
@@ -190,4 +210,3 @@ export const TeamDisplay: React.FC = () => {
         </>
     );
 };
-
