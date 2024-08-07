@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/permanence.service';
-import * as team_service from '../services/team.service'
 import { Error, Created, Ok } from '../utils/responses';
 
 
@@ -48,6 +47,30 @@ export const deletePermanence = async (req: Request, res: Response, next: NextFu
   try {
     await service.deletePermanence(idNumber);
     Ok(res, { msg: "Permanence deleted" });
+  } catch (error) {
+    Error(res, { error });
+  }
+};
+
+export const addUserToPermanence = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { userId, permId } = req.params;
+  const userIdNumber = parseInt(userId, 10);
+  const permIdNumber = parseInt(permId, 10);
+
+  if (isNaN(userIdNumber)) return Error(res, { msg: "could not parse Id" });
+  if (isNaN(permIdNumber)) return Error(res, { msg: "could not parse Id" });
+
+  try {
+    const userAdded = await service.addUserToPermanence(userIdNumber, permIdNumber);
+    if (userAdded) {
+      Ok(res, { msg: "user added to permanence" });
+    } else {
+      Error(res, { msg: "max number of student reached" });
+    }
   } catch (error) {
     Error(res, { error });
   }
