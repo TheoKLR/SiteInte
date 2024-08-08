@@ -208,7 +208,7 @@ export const teamDistribution = async (req: Request, res: Response) => {
         for (const user of users) {
           // Assigner l'utilisateur à l'équipe avec le moins de membres
           const smallestTeam = teamSizes[0];
-          await user_service.addToTeam([user.id], smallestTeam.team_id);
+          await user_service.addToTeam([user.id], smallestTeam.teamId);
 
           // Mettre à jour la taille de l'équipe après l'ajout
           smallestTeam.size += 1;
