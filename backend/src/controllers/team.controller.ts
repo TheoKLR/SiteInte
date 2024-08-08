@@ -163,49 +163,69 @@ export const teamDistribution = async (req: Request, res: Response) => {
   try {
       
       const newStudents = await user_service.getAllByPermission(PermType.NewStudent);
-      const teams = await service.getAllTeams()
+      const teams = await service.getAllTeams();
+      
+      // Filtrer les étudiants qui ne sont pas dans la liste RI et qui ne sont pas déjà assignés à une équipe
       const filteredStudents = newStudents
                                 .filter((student: any) => !RI_list.includes(student.email))
                                 .filter((student : any) => !student.team_id);
 
       // Filtrer les utilisateurs en fonction de la spécialité
       const tcStudents = filteredStudents
-      .filter((student: any) => student.branch === "TC")
-      .map((student : any) => ({
-        id :student.id,
-        email: student.email,
-        branch: student.branch
-      }));
+        .filter((student: any) => student.branch === "TC")
+        .map((student: any) => ({
+          id: student.id,
+          email: student.email,
+          branch: student.branch
+        }));
 
       const otherStudents = filteredStudents
-      .filter((student:any) => student.branch !== "TC" && student.branch !== "RI" && student.branch !== "MM")
-      .map((student:any) => ({
-        id :student.id,
-        email: student.email,
-        branch: student.branch
-      }));
+        .filter((student: any) => student.branch !== "TC" && student.branch !== "RI" && student.branch !== "MM")
+        .map((student: any) => ({
+          id: student.id,
+          email: student.email,
+          branch: student.branch
+        }));
 
       // Filtrer les équipes en fonction de leur type
       const tcTeams = teams.filter(team => team.type === "TC");
       const otherTeams = teams.filter(team => team.type !== "TC" && team.type !== "RI" && team.type !== "PMOM");
 
-
+      // Fonction pour assigner les utilisateurs à des équipes équilibrées
       async function assignUsersToTeams(users: any, teams: any) {
-        let teamIndex = 0;
+        // Calculer la taille actuelle des équipes
+        const teamSizes = await Promise.all(teams.map(async (team: any) => {
+          const members = await user_service.getAllMembersTeam(team.id);
+          return {
+            teamId: team.id,
+            size: members.length
+          };
+        }));
+
+        // Trier les équipes par taille (ascendant)
+        teamSizes.sort((a: any, b: any) => a.size - b.size);
+
         for (const user of users) {
-            await user_service.addToTeam([user.id], teams[teamIndex].id);
-            teamIndex = (teamIndex + 1) % teams.length;
+          // Assigner l'utilisateur à l'équipe avec le moins de membres
+          const smallestTeam = teamSizes[0];
+          await user_service.addToTeam([user.id], smallestTeam.team_id);
+
+          // Mettre à jour la taille de l'équipe après l'ajout
+          smallestTeam.size += 1;
+
+          // Réordonner les équipes pour garder la plus petite en premier
+          teamSizes.sort((a: any, b: any) => a.size - b.size);
         }
-    }
+      }
+
       // Assigner les utilisateurs TC aux équipes TC
-      assignUsersToTeams(tcStudents, tcTeams);
+      await assignUsersToTeams(tcStudents, tcTeams);
 
       // Assigner les autres utilisateurs aux équipes non-TC
-      assignUsersToTeams(otherStudents, otherTeams);
+      await assignUsersToTeams(otherStudents, otherTeams);
 
-
-      Ok(res, {msg : "NewStudents distributed !"})
+      Ok(res, { msg: "NewStudents distributed!" });
   } catch (error) {
-      Error(res, { error })
+      Error(res, { error });
   }
 }
