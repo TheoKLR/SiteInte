@@ -28,7 +28,7 @@ export const Profil = () => {
         <div className="ProfilForm">
             <Navbar />
             <Section titre="Voici ton profil !" contenu={ProfilForm} />
-            <Section titre="Voici ton équipe !" contenu={TeamDisplay} />
+            <Section titre="Ton équipe !" contenu={TeamDisplay} />
         </div>
     )
 }

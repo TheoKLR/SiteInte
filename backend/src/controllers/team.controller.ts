@@ -178,7 +178,7 @@ export const teamDistribution = async (req: Request, res: Response) => {
       }));
 
       const otherStudents = filteredStudents
-      .filter((student:any) => student.branch !== "TC" && student.branch !== "RI" && student.branch !== "PMOM")
+      .filter((student:any) => student.branch !== "TC" && student.branch !== "RI" && student.branch !== "MM")
       .map((student:any) => ({
         id :student.id,
         email: student.email,
