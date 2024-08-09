@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AdminSection from '../AdminSection';
-import { AddToTeam, ChangePermission, DeleteUser, ManageNewStudents, TableNewStudents, TableUser } from './Actions';
+import { AddToTeam, ChangePermission, DeleteUser, ManageNewStudents, PasswordReset, TableNewStudents, TableUser } from './Actions';
 import { AdminAction } from '../AdminSection';
 import { getRole } from '../../../services/requests';
 
@@ -42,6 +42,10 @@ const UserAdminSection: React.FC = () => {
     {
       title: 'Supprimer utilisateurs',
       form: <DeleteUser/>,
+    },
+    {
+      title: 'Reset Password',
+      form: <PasswordReset/>,
     },
     {
       title: 'Gestion des nouveaux',

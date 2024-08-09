@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from 'express'
 import { PermType } from '../schemas/user.schema'
-import * as service from '../services/user.service'
+import * as user_service from '../services/user.service'
+import * as auth_service from '../services/auth.service'
 import * as newstudentservice from '../services/newstudent.service'
 import * as bcrypt from 'bcryptjs'
 import { Error, Created, Ok, Unauthorized } from '../utils/responses'
-import { sign } from 'jsonwebtoken'
-import { jwtSecret } from '../utils/secret'
+import { sign, verify } from 'jsonwebtoken'
+import { jwtSecret, service_url } from '../utils/secret'
 import { decodeToken } from '../utils/token'
 import { getToken, getUserData } from '../utils/api_etu'
 import { validateCASTicket } from '../services/auth.service'
@@ -22,9 +23,9 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
     try {
         
-        await service.registerUser(first_name, last_name, email.toLowerCase(), birthday, branch, contact, discord_id, hashedPassword)
+        await user_service.registerUser(first_name, last_name, email.toLowerCase(), birthday, branch, contact, discord_id, hashedPassword)
         
-        const newUser = await service.getUserByEmail(email);
+        const newUser = await user_service.getUserByEmail(email);
 
         if(newUser){
 
@@ -44,7 +45,7 @@ export const newStudentLogin = async (req: Request, res: Response, next: NextFun
     const { email, password } = req.body
 
     try {
-        const user = await service.getUserByEmail(email.toLowerCase())
+        const user = await user_service.getUserByEmail(email.toLowerCase())
         if (!user) {
             return Error(res, { msg: "User doesn't exists" })
         }
@@ -55,7 +56,7 @@ export const newStudentLogin = async (req: Request, res: Response, next: NextFun
         }
         const id = user.id
         const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
-        service.incrementConnection(id);
+        user_service.incrementConnection(id);
         Ok(res, { data: token })
     } catch (error) {
         Error(res, { error })
@@ -77,20 +78,20 @@ export const studentLogin = async (req: Request, res: Response, next: NextFuncti
         }
 
         const { email, firstName, lastName, branch, birthday, discord_tag } = user_data
-        let user = await service.getUserByEmail(email)
+        let user = await user_service.getUserByEmail(email)
 
         if (!user) {
-            await service.createUser(firstName, lastName, email, birthday ,branch,"", discord_tag, "default", PermType.Student)
-            user = await service.getUserByEmail(email)
+            await user_service.createUser(firstName, lastName, email, birthday ,branch,"", discord_tag, "default", PermType.Student)
+            user = await user_service.getUserByEmail(email)
         }
 
         const id = user?.id
         if (!id) return Error(res, {})
             
-        await service.updateUserStudent(id, firstName, lastName, email, branch, birthday);
+        await user_service.updateUserStudent(id, firstName, lastName, email, branch, birthday);
             
         const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
-        service.incrementConnection(id);
+        user_service.incrementConnection(id);
         Ok(res, { data: { token } })
     } catch (error) {
         Error(res, { error })
@@ -100,7 +101,7 @@ export const studentLogin = async (req: Request, res: Response, next: NextFuncti
 export const getRole = async (req: Request, res: Response) => {
     try {
         const decodedToken = decodeToken(req)
-        const user = await service.getUserByEmail(decodedToken.email)
+        const user = await user_service.getUserByEmail(decodedToken.email)
 
         if (user === null) {
             return Error(res, { msg: "user doesn't exists" })
@@ -138,20 +139,20 @@ export const handlecasticket = async (req: Request, res: Response) => {
 
             if (CASuser && CASuser.email && CASuser.givenName && CASuser.sn) {
                 // Assurez-vous que user.email est un string
-                let user = await service.getUserByEmail(CASuser.email.toLowerCase());
+                let user = await user_service.getUserByEmail(CASuser.email.toLowerCase());
                 if(!user){
-                    await service.createUser(CASuser.givenName, CASuser.sn, CASuser.email, null , null, "", null, "default", PermType.Student)
-                    user = await service.getUserByEmail(CASuser.email.toLowerCase())
+                    await user_service.createUser(CASuser.givenName, CASuser.sn, CASuser.email, null , null, "", null, "default", PermType.Student)
+                    user = await user_service.getUserByEmail(CASuser.email.toLowerCase())
                 }
 
                 const id = user?.id
                 const email = CASuser.email
                 if (!id) return Error(res, {})
                     
-                await service.updateUserStudent(id, CASuser.givenName, CASuser.sn, CASuser.email, null, null);
+                await user_service.updateUserStudent(id, CASuser.givenName, CASuser.sn, CASuser.email, null, null);
                 
                 const token =  sign({ id, email }, jwtSecret, { expiresIn: '1h' })
-                service.incrementConnection(id)
+                user_service.incrementConnection(id)
 
                 Ok(res, { data: { token } })
             
@@ -166,3 +167,53 @@ export const handlecasticket = async (req: Request, res: Response) => {
         return Error(res, { msg: 'Unauthorized: Invalid token' });
     }
 }
+
+export const resetPasswordAdmin = async (req: Request, res: Response) => {
+
+    const {user_id} = req.body
+    const user = await user_service.getUser(user_id);
+
+    if (!user) {
+        return res.status(404).send('Utilisateur non trouvé');
+    }
+
+    // Générer un token JWT
+    const token = sign({ userId: user.id }, jwtSecret, { expiresIn: '1h' });
+
+    // Créer le lien de réinitialisation
+    const resetLink = `${service_url}reset-password?token=${token}`;
+    try{
+        // Envoyer l'e-mail
+        await auth_service.sendPasswordResetEmail(user.email, resetLink);
+        return Ok(res, {msg:'Email for apssword reste sent !'})
+    }catch(error){
+        return Error(res, { msg: 'Error when reseting password' });
+    }
+
+}
+
+export const resetPasswordUser = async (req: Request, res: Response) => {
+        const {token, password} = req.body; 
+      
+        try {
+            // Vérifiez et décodez le token
+            const decoded: any = verify(token, jwtSecret);
+
+    
+            // Trouvez l'utilisateur par ID
+            const user = await user_service.getUser(decoded.userId);
+            if (!user) {
+                return Error(res, {msg :'Utilisateur non trouvé'});
+            }
+    
+            // Hash du nouveau mot de passe
+            const hashedPassword = await bcrypt.hash(password, 10);
+    
+            // Mettez à jour le mot de passe de l'utilisateur
+            await user_service.updateUserPassword(user.id, hashedPassword);
+            
+            return Ok(res, {msg: 'Mot de passe réinitialisé avec succès'});
+        } catch (error) {
+            return Error(res, { msg: 'Token invalid or expire' });
+        }
+  }
