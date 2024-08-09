@@ -32,4 +32,6 @@ export const noSyncEmails = [
     "brunopsilvano97@gmail.com",
     "teekay698@gmail.com",
     "akmuhammad0200@gmail.com",
+    "flavien.senechal73@gmail.com",
+    "jeniferflg02@gmail.com",
 ];
