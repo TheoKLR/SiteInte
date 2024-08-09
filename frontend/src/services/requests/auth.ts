@@ -14,3 +14,15 @@ export const handleCASTicket = async (ticket: string)=>{
 
     return response?.data.data
 }
+
+export const resetPasswordUser = async(token : string, password: string)=>{
+    const response = await api.post('auth/resetpassworduser', {token, password});
+
+    return response?.data
+}
+
+export const resetPasswordAdmin = async(user_id : number)=>{
+    const response = await api.post('auth/resetpasswordadmin', {user_id});
+
+    return response?.data
+}

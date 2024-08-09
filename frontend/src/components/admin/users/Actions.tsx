@@ -9,6 +9,7 @@ import { User, newStudent } from '../../../services/interfaces'
 import { getAllUsers } from '../../../services/requests'
 import { toTable } from '../../utils/Tables'
 import { deleteNewStudent, getAllNewStudent, syncNewStudent } from '../../../services/requests/newstudent';
+import { resetPasswordAdmin } from '../../../services/requests/auth';
 
 export const AddToTeam = () => {
   const [users, setUsers] = useState([] as any)
@@ -171,6 +172,32 @@ export const DeleteUser = () => {
   const Submit = async () => {
     const id = toId(user)
     await handleError("Utilisateur supprimer !", "Une erreur est survenue", deleteUser, id)
+    setUser({})
+  }
+
+  return (
+    <div>
+      <div className="select-container">
+        <Select
+          options={Users()}
+          onChange={user => setUser(user)}
+          value={user}
+        />
+      </div>
+      <button className="submit-button" onClick={Submit}>Soumettre</button>
+      <ToastContainer position="bottom-right" />
+    </div>
+  )
+}
+
+export const PasswordReset = () => {
+  const [user, setUser] = useState({} as any)
+
+
+
+  const Submit = async () => {
+    const id = toId(user)
+    await handleError("Mail de reset envoyé !", "Une erreur est survenue", resetPasswordAdmin, id)
     setUser({})
   }
 
