@@ -2,6 +2,8 @@ import { db } from "../database/db"
 import { eq } from 'drizzle-orm'
 import { cas_validate_url, service_url } from "../utils/secret";
 import { JSDOM } from 'jsdom';
+import { compileTemplateResetPassword } from "../utils/emailtemplates";
+import { sendEmail } from "./email.service";
 
 export const validateCASTicket = async (ticket : string) => {
     try {
@@ -26,7 +28,7 @@ export const validateCASTicket = async (ticket : string) => {
     }
 }
 
-function parseUsernameFromCASResponse(response: string) {
+export const parseUsernameFromCASResponse = async(response: string) => {
     const dom = new JSDOM(response, { contentType: "application/xml" });
     const document = dom.window.document;
     const authSuccessNode = document.getElementsByTagName("cas:authenticationSuccess")[0];
@@ -43,8 +45,21 @@ function parseUsernameFromCASResponse(response: string) {
     }
 }
 
-  
-  function establishSession(username: string) {
-    // Implement session establishment logic here
-    console.log(`User ${username} is authenticated`);
+
+export const sendPasswordResetEmail = async(userEmail: string, resetLink: string) => {
+  const htmlContent = compileTemplateResetPassword({ resetLink });
+
+  const emailOptions = {
+      from: 'integration@utt.fr',
+      to: [userEmail],
+      subject: '[INTEGRATION UTT] - Réinitialisation de votre mot de passe',
+      html: htmlContent,
+  };
+
+  try {
+      await sendEmail(emailOptions);
+      console.log('Email de réinitialisation envoyé avec succès');
+  } catch (error) {
+      console.error('Erreur lors de l\'envoi de l\'email:', error);
   }
+}

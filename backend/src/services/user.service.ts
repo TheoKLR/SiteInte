@@ -297,3 +297,14 @@ export const getAllMembersTeam = async (team_id: number) => {
         throw new Error("Failed to get the team's timecode. Please try again later.");
     }
 }
+
+export const updateUserPassword = async(id: number, password: string) => {
+    try{
+        await db.update(userSchema).set({
+            password: password
+        }).where(eq(userSchema.id, id));
+
+    }catch(error){
+        throw new Error("Failed to update user password. Please try again later.");
+    }
+}
