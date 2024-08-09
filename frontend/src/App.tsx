@@ -13,6 +13,7 @@ import { Login } from './screens/Login';
 import { Souhait } from './screens/Desires';
 import { Profil } from './screens/Profil'
 import { Permanences } from './screens/Permanences';
+import { PasswordReset } from './screens/ResetPassword';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path='/' element={<Login />} />
+        <Route path='/Reset-Password' element={<PasswordReset />} />
         <Route path='/Home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route path='/Admin' element={<ProtectedRoute><Admin /></ProtectedRoute>} />
         <Route path='/Defis' element={<ProtectedRoute><Defis /></ProtectedRoute>} />
