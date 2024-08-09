@@ -112,22 +112,32 @@ export const getRole = async (req: Request, res: Response) => {
     }
 }
 
-export const isTokenValid = async (req: Request, res: Response)=> {
+export const isTokenValid = async (req: Request, res: Response) => {
     try {
-        const token = req.headers['authorization']?.split(' ')[1];
-        if (!token) {
-            return Error(res, { msg: 'Unauthorized: Invalid token' });
+        // Extract token from Authorization header
+        const authHeader = req.headers['authorization'];
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return Unauthorized(res, { msg: 'Unauthorized: Missing or malformed token', data: { isValid: false } });
         }
+
+        const token = authHeader.split(' ')[1];
+
+        // Decode the token and validate it
         const decodedToken = decodeToken(req);
         if (!decodedToken) {
-            return Unauthorized(res, { msg: 'Unauthorized: Token has expired' });
-        }else{
-            return Ok(res, {data: {isValid: true}});
+            return Unauthorized(res, { msg: 'Unauthorized: Token has expired or is invalid', data: { isValid: false } });
         }
+
+        // Check for email presence in the decoded token
+        if (!decodedToken.email) {
+            return Unauthorized(res, { msg: 'Unauthorized: Invalid token content', data: { isValid: false } });
+        }
+
+        // If everything is fine, return a positive response
+        return Ok(res, { data: { isValid: true } });
     } catch (error) {
-        return Error(res, { msg: 'Unauthorized: Invalid token' });
+        return Error(res, { msg: 'Unauthorized: Token validation failed'});
     }
-    
 }
 
 export const handlecasticket = async (req: Request, res: Response) => {
@@ -174,7 +184,7 @@ export const resetPasswordAdmin = async (req: Request, res: Response) => {
     const user = await user_service.getUser(user_id);
 
     if (!user) {
-        return res.status(404).send('Utilisateur non trouvé');
+        return Error(res, { msg: 'User not found' });
     }
 
     // Générer un token JWT
