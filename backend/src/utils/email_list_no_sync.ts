@@ -1,4 +1,5 @@
 //This list is to ignore user from UTT API who already have an account on the website but not with the same email address
+// OR People we don't want to sync like "BIO REF" or demissionary
 export const noSyncEmails = [
     "micheleudes064@gmail.com",
     "marco.menguzzato-1@studenti.unitn.it",
@@ -8,6 +9,27 @@ export const noSyncEmails = [
     "mathis.duchastelle@gmail.com",
     "baptiste.robalo.ronceret@gmail.com",
     "mona.karoui@gmail.com",
-    "francoislinkleveque@gmail.com"
-    
+    "francoislinkleveque@gmail.com",
+    "pedro44722@gmail.com",
+    "akash1971.ai@gmail.com",
+    "saalqui@gmail.com",
+    "davidsononwumelu@gmail.com",
+    "julioczmn@gmail.com",
+    "javeriamasood1420@gmail.com",
+    "olivermangosing@gmail.com",
+    "gulnaz.khalilova@hotmail.com",
+    "helenmebre2016@gmail.com",
+    "amihasanjamil@yahoo.com",
+    "eduardamanuelag@gmail.com",
+    "gebrihans@aait.edu.et",
+    "chrisestivariz@gmail.com",
+    "rlucasborges@gmail.com",
+    "rasulbalamedov@gmail.com",
+    "josemalvaradov@gmail.com",
+    "sondosfawzy414@gmail.com",
+    "sani.abdullahi.aliyu.123@gmail.com",
+    "rrazzoqova4601@gmail.com",
+    "brunopsilvano97@gmail.com",
+    "teekay698@gmail.com",
+    "akmuhammad0200@gmail.com",
 ];
