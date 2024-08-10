@@ -3,7 +3,11 @@ import * as service from '../services/permanence.service';
 import { Error, Created, Ok } from '../utils/responses';
 
 
-export const getAllPermanences = async (req: Request, res: Response, next: NextFunction) => {
+export const getAllPermanences = async (
+  req: Request, 
+  res: Response, 
+  next: NextFunction
+) => {
   try {
     const data = await service.getAllPermanences();
     Ok(res, { data });
@@ -11,6 +15,19 @@ export const getAllPermanences = async (req: Request, res: Response, next: NextF
     Error(res, { error });
   }
 }
+
+export const getAllAvailablePermanences = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = await service.getAllAvailablePermanences();
+    Ok(res, { data });
+  } catch (error) {
+    Error(res, { error });
+  }
+};
 
 export const getPermanence = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
@@ -71,6 +88,19 @@ export const addUserToPermanence = async (
     } else {
       Error(res, { msg: "max number of student reached" });
     }
+  } catch (error) {
+    Error(res, { error });
+  }
+};
+
+export const updateTimeLimit = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await service.updateTimeLimit();
+    Ok(res, {});
   } catch (error) {
     Error(res, { error });
   }
