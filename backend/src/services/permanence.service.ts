@@ -113,6 +113,7 @@ export const updateTimeLimit = async () => {
       .update(timeLimitSchema)
       .set({ limit: oneWeekFromNow })
       .where(eq(timeLimitSchema.id, 0));
+      
   } catch (error) {
     throw new Error(
       "Failed to update time limit"

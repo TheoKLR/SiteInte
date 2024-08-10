@@ -1,10 +1,12 @@
 import { db } from "./db"
 import { eventSchema } from "../schemas/event.schema"
 import { roleSchema } from "../schemas/role.schema"
+import { TimeLimit, timeLimitSchema } from "../schemas/permanence.schema"
 
 export const init = async () => {
-    initEvent()
-    initRole()
+    await initEvent()
+    await initRole();
+    await db.insert(timeLimitSchema).values({ limit: new Date() });
 }
 
 const initEvent = async () => {

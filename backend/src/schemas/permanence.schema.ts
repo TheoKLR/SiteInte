@@ -23,3 +23,4 @@ export const timeLimitSchema = pgTable("timeLimit", {
 
 export type Permanence = typeof permanenceSchema.$inferInsert;
 export type UserToPermanence = typeof userToPermanenceSchema.$inferInsert;
+export type TimeLimit = typeof timeLimitSchema.$inferInsert;
