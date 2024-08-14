@@ -5,6 +5,7 @@ import { roleSchema, userToRoleSchema } from '../schemas/role.schema';
 import { db } from "../database/db"
 import { eq, and, is } from 'drizzle-orm'
 import { uuid } from 'drizzle-orm/pg-core';
+import { permission } from 'process';
 
 export const getAllUsers = async () => {
     try {
@@ -286,6 +287,7 @@ export const getAllMembersTeam = async (team_id: number) => {
                         first_name: userSchema.first_name,
                         last_name: userSchema.last_name,
                         email: userSchema.email,
+                        permission: userSchema.permission,
                         team_id: userSchema.team,
                         contact: userSchema.contact
                         })
