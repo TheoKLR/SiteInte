@@ -8,6 +8,7 @@ export interface User {
     contact: string;
     discord_id : string;
     branch : string;
+    permission : string;
     
 }
 export interface UserLight {

@@ -148,7 +148,7 @@ export const ProfilForm: React.FC = () => {
 
 export const TeamDisplay: React.FC = () => {
     const [userTeam, setTeam] = useState<Team>();
-    const [teamMembers, setTeamMembers] = useState([]);
+    const [teamMembers, setTeamMembers] = useState<User[]>([]);
     const [userFaction, setFaction] = useState<Faction>();
     const [permission, setPermission] = useState("");
 
@@ -177,6 +177,7 @@ export const TeamDisplay: React.FC = () => {
         <>
             <div className='containerTeam'>
                 <h2>Voici ton équipe !</h2>
+                <p>En couleur ce sont tes chefs d'équipes !</p>
                 <div className='affichageTeam'>
                     <h3 id='msgTeams'> {userTeam?.name ? userTeam.name : "Tu n'as pas d'équipe d'attribuée pour l'instant"}</h3>
                     <table className="teamTable">
@@ -188,9 +189,10 @@ export const TeamDisplay: React.FC = () => {
                         </thead>
                         <tbody>
                             {teamMembers?.length !== 0 ? (
-                                teamMembers?.map((member: any) => (
+                                teamMembers?.map((member: User) => (
                                     <tr key={member.id}>
-                                        <td>{member.first_name + ' ' + member.last_name}</td>
+                                        {(member.permission !== "newStudent") && <td style={{color:"#da4c72d1"}}>{member.first_name + ' ' + member.last_name}</td>}
+                                        {member.permission === "newStudent" &&<td>{member.first_name + ' ' + member.last_name}</td>}
                                         {permission === "Student" || permission === "Admin" ? <td>{member.contact}</td> : null}
                                     </tr>
                                 ))
