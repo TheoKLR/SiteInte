@@ -1,8 +1,18 @@
 import { api } from '../api';
 
-export const createPerm = async (name: string, desc:string, startingTime:string, duration:number, studentNumber:number) => {
-    console.log({ name, desc, startingTime, duration, studentNumber });
-    return await api.post('permanence', { name, desc, startingTime, duration, studentNumber });
+export const createPerm = async (   
+
+    title: string, 
+    description: string, 
+    startTime: Date, 
+    endTime: Date, 
+    location: string, 
+    maxRegistrations: number) => {
+
+
+    const response = await api.post('permanence', { title, description, startTime, endTime, location, maxRegistrations });
+
+    return response.data;
 }
 
 export const deletePerm = async (id: number) => {
@@ -10,10 +20,58 @@ export const deletePerm = async (id: number) => {
 }
 
 export const getAllPerms = async () => {
-    try {
-        const response = await api.get('permanence/all');
+
+    const response = await api.get('permanence/all');
+    return response.data.data;
+
+}
+
+export const updatePermanence = async (
+    id: number, 
+    title: string, 
+    description: string, 
+    startTime: Date, 
+    endTime: Date, 
+    location: string, 
+    maxRegistrations: number,
+    isRegistrationOpen: boolean) => {
+
+    const response = await api.put('permanence/'+ id, {title, description, startTime, endTime, location, maxRegistrations, isRegistrationOpen});
+    return response.data;
+
+}
+
+export const openOrclosePermanenceJ7 = async (state: boolean ) => {
+
+        const response = await api.post('permanence/openorclosej7/', {state});
         return response.data.data;
-    } catch (error) {
-        console.error("Erreur lors de la récupération des perms");
-    }
+}
+
+export const registerPermanence = async ( id: number,  userId: number) => {
+
+        const response = await api.post('permanence/register/'+ id, {userId});
+
+        return response.data;
+
+}
+
+export const unRegisterPermanence = async (id: number, userId: number) => {
+
+        const response = await api.delete('permanence/unregister/'+ id,{data :{userId: userId} });
+        return response.data;
+
+}
+
+export const getRegistration = async (id: number ) => {
+
+        const response = await api.get('permanence/registrations/'+ id);
+        return response.data.data;
+
+}
+
+export const getUserPermanences = async (userid: number ) => {
+
+    const response = await api.get('permanence/userpermanences/'+ userid);
+    return response.data.data;
+
 }

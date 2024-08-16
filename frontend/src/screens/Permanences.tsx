@@ -1,13 +1,10 @@
 import { Navbar } from "../components/shared/Navbar"
 import { useEffect, useState } from "react";
-import { getRole } from "../services/requests";
 import { Section } from "../components/shared/Section";
-import { getAllFactions } from "../services/requests/factions";
-import { Faction, Perm } from "../services/interfaces";
-import FactionsAffichage from "../components/factions/FactionsAffichage";
+import { Perm } from "../services/interfaces";
 import { getAllPerms } from "../services/requests/perms";
-import PermAffichage from "../components/permanences/PermAffichage";
 import { getCurrentUser } from "../services/requests/users";
+import { PublicDashboard, UserPermanenceSummary } from "../components/permanences/PermAffichage";
 
 export const Permanences = () => {
 
@@ -34,11 +31,8 @@ export const Permanences = () => {
     return (
         <div className="Perms">
             <Navbar/>
-            {perms.map((perm, index) => (
-                    <div key={index}>
-                        <Section titre={perm.name} contenu={() => PermAffichage({ perm })}/>
-                    </div>
-                ))}
+            <Section titre="Permances !" contenu={PublicDashboard} />
+            <Section titre="Mes Permances !" contenu={UserPermanenceSummary} />
         </div>
     )
 }

@@ -23,7 +23,6 @@ export const Admin = () => {
                 const permission = user.permission;
                 
                 if ((permission !== ('Admin')) && (permission !== 'RespoCE')) {
-                    console.log(permission)
                     window.location.href = '/Home';
                     return null;
                 }

@@ -1,20 +1,25 @@
-import { bigint, pgTable, serial, text, integer } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, integer, date, boolean } from "drizzle-orm/pg-core";
 import { userSchema } from "./user.schema";
 
-export const permanenceSchema = pgTable('permanence', {
-    id: serial('id').primaryKey(),
-    name: text('name').notNull().unique(),
-    desc: text('desc').notNull(),
-    startingTime: text('startingTime').notNull(),
-    duration: bigint('duration', { mode: 'number' }).notNull(),
-    studentNumber: integer('studentNumber').notNull(),
-  });
+export const permanenceSchema = pgTable("Permanence", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description"),
+  startTime: text("start_time").notNull(),
+  endTime: text("end_time").notNull(),
+  location: text("location").notNull(),
+  maxRegistrations: integer("max_registrations").notNull(),
+  isRegistrationOpen: boolean("is_registration_open").default(false),
+});
 
-export const userToPermanenceSchema = pgTable('userToPermanence', {
-    userId: integer('user_id').notNull().references(() => userSchema.id, { onDelete: "cascade" }),
-    permId: integer('perm_id').notNull().references(() => permanenceSchema.id, { onDelete: "cascade" }),
+// Schéma des inscriptions
+export const registrationSchema = pgTable("Registration", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => userSchema.id, { onDelete: "cascade" }).notNull(),
+  permanenceId: integer("permanence_id").references(() => permanenceSchema.id, { onDelete: "cascade" }).notNull(),
+  registeredAt: date("registered_at").defaultNow(),
 });
 
 
 export type Permanence = typeof permanenceSchema.$inferInsert;
-export type UserToPermanence = typeof userToPermanenceSchema.$inferInsert;
+export type Registration = typeof registrationSchema.$inferInsert;
