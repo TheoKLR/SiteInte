@@ -62,7 +62,7 @@ export const Perms = () => {
         const response = await getAllPerms()
         const usersOptions = response.map((perm: Perm) => ({
           value: perm.id,
-          label: perm.name,
+          label: perm.title,
         }))
         setOptions(usersOptions)
       } catch (error) {

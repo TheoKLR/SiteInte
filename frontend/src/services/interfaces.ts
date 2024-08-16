@@ -32,12 +32,20 @@ export interface Faction {
 }
 
 export interface Perm {
-    id: number;
-    name: string;
-    desc: string;
-    startingTime: string,
-    duration: number,
-    studentNumber: number,
+    id: number,
+    title: string,
+    description: string,
+    startTime: string,
+    endTime: string,
+    location: string,
+    maxRegistrations: number,
+    isRegistrationOpen: boolean,
+}
+export interface Registration {
+    id: number,
+    userId: number,
+    permanenceId: number,
+    registeredAt: Date,
 }
 
 export interface Role {

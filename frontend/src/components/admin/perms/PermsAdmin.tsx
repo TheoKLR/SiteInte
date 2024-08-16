@@ -1,21 +1,21 @@
 import React from 'react';
 import AdminSection from '../AdminSection';
 import { AdminAction } from '../AdminSection';
-import { CreatePerm, DeletePerm, TablePerms } from './Actions';
+import { PermanenceList, PermanenceForm, OpenPermsAtJ7 } from './Actions';
 
 const PermsAdminSection: React.FC = () => {
   const actions: AdminAction[] = [
     {
       title: 'Créer une perm',
-      form: <CreatePerm/>,
-    },
-    {
-      title: 'Supprimer une perm',
-      form: <DeletePerm/>,
+      form: <PermanenceForm/>,
     },
     {
       title: 'Affichage perms',
-      form: <TablePerms/>,
+      form: <PermanenceList/>,
+    },
+    {
+      title: 'Ouvrir ou fermer les perms à J+7',
+      form: <OpenPermsAtJ7/>,
     },
 ];
 

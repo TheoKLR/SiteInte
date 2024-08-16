@@ -1,0 +1,109 @@
+/* Container */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading Styles */
+.dashboard-container h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Permanence List */
+.perm-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.perm-list li {
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+/* Buttons */
+.perm-list button {
+    margin-right: 10px;
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.perm-list button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.perm-list .unregister-button {
+    background-color: #dc3545;
+}
+
+.perm-list .unregister-button:hover {
+    background-color: #c82333;
+}
+
+.perm-list button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+/* Registered Users List */
+.registered-users-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.registered-users-list li {
+    padding: 5px;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* User Permanence Summary */
+.user-permanence-summary {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-permanence-summary h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.user-permanence-summary p {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #495057;
+}
+
+.user-permanence-summary .permanence-dates {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.user-permanence-summary .permanence-location {
+    font-weight: bold;
+    color: #495057;
+}
+
+.user-permanence-summary .empty-summary {
+    font-size: 18px;
+    text-align: center;
+    color: #6c757d;
+}
