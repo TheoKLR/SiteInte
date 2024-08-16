@@ -19,6 +19,22 @@ export interface Team {
     faction:number;
 }
 
+export enum ChallType {
+    Student = "Student",
+    StudentOrCe = "StudentOrCe",
+    Team = "Team",
+    Faction = "Faction",
+    Free = "Free"
+}
+
+export interface Challenge {
+    id: number;
+    name: string;
+    description: string;
+    points: string;
+    chall_type: ChallType;
+}
+
 export interface Faction {
     id: number;
     name: string;

@@ -1,4 +1,5 @@
 import { api } from "../api";
+import {ChallType} from "../interfaces";
 
 export const createTeam = async (name: string) => {
   return await api.post("team", { name });
