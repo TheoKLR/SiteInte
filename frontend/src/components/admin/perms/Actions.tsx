@@ -1,96 +1,325 @@
 import { useEffect, useState } from 'react';
-import Select from 'react-select'
-import { toId } from '../../utils/Submit'
-import { Perms } from '../../utils/Select'
-import { handleError } from '../../utils/Submit';
 import { toast, ToastContainer } from 'react-toastify';
-import { Faction } from '../../../services/interfaces';
-import { toTable } from '../../utils/Tables';
-import { createPerm, deletePerm, getAllPerms } from '../../../services/requests/perms';
+import { Perm } from '../../../services/interfaces';
+import { handleError } from '../../utils/Submit';
+import './Permanences.css'
+import { getAllPerms, deletePerm, updatePermanence, createPerm, openOrclosePermanenceJ7 } from '../../../services/requests/perms';
 
-export const CreatePerm = () => {
-  const [name, setName] = useState('');
-  const [desc, setDesc] = useState('');
-  const [startingTime, setStartingTime] = useState('');
-  const [duration, setDuration] = useState(0);
-  const [studentNumber, setStudentNumber] = useState(0);
+export const PermanenceList = () => {
+  const [permanences, setPermanences] = useState<Perm[]>([]);
+  const [selectedPerm, setSelectedPerm] = useState<Perm | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
-  const handleSubmit = async () => {
-    if (name !== '') {
+  useEffect(() => {
+    const fetchPerms = async () => {
       try {
-        await createPerm(name, desc, startingTime, duration, studentNumber);
-        toast.success("Perm créée !");
-        setName('');
-        setDesc('');
-        setStartingTime('');
-        setDuration(0);
-        setStudentNumber(0);
+        const fetchedPermanences = await getAllPerms();
+        setPermanences(fetchedPermanences);
       } catch (error) {
-        toast.error("Une erreur est survenue");
+        console.error('Error fetching permissions:', error);
+      }
+    };
+
+    fetchPerms();
+  }, []);
+
+  const handleDelete = async (id: number) => {
+    try {
+      await handleError("Permanence supprimée", "Erreur lors de la suppression", deletePerm, id);
+      const updatedPermanences = await getAllPerms();
+      setPermanences(updatedPermanences);
+    } catch (error) {
+      toast.error('Erreur lors de la suppression de la permanence. Veuillez réessayer plus tard.');
+    }
+  };
+
+  const handleOpen = async (permanence: Perm) => {
+    try {
+      const updatedPerm = { ...permanence, isRegistrationOpen: true };
+      await handleError("Permanence ouverte !", "Erreur lors de l'ouverture", updatePermanence, 
+        permanence.id,
+        permanence.title,
+        permanence.description,
+        permanence.startTime,
+        permanence.endTime,
+        permanence.location,
+        permanence.maxRegistrations,
+        true
+      );
+      const updatedPermanences = await getAllPerms();
+      setPermanences(updatedPermanences);
+    } catch (error) {
+      toast.error("Erreur lors de l'ouverture de la permanence.");
+    }
+  };
+
+  const handleClose = async (permanence: Perm) => {
+    try {
+      await handleError("Permanence fermée !", "Erreur lors de la fermeture", updatePermanence, 
+        permanence.id,
+        permanence.title,
+        permanence.description,
+        permanence.startTime,
+        permanence.endTime,
+        permanence.location,
+        permanence.maxRegistrations,
+        false
+      );
+      const updatedPermanences = await getAllPerms();
+      setPermanences(updatedPermanences);
+    } catch (error) {
+      toast.error("Erreur lors de la fermeture de la permanence.");
+    }
+  };
+
+  const handleEdit = (permanence: Perm) => {
+    setSelectedPerm(permanence);
+    setShowModal(true); // Afficher le formulaire modal
+  };
+
+  const handleUpdate = async () => {
+    if (selectedPerm) {
+      try {
+        await handleError("Permanence mise à jour !", "Erreur lors de la mise à jour", updatePermanence, 
+          selectedPerm.id,
+          selectedPerm.title,
+          selectedPerm.description,
+          selectedPerm.startTime,
+          selectedPerm.endTime,
+          selectedPerm.location,
+          selectedPerm.maxRegistrations,
+          selectedPerm.isRegistrationOpen
+        );
+        const updatedPermanences = await getAllPerms();
+        setPermanences(updatedPermanences);
+        setShowModal(false); // Fermer le formulaire modal
+      } catch (error) {
+        toast.error("Erreur lors de la mise à jour de la permanence.");
       }
     }
   };
 
   return (
-    <div>
-      <div>
-        <p>Nom</p>
-        <input type="text" value={name} onChange={e => setName(e.target.value)} />
-        <p>Description</p>
-        <input type="text" value={desc} onChange={e => setDesc(e.target.value)} />
-        <p>Date de début</p>
-        <input type="datetime-local" value={startingTime} onChange={e => setStartingTime(e.target.value)} />
-        <p>Durée</p>
-        <input type="number" value={duration} onChange={e => setDuration(Number(e.target.value))} />
-        <p>Nombre de permanenciers max</p>
-        <input type="number" value={studentNumber} onChange={e => setStudentNumber(Number(e.target.value))} />
-      </div>
-      <button className="submit-button" onClick={handleSubmit}>Soumettre</button>
+    <div className="admin-container">
+      <h2>Liste des Permanences</h2>
+      <ul className="perm-list">
+        {permanences.length > 0 ? (
+          permanences.map((permanence: Perm) => (
+            <li key={permanence.id}>
+              <h3>{permanence.title}</h3>
+              <p>{permanence.description}</p>
+              <p>{new Date(permanence.startTime).toLocaleString()} - {new Date(permanence.endTime).toLocaleString()}</p>
+              <p>Lieu : {permanence.location}</p>
+              <p>Nb de personne max : {permanence.maxRegistrations}</p>
+              <button onClick={() => handleDelete(permanence.id)}>Supprimer</button>
+              <button onClick={() => handleEdit(permanence)}>Modifier</button>
+              {!permanence.isRegistrationOpen ? (
+                <button onClick={() => handleOpen(permanence)}>Ouvrir la permanence</button>
+              ) : (
+                <button className="close-button" onClick={() => handleClose(permanence)}>Fermer la permanence</button>
+              )}
+            </li>
+          ))
+        ) : (
+          <p>Aucune permanence trouvée.</p>
+        )}
+      </ul>
+
+      {/* Modal pour la modification */}
+      {showModal && selectedPerm && (
+        <div className="modal">
+          <h3>Modifier la permanence</h3>
+          <form className="admin-form">
+            <label>Titre :</label>
+            <input
+              type="text"
+              value={selectedPerm.title}
+              onChange={(e) => setSelectedPerm({ ...selectedPerm, title: e.target.value })}
+            />
+            <label>Description :</label>
+            <textarea
+              value={selectedPerm.description}
+              onChange={(e) => setSelectedPerm({ ...selectedPerm, description: e.target.value })}
+            />
+            <label>Date de début :</label>
+            <input
+              type="datetime-local"
+              value={new Date(selectedPerm.startTime).toISOString().slice(0, 16)}
+              onChange={(e) => setSelectedPerm({ ...selectedPerm, startTime: e.target.value })}
+            />
+            <label>Date de fin :</label>
+            <input
+              type="datetime-local"
+              value={new Date(selectedPerm.endTime).toISOString().slice(0, 16)}
+              onChange={(e) => setSelectedPerm({ ...selectedPerm, endTime: e.target.value })}
+            />
+            <label>Lieu :</label>
+            <input
+              type="text"
+              value={selectedPerm.location}
+              onChange={(e) => setSelectedPerm({ ...selectedPerm, location: e.target.value })}
+            />
+            <label>Nombre max d'inscriptions :</label>
+            <input
+              type="number"
+              value={selectedPerm.maxRegistrations}
+              onChange={(e) => setSelectedPerm({ ...selectedPerm, maxRegistrations: parseInt(e.target.value) })}
+            />
+            <div className="j7-actions">
+              <button type="button" className="submit-button" onClick={handleUpdate}>
+                Enregistrer les modifications
+              </button>
+              <button type="button" className="submit-button" onClick={() => setShowModal(false)}>
+                Annuler
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
       <ToastContainer position="bottom-right" />
     </div>
   );
 };
 
 
-export const DeletePerm = () => {
-  const [perm, setPerm] = useState({} as any)
+export const PermanenceForm = () => {
 
-  const Submit = async () => {
-    const id = toId(perm)
-    await handleError("Perm suprimée !", "Une erreur est survenue", deletePerm, id)
-    setPerm({})
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [location, setLocation] = useState("");
+  const [maxRegistrations, setMaxRegistrations] = useState(0);
+
+  const handleSubmit = async(e: React.FormEvent) => {
+      e.preventDefault();
+
+      try{
+        await handleError("Création OK", "Erreur lors de la création", createPerm, title, description, startTime, endTime, location, maxRegistrations );
+        setTitle("");
+        setDescription("");
+        setStartTime("");
+        setEndTime("");
+        setLocation("");
+        setMaxRegistrations(0);
+      }catch(error){
+          toast.error('Erreur lors de la création/modification de la permanence');
+      }
+    };
+
+  return (
+    <div className="admin-container">
+      <form className="admin-form">
+        <h2>Créer/Modifier une Permanence</h2>
+        <label>Titre :</label>
+        <input
+          type="text"
+          name="title"
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          placeholder="Titre"
+          required
+        />
+        <label>Description :</label>
+        <textarea
+          name="description"
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          placeholder="Description"
+        />
+        <label>Date de début :</label>
+        <input
+          type="datetime-local"
+          name="startTime"
+          value={startTime}
+          onChange={e => setStartTime(e.target.value)}
+          required
+        />
+        <label>Date de fin :</label>
+        <input
+          type="datetime-local"
+          name="endTime"
+          value={endTime}
+          onChange={e => setEndTime(e.target.value)}
+          required
+        />
+        <label>Lieu :</label>
+        <input
+          type="text"
+          name="location"
+          value={location}
+          onChange={e => setLocation(e.target.value)}
+          placeholder="Lieu"
+          required
+        />
+        <label>Nombre max d'inscriptions :</label>
+        <input
+          type="number"
+          name="maxRegistrations"
+          value={maxRegistrations}
+          onChange={e => setMaxRegistrations(Number(e.target.value))}
+          placeholder="Nombre max d'inscriptions"
+          required
+        />
+        <button type="submit" onClick={handleSubmit}>Enregistrer</button>
+      </form>
+      <ToastContainer position="bottom-right" />
+    </div>
+  );
+};
+
+export const OpenPermsAtJ7 = () => {
+  const [permanences, setPermanences] = useState<Perm[]>([]);
+
+  const handleOpen = async() => {
+    try{
+      const updatedperms = await openOrclosePermanenceJ7(true);
+      setPermanences(updatedperms);
+      toast.success("Permanence ouverte à J-7!");
+    }catch(error){
+      toast.error("Erreur lors de l'ouverture à J-7");
+    }
+  }
+
+  const handleClose = async() => {
+    try{
+      const updatedperms = await openOrclosePermanenceJ7(false);
+      setPermanences(updatedperms);
+      toast.success("Permanence fermée à J-7!");
+    }catch(error){
+      toast.error("Erreur lors de la fermeture à J-7");
+    }
   }
 
   return (
-    <div>
-      <div className="select-container">
-        <Select
-          options={Perms()}
-          onChange={perm => setPerm(perm)}
-          value={perm}
-        />
+    <div className="admin-container">
+      <h2>Permanences ouvertes à J+7</h2>
+      <ul className="perm-list">
+        {permanences.length > 0 ? (
+          permanences.filter(perm => perm.isRegistrationOpen).map((permanence: Perm) => (
+            <li key={permanence.id}>
+              <h3>{permanence.title}</h3>
+              <p>{permanence.description}</p>
+              <p>{new Date(permanence.startTime).toLocaleString()} - {new Date(permanence.endTime).toLocaleString()}</p>
+              <p>Lieu : {permanence.location}</p>
+            </li>
+          ))
+        ) : (
+          <p>Aucune permanence ouverte ou fermée à J+7 pour le moment.</p>
+        )}
+      </ul>
+      <div className="j7-actions">
+        <div className="input">
+          <label><strong>Voulez-vous ouvrir les permanences à J+7?</strong></label>
+        </div>
+        <button className="submit-button" onClick={handleOpen}>Ouvrir</button>
+        <div className="input">
+          <label><strong>Voulez-vous fermer les permanences à J+7?</strong></label>
+        </div>
+        <button className="submit-button" onClick={handleClose}>Fermer</button>
       </div>
-      <button className="submit-button" onClick={Submit}>Soumettre</button>
       <ToastContainer position="bottom-right" />
     </div>
-  )
-}
-
-export const TablePerms = () => {
-
-  const [factions, setFactions] = useState<Faction[]>([]);
-
-  useEffect(() => {
-    const fetchRole = async () => {
-      try {
-        const factions = await getAllPerms();
-        setFactions(factions)
-      } catch (error) {
-        console.error('Error fetching role:', error);
-      }
-    };
-    fetchRole();
-  }, []);
-
-  return factions.length > 0 ? toTable(factions) : null;
-}
+  );
+};
