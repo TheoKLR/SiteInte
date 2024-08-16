@@ -48,7 +48,6 @@ export const ProfilForm: React.FC = () => {
             setContact(currentUser.contact);
             setDiscordId(currentUser.discord_id);
 
-            console.log(branch);
           } catch (error) {
             toast.error('Erreur lors de la récupération du profil. Veuillez réessayer plus tard.');
           }

@@ -22,7 +22,6 @@ export const Navbar: React.FC = () => {
                 const permission = user.permission;
 
                 const isRI = await isInRiList(email);
-                console.log(isRI)
                 setisRI(isRI);
                 setPermission(permission);
             } catch (error) {
