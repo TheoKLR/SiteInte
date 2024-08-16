@@ -1,6 +1,7 @@
 import {pgTable, serial, text, integer, pgEnum} from "drizzle-orm/pg-core";
 import { factionSchema } from "./faction.schema";
 import {newstudentSchema} from "./newstudent.schema";
+import { primaryKey } from 'drizzle-orm/pg-core';
 import {userSchema} from "./user.schema";
 import {teamSchema} from "./team.schema";
 
@@ -49,25 +50,39 @@ export const challengeSchema = pgTable('challenge', {
 export type challenge = typeof challengeSchema.$inferInsert;
 
 export const factionTochallengeSchema = pgTable('factionTochallenge', {
-    factionId: integer('faction_id').notNull().primaryKey().references(() => factionSchema.id),
-    challengeId: integer('challenge_id').notNull().primaryKey().references(() => challengeSchema.id),
+    factionId: integer('faction_id').notNull().references(() => factionSchema.id),
+    challengeId: integer('challenge_id').notNull().references(() => challengeSchema.id),
     attributedPoints: integer('attributed_points').notNull(),
-});
+}, (table) => ({
+    pk: primaryKey(table.factionId, table.challengeId) // Clé primaire composite
+}));
 
 export type factionTochallenge = typeof factionTochallengeSchema.$inferInsert;
 
-export const TeamTochallengeSchema = pgTable('factionTochallenge', {
-    teamId: integer('team_id').notNull().primaryKey().references(() => teamSchema.id),
-    challengeId: integer('challenge_id').notNull().primaryKey().references(() => challengeSchema.id),
+export const TeamTochallengeSchema = pgTable('teamTochallenge', {
+    teamId: integer('team_id').notNull().references(() => teamSchema.id),
+    challengeId: integer('challenge_id').notNull().references(() => challengeSchema.id),
     attributedPoints: integer('attributed_points').notNull(),
-});
+}, (table) => ({
+    pk: primaryKey(table.teamId, table.challengeId) // Clé primaire composite
+}));
 
-export type TeamTochallenge = typeof TeamTochallengeSchema.$inferInsert;
+export type teamTochallenge = typeof TeamTochallengeSchema.$inferInsert;
 
 export const StudentTochallengeSchema = pgTable('studentTochallenge', {
-    studentId: integer('student_id').notNull().primaryKey().references(() => userSchema.id),
-    challengeId: integer('challenge_id').notNull().primaryKey().references(() => challengeSchema.id),
+    studentId: integer('student_id').notNull().references(() => userSchema.id),
+    challengeId: integer('challenge_id').notNull().references(() => challengeSchema.id),
+    attributedPoints: integer('attributed_points').notNull(),
+}, (table) => ({
+    pk: primaryKey(table.studentId, table.challengeId) // Clé primaire composite
+}));
+
+export type studentTochallenge = typeof StudentTochallengeSchema.$inferInsert;
+
+export const FreeToChallengeSchema = pgTable('freeToChallenge', {
+    factionId: integer('faction_id').notNull().references(() => factionSchema.id),
+    text: text('text').notNull(),
     attributedPoints: integer('attributed_points').notNull(),
 });
 
-export type studentTochallenge = typeof StudentTochallengeSchema.$inferInsert;
+export type freeToChallenge = typeof StudentTochallengeSchema.$inferInsert;

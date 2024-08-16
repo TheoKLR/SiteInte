@@ -11,6 +11,63 @@ export const getAllChallenges = async (req: Request, res: Response, next: NextFu
   }
 }
 
+export const getAllStudentOrCeChallenges = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = await service.getAllStudentOrCeChallenges();
+    Ok(res, { data });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
+export const validChallenge = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const {challId, associatedId, attributedPoints, text} = req.body
+    console.log(req.body)
+    const data = await service.validateChallenge(challId, associatedId, attributedPoints, text);
+    Ok(res, { data });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
+export const unvalidChallenge = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const {challId, associatedId} = req.body
+    const data = await service.unvalidateChallenge(challId, associatedId);
+    Ok(res, { data });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
+export const getAllStudentChallenges = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = await service.getAllStudentChallenges();
+    Ok(res, { data });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
+export const getAllFactionChallenges = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = await service.getAllFactionChallenges();
+    Ok(res, { data });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
+export const getAllTeamChallenges = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = await service.getAllTeamChallenges();
+    Ok(res, { data });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
 export const createChallenge = async (req: Request, res: Response, next: NextFunction) => {
   const { name, desc, points } = req.body;
   name ?? Error(res, { msg: "No name" });
@@ -38,11 +95,21 @@ export const deleteChallenge = async (req: Request, res: Response, next: NextFun
 };
 
 export const validateChallenge = async (req: Request, res: Response, next: NextFunction) => {
-  const { challengeId, associatedId, points } = req.body;
+  const { challengeId, associatedId, points, text } = req.body;
 
   try {
-    await service.validateChallenge(challengeId, associatedId, points);
+    await service.validateChallenge(challengeId, associatedId, points, text);
     Ok(res, { msg: "challenge validated" });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
+export const countPoints = async (req: Request, res: Response, next: NextFunction) => {
+
+  try {
+    const points = [await service.countPoints(1), await service.countPoints(2)]
+    Ok(res, {data: points});
   } catch (error) {
     Error(res, { error });
   }
