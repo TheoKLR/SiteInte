@@ -156,10 +156,12 @@ export const handlecasticket = async (req: Request, res: Response) => {
                 }
 
                 const id = user?.id
+                const branch = user?.branch ?? "Aucne branche";
+                const birthday = user?.birthday ?? "0000-00-00"
                 const email = CASuser.email
                 if (!id) return Error(res, {})
                     
-                await user_service.updateUserStudent(id, CASuser.givenName, CASuser.sn, CASuser.email, null, null);
+                await user_service.updateUserStudent(id, CASuser.givenName, CASuser.sn, CASuser.email, branch, birthday);
                 
                 const token =  sign({ id, email }, jwtSecret, { expiresIn: '1h' })
                 user_service.incrementConnection(id)
