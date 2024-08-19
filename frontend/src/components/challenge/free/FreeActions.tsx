@@ -12,10 +12,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import {Challenge, ChallType} from "../../../services/interfaces";
 import {toTable} from "../../utils/Tables";
-import {getChallenges, validChallenge} from "../../../services/requests/challenges";
+import {
+    getChallenges,
+    unvalidFreeChallenge,
+    validChallenge,
+    validFreeChallenge
+} from "../../../services/requests/challenges";
 import {handleError, toId} from "../../utils/Submit";
 import {changePermission} from "../../../services/requests/users";
-import {Challenges, Factions, Users} from "../../utils/Select";
+import {Challenges, Factions, getFreeChallengeText, Teams, Users} from "../../utils/Select";
 
 interface TableChallengeType {
     type: ChallType
@@ -47,7 +52,7 @@ export const ValidChallenge: React.FC<{type: ChallType}> = ({type}) => {
 
     const Submit = async () => {
         const id = toId(faction)
-        await handleError("Challenge validé !", "Challenge déjà complété.", validChallenge, faction.value, challenge.value, points, text)
+        await handleError("Challenge validé !", "Challenge déjà complété.", validFreeChallenge, faction.value, points, text)
         setFaction({})
         setChallenge({})
         setPoints(0)
@@ -61,11 +66,6 @@ export const ValidChallenge: React.FC<{type: ChallType}> = ({type}) => {
                     options={Factions()}
                     onChange={faction => setFaction(faction)}
                     value={faction}
-                />
-                <Select
-                    options={Challenges(type)}
-                    onChange={chall => setChallenge(chall)}
-                    value={challenge}
                 />
 
             </div>
@@ -92,6 +92,46 @@ export const ValidChallenge: React.FC<{type: ChallType}> = ({type}) => {
                 </div>
             </div>
             <button className="submit-button" disabled={!faction || points === 0 || !challenge} onClick={Submit}>Soumettre</button>
+            <ToastContainer position="bottom-right" />
+        </div>
+    )
+}
+
+export const UnvalidChallenge: React.FC = () => {
+    const [faction, setFaction] = useState({} as any)
+    const [challenge, setChallenge] = useState({} as any)
+    const [options, setOptions] = useState<any>([])
+
+    const Submit = async () => {
+        await handleError("Challenge unvalidé !", "Challenge non complété.", unvalidFreeChallenge, faction.value, challenge.value)
+        setFaction({})
+        setChallenge({})
+    }
+
+    useEffect(() => {
+        getFreeChallengeText(faction.value)
+            .then(value => {
+                setOptions(value)})
+    }, [faction]);
+
+    return (
+        <div className="info-container">
+            <div className="select-container">
+                <Select
+                    options={Factions()}
+                    onChange={faction => {
+                        setFaction(faction)
+                    }}
+                    value={faction}
+                />
+                <Select
+                    options={options}
+                    onChange={chall => setChallenge(chall)}
+                    value={challenge}
+                />
+
+            </div>
+            <button className="submit-button" disabled={!faction || !challenge} onClick={Submit}>Soumettre</button>
             <ToastContainer position="bottom-right" />
         </div>
     )
