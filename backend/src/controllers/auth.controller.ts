@@ -204,6 +204,30 @@ export const resetPasswordAdmin = async (req: Request, res: Response) => {
 
 }
 
+export const requestPasswordUser = async (req: Request, res: Response) => {
+
+    const {user_email} = req.body
+    const user = await user_service.getUserByEmail(user_email);
+
+    if (!user) {
+        return Error(res, { msg: 'User not found' });
+    }
+
+    // Générer un token JWT
+    const token = sign({ userId: user.id }, jwtSecret, { expiresIn: '1h' });
+
+    // Créer le lien de réinitialisation
+    const resetLink = `${service_url}reset-password?token=${token}`;
+    try{
+        // Envoyer l'e-mail
+        await auth_service.sendPasswordResetEmail(user.email, resetLink);
+        return Ok(res, {msg:'Email for password reste sent !'})
+    }catch(error){
+        return Error(res, { msg: 'Error when reseting password' });
+    }
+
+}
+
 export const resetPasswordUser = async (req: Request, res: Response) => {
         const {token, password} = req.body; 
       
