@@ -1,11 +1,11 @@
 import "./Login.css";
 import { useRef, useState, useEffect } from "react";
 import { newStudentLogin, studentLogin, registerStudent } from "../../services/requests";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { handleError } from "../utils/Submit";
 import { colors } from "react-select/dist/declarations/src/theme";
 import Select from "react-select";
-import { handleCASTicket } from "../../services/requests/auth";
+import { handleCASTicket, requestPasswordUser } from "../../services/requests/auth";
 import { Option } from "../../services/interfaces";
 
 
@@ -26,6 +26,7 @@ const LoginForm = () => {
   const [errMsg, setErrMsg] = useState("");
   const [stateNewLogin, setStateNewLogin] = useState(false);
   const [stateNewRegister, setStateNewRegister] = useState(false);
+  const [showPasswordReset, setShowPasswordReset] = useState(false);
 
 
 
@@ -85,6 +86,12 @@ const LoginForm = () => {
     setUUID("");
   };
 
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await handleError("Reset email sent !"," Error, please contact an admin", requestPasswordUser, email);
+    setEmail("");
+  }
+
   const getAuthCode = () => {
     const url = new URL(window.location.href);
     const code = url.searchParams.get("authorization_code");
@@ -123,6 +130,10 @@ const LoginForm = () => {
 
   const handleClick_NouveauRegister = () => {
     setStateNewRegister(!stateNewRegister);
+  };
+
+  const handleClick_ResetPwd = () => {
+    setShowPasswordReset(!stateNewLogin);
   };
 
   //OLD : Connexion by EtuUTT (down in July 2024)
@@ -205,12 +216,39 @@ const LoginForm = () => {
           >
             {errMsg}
           </p>
+          
           <button className="login-button" type="submit">
             Connexion
           </button>
           <button className="login-button" onClick={handleClick_NouveauLogin}>
           Retour
         </button>
+        <button className="login-button" onClick={() => setShowPasswordReset(true)}
+          >
+            Forgot password?
+          </button>
+        </form>
+      </div>
+
+      <div className={showPasswordReset ? "formNouveau reset active" : "formNouveau reset"}>
+        <form onSubmit={handlePasswordReset}>
+          <h1>Reset Password</h1>
+          <p>Entrez votre adresse email pour réinitialiser votre mot de passe</p>
+          <div className="input-box">
+            <input
+              type="email"
+              placeholder="E-mail"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              required
+            />
+          </div>
+          <button className="login-button" type="submit">
+            Reset
+          </button>
+          <button className="login-button" onClick={handleClick_ResetPwd}>
+            Retour
+          </button>
         </form>
       </div>
 

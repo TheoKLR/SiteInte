@@ -13,5 +13,6 @@ authRouter.get('/istokenvalid/:token',ac.isTokenValid);
 authRouter.get('/handlecasticket', ac.handlecasticket)
 authRouter.post('/resetpasswordadmin', isAdmin, ac.resetPasswordAdmin)
 authRouter.post('/resetpassworduser', ac.resetPasswordUser)
+authRouter.post('/requestpassworduser', ac.requestPasswordUser)
 
 export default authRouter;

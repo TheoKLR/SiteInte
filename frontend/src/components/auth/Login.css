@@ -102,6 +102,13 @@
     height: 100%;
 }
 
+.formNouveau.reset.active {
+    visibility: visible;
+    opacity: 1;
+    width: 50%;
+    height: 50%;
+}
+
 .formNouveau h1 {
     text-align: center;
     color: #ffffff;
