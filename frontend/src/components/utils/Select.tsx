@@ -6,7 +6,7 @@ import { getActiveEvents, getInactiveEvents } from "../../services/requests/even
 import { getAllUUID } from "../../services/requests/newstudent"
 import { getAllPerms } from "../../services/requests/perms"
 import { getAllByPermission } from "../../services/requests/users"
-import {getAllChallenges, getChallenges} from "../../services/requests/challenges";
+import {getAllChallenges, getAllFreeChallengesTexts, getChallenges} from "../../services/requests/challenges";
 
 export const Roles = () => {
   const [options, setOptions] = useState([])
@@ -109,13 +109,13 @@ export const Challenges = (challType: ChallType) => {
       try {
         const response = await getChallenges(challType)
         const challOptions = response.map((chall: Challenge) => {
-          console.log(chall)
           return {
             value: chall.id,
             label: chall.name,
+            description: chall.description,
+            points: chall.points
           }
         })
-        console.log(challOptions)
         setOptions(challOptions)
       } catch (error) {
         console.error('Error fetching data:', error)
@@ -127,6 +127,55 @@ export const Challenges = (challType: ChallType) => {
 
   return options
 }
+
+export const getFreeChallengeText = async (factionId: number): Promise<{value: string, label: string}[]> => {
+
+  return await getAllFreeChallengesTexts(factionId)
+      .then(data => {
+        if(!data || data.length === 0) return []
+        const response = data.map((chall: Challenge) => {
+          if(!chall) return {value: "", label: "undefined"}
+          console.log(chall)
+          return {
+            value: chall,
+            label: chall,
+          }
+        })
+        return response
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+}
+
+export const ValidedChallenge = (challType: ChallType) => {
+  const [options, setOptions] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getChallenges(challType)
+        const challOptions = response.map((chall: Challenge) => {
+          return {
+            value: chall.id,
+            label: chall.name,
+            description: chall.description,
+            points: chall.points
+          }
+        })
+        setOptions(challOptions)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return options
+}
+
 
 export const Users = () => {
   const [options, setOptions] = useState([])
