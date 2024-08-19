@@ -7,12 +7,13 @@ import {
 } from "../schemas/challenge.schema"
 import {addPoints, removePoints} from "./faction.service"
 import { db } from "../database/db"
-import {and, eq} from 'drizzle-orm'
+import {and, eq, TableConfig} from 'drizzle-orm'
 import {PermType, userSchema} from "../schemas/user.schema";
 import {teamSchema} from "../schemas/team.schema";
 import {factionSchema} from "../schemas/faction.schema";
 import assert from "node:assert";
 import {getFactionFromUserId, getFactionFromUserTeam} from "../utils/challenge";
+import {PgTableWithColumns} from "drizzle-orm/pg-core";
 
 
 export const getAllChallenges = async () => {
@@ -54,6 +55,23 @@ export const getAllStudentChallenges = async () => {
         throw new Error("Failed to fetch challenges. Please try again later.");
     }
 }
+
+export const getAllFreeChallenges = async () => {
+    try {
+        return await db.select().from(FreeToChallengeSchema)
+    } catch (error) {
+        throw new Error("Failed to fetch challenges. Please try again later.");
+    }
+}
+
+export const getFreeChallenges = async (factionId: number) => {
+    try {
+        return await db.select().from(FreeToChallengeSchema).where(eq(FreeToChallengeSchema.factionId, factionId))
+    } catch (error) {
+        throw new Error("Failed to fetch challenges. Please try again later.");
+    }
+}
+
 
 export const getChallenge = async (id: number) => {
     try {
@@ -124,7 +142,6 @@ export const deleteChallenge = async (id: number) => {
 }
 
 export const validateChallenge = async (challengeId: number, associatedId: number, attributedPoints: number, text: string | null) => {
-    console.log("Cc")
     //First get the type of challenge
     const challenge = await db.select().from(challengeSchema).where(eq(challengeSchema.id, challengeId));
     if(!challenge || challenge.length === 0) throw new Error("No challenge with id '" + challengeId + "'")
@@ -150,8 +167,7 @@ export const validateChallenge = async (challengeId: number, associatedId: numbe
 }
 
 
-//TODO
-export const unvalidateChallenge = async (challengeId: number, associatedId: number) => {
+export const unvalidateChallenge = async (challengeId: number, associatedId: number, text?: string) => {
     //First get the type of challenge
     const challenge = await db.select().from(challengeSchema).where(eq(challengeSchema.id, challengeId));
     if(!challenge || challenge.length === 0) throw new Error("No challenge with id '" + challengeId + "'")
@@ -170,7 +186,8 @@ export const unvalidateChallenge = async (challengeId: number, associatedId: num
             await unvalidateChallengeToFaction(challengeId, associatedId)
             break;
         case ChallengeType.Free:
-            await unvalidateToFaction(associatedId)
+            if(!text) throw new Error("You need to enter text.")
+            await unvalidateToFaction(text, associatedId)
             break;
     }
 }
@@ -184,11 +201,93 @@ async function unvalidateChallengeToUser(challengeId: number, associatedId: numb
                 eq(StudentTochallengeSchema.studentId, associatedId)
             )
         );
-    if(associatedChall.length === 0) throw new Error("Event already associated with this user. userId '" + associatedId + "'")
+    if(associatedChall.length === 0) throw new Error("Event not associated with this user. userId '" + associatedId + "'")
     const points = associatedChall[0].attributedPoints
     //Getting faction
     const faction = await getFactionFromUserId(associatedId)
     await removePoints(faction, points)
+    await db.delete(StudentTochallengeSchema)
+        .where(
+            and(
+                eq(StudentTochallengeSchema.challengeId, challengeId),
+                eq(StudentTochallengeSchema.studentId, associatedId)
+            )
+        );
+}
+
+async function unvalidateChallengeToTeam(challengeId: number, associatedId: number) {
+    //Getting the challenge
+    const associatedChall = await db.select().from(TeamTochallengeSchema)
+        .where(
+            and(
+                eq(TeamTochallengeSchema.challengeId, challengeId),
+                eq(TeamTochallengeSchema.teamId, associatedId)
+            )
+        );
+    if(associatedChall.length === 0) throw new Error("Event not associated with this team. teamId '" + associatedId + "'")
+    const points = associatedChall[0].attributedPoints
+
+    //Getting team
+    const team = await db.select().from(teamSchema).where(eq(teamSchema.id, associatedId));
+    if(!team || team.length === 0) throw new Error("Team does not exist. id: " + associatedId);
+    await removePoints(team[0].faction as number, points)
+    await db.delete(TeamTochallengeSchema)
+        .where(
+            and(
+                eq(TeamTochallengeSchema.challengeId, challengeId),
+                eq(TeamTochallengeSchema.teamId, associatedId)
+            )
+        );
+}
+
+async function unvalidateChallengeToFaction(challengeId: number, associatedId: number) {
+    //Getting the challenge
+    const associatedChall = await db.select().from(factionTochallengeSchema)
+        .where(
+            and(
+                eq(factionTochallengeSchema.challengeId, challengeId),
+                eq(factionTochallengeSchema.factionId, associatedId)
+            )
+        );
+    if(associatedChall.length === 0) throw new Error("Event not associated with this faction. factionId '" + associatedId + "'")
+    const points = associatedChall[0].attributedPoints
+
+    //Getting team
+    const faction = await db.select().from(factionSchema).where(eq(factionSchema.id, associatedId));
+    if(!faction || faction.length === 0) throw new Error("Faction does not exist. id: " + associatedId);
+    await removePoints(faction[0].id as number, points)
+    await db.delete(factionTochallengeSchema)
+        .where(
+            and(
+                eq(factionTochallengeSchema.challengeId, challengeId),
+                eq(factionTochallengeSchema.factionId, associatedId)
+            )
+        );
+}
+
+export async function unvalidateToFaction(text: string, associatedId: number) {
+    //Getting the challenge
+    const associatedChall = await db.select().from(FreeToChallengeSchema)
+        .where(
+            and(
+                eq(FreeToChallengeSchema.text, text),
+                eq(FreeToChallengeSchema.factionId, associatedId)
+            )
+        );
+    if(associatedChall.length === 0) throw new Error("Event not associated with this faction. factionId '" + associatedId + "'")
+    const points = associatedChall[0].attributedPoints
+
+    //Getting team
+    const faction = await db.select().from(factionSchema).where(eq(factionSchema.id, associatedId));
+    if(!faction || faction.length === 0) throw new Error("Faction does not exist. id: " + associatedId);
+    await removePoints(faction[0].id as number, points)
+    await db.delete(FreeToChallengeSchema)
+        .where(
+            and(
+                eq(FreeToChallengeSchema.text, text),
+                eq(FreeToChallengeSchema.factionId, associatedId)
+            )
+        );
 }
 
 async function completeChallengeToUser(challengeId: number, associatedId: number, attributedPoints: number, allowCe: boolean) {
@@ -211,16 +310,20 @@ async function completeChallengeToUser(challengeId: number, associatedId: number
         );
 
     if(associatedChall && associatedChall.length > 0) throw new Error("Event already associated with this user. userId '" + associatedId + "'")
-    //associating the event
-    await db.insert(StudentTochallengeSchema).values({
-        challengeId: challengeId,
-        studentId: associatedId,
-        attributedPoints: attributedPoints
-    }).execute();
 
     //get associated faction
-    const faction = await getFactionFromUserTeam(user[0].team as number)
-    await addPoints(faction, attributedPoints)
+    try {
+        const faction = await getFactionFromUserTeam(user[0].team as number)
+        await addPoints(faction, attributedPoints)
+        //associating the event
+        await db.insert(StudentTochallengeSchema).values({
+            challengeId: challengeId,
+            studentId: associatedId,
+            attributedPoints: attributedPoints
+        }).execute();
+    } catch (error) {
+        throw error
+    }
 }
 
 async function completeChallengeToTeam(challengeId: number, associatedId: number, attributedPoints: number) {
@@ -264,7 +367,6 @@ async function completeChallengeToFaction(challengeId: number, associatedId: num
                 eq(factionTochallengeSchema.factionId, associatedId)
             )
         );
-    console.log(associatedChall)
     if(associatedChall && associatedChall.length > 0) throw new Error("Event already associated with this faction. teamId '" + associatedId + "'")
     //associating the event
     await db.insert(factionTochallengeSchema).values({
@@ -277,7 +379,7 @@ async function completeChallengeToFaction(challengeId: number, associatedId: num
     await addPoints(faction[0].id, attributedPoints)
 }
 
-async function freeChallengeToFaction(factionId: number, attributedPoints: number, text: string) {
+export async function freeChallengeToFaction(factionId: number, attributedPoints: number, text: string) {
     //means associatedId is a faction
     //checking faction exist
     const faction = await db.select().from(factionSchema).where(eq(factionSchema.id, factionId));

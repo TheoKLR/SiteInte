@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {TableChallenge, UnvalidChallenge, ValidChallenge} from './TeamActions';
+import {TableChallenge, UnvalidChallenge, ValidChallenge} from './FreeActions';
 import {getRole} from '../../../services/requests';
 import AnimSection from "../AnimSection";
 import {AdminAction} from "../../admin/AdminSection";
 import {ChallType} from "../../../services/interfaces";
 
-const ChallTeamSection: React.FC = () => {
+const ChallFreeSection: React.FC = () => {
 
     const [clicked, setClicked] = useState(false);
     const [role, setRole] = useState<string | null>(null);
@@ -30,15 +30,15 @@ const ChallTeamSection: React.FC = () => {
     const actions: AdminAction[] = [
         {
             title: 'Valider challenge',
-            form: <ValidChallenge type={ChallType.Team}/>,
+            form: <ValidChallenge type={ChallType.Free}/>,
         },
         {
             title: 'Unvalider challenge',
-            form: <UnvalidChallenge type={ChallType.Team}/>,
+            form: <UnvalidChallenge />,
         },
         {
             title: 'Affichage challenges',
-            form: <TableChallenge type={ChallType.Team}/>,
+            form: <TableChallenge type={ChallType.Free}/>,
         }
     ];
 
@@ -47,4 +47,4 @@ const ChallTeamSection: React.FC = () => {
     );
 };
 
-export default ChallTeamSection;
+export default ChallFreeSection;

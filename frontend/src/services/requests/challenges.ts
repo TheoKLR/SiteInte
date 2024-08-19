@@ -12,7 +12,15 @@ export const getChallenges = async (type: ChallType) => {
   return response.data.data;
 };
 
+export const getAllFreeChallengesTexts = async (factionId: number) => {
+  const response = await api.post("challenge/allFreeText", {
+    factionId
+  });
+  return response.data.data;
+};
+
 export const validChallenge = async (associatedId: number, challId: number, attributedPoints: number, text: string|null) => {
+  console.log("ratio")
   return await api.post('challenge/valid', {
     associatedId,
     challId,
@@ -21,9 +29,24 @@ export const validChallenge = async (associatedId: number, challId: number, attr
   })
 }
 
-export const unvalidChallenge = async (associatedId: number, challId: number) => {
-  return await api.post('challenge/unvalid', {
+export const validFreeChallenge = async (associatedId: number, attributedPoints: number, text: string|null) => {
+  return await api.post('challenge/validFree', {
     associatedId,
-    challId
+    attributedPoints,
+    text
+  })
+}
+
+export const unvalidFreeChallenge = async (factionId: number, text: number) => {
+  return await api.post('challenge/unvalidFree', {
+    factionId,
+    text
+  })
+}
+
+export const unvalidChallenge = async (challId: number, associatedId: number) => {
+  return await api.post('challenge/unvalid', {
+    challId,
+    associatedId
   })
 }
