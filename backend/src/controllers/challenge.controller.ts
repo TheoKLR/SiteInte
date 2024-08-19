@@ -20,12 +20,41 @@ export const getAllStudentOrCeChallenges = async (req: Request, res: Response, n
   }
 }
 
+export const getAllFreeChallenges = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = await service.getAllFreeChallenges();
+    Ok(res, { data });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
 export const validChallenge = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const {challId, associatedId, attributedPoints, text} = req.body
-    console.log(req.body)
     const data = await service.validateChallenge(challId, associatedId, attributedPoints, text);
     Ok(res, { data });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
+export const validFreeChallenge = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const {associatedId, attributedPoints, text} = req.body
+    const data = await service.freeChallengeToFaction(associatedId, attributedPoints, text);
+    Ok(res, { data });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
+export const getAllFreeText = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const {factionId} = req.body
+    const data = await service.getFreeChallenges(factionId);
+    const response = data.map(value => value.text)
+    Ok(res, {data: response});
   } catch (error) {
     Error(res, { error });
   }
@@ -35,6 +64,16 @@ export const unvalidChallenge = async (req: Request, res: Response, next: NextFu
   try {
     const {challId, associatedId} = req.body
     const data = await service.unvalidateChallenge(challId, associatedId);
+    Ok(res, { data });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
+export const unvalidFreeChallenge = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const {factionId, text} = req.body
+    const data = await service.unvalidateToFaction(text, factionId);
     Ok(res, { data });
   } catch (error) {
     Error(res, { error });

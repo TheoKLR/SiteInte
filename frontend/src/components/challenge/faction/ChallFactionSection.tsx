@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {TableChallenge, ValidChallenge} from './Actions';
+import {TableChallenge, UnvalidChallenge, ValidChallenge} from './Actions';
 import {getRole} from '../../../services/requests';
 import AnimSection from "../AnimSection";
 import {AdminAction} from "../../admin/AdminSection";
@@ -34,7 +34,7 @@ const ChallFactionSection: React.FC = () => {
         },
         {
             title: 'Unvalider challenge',
-            form: <TableChallenge type={ChallType.Faction}/>,
+            form: <UnvalidChallenge type={ChallType.Faction}/>,
         },
         {
             title: 'Affichage challenges',

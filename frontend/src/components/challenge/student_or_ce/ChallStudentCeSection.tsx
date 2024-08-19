@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {TableChallenge, UnvalidChallenge, ValidChallenge} from './TeamActions';
+import {TableChallenge, ValidChallenge} from './Actions';
 import {getRole} from '../../../services/requests';
 import AnimSection from "../AnimSection";
 import {AdminAction} from "../../admin/AdminSection";
 import {ChallType} from "../../../services/interfaces";
+import {UnvalidChallenge} from "../student/Actions";
 
-const ChallTeamSection: React.FC = () => {
+
+const ChallStudentCeSection: React.FC = () => {
 
     const [clicked, setClicked] = useState(false);
     const [role, setRole] = useState<string | null>(null);
@@ -30,15 +32,15 @@ const ChallTeamSection: React.FC = () => {
     const actions: AdminAction[] = [
         {
             title: 'Valider challenge',
-            form: <ValidChallenge type={ChallType.Team}/>,
+            form: <ValidChallenge type={ChallType.StudentOrCe}/>,
         },
         {
             title: 'Unvalider challenge',
-            form: <UnvalidChallenge type={ChallType.Team}/>,
+            form: <UnvalidChallenge type={ChallType.StudentOrCe}/>,
         },
         {
             title: 'Affichage challenges',
-            form: <TableChallenge type={ChallType.Team}/>,
+            form: <TableChallenge type={ChallType.StudentOrCe}/>,
         }
     ];
 
@@ -47,4 +49,4 @@ const ChallTeamSection: React.FC = () => {
     );
 };
 
-export default ChallTeamSection;
+export default ChallStudentCeSection;
