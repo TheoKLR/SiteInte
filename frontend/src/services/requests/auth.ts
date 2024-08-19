@@ -26,3 +26,9 @@ export const resetPasswordAdmin = async(user_id : number)=>{
 
     return response?.data
 }
+
+export const requestPasswordUser = async(user_email : string)=>{
+    const response = await api.post('auth/requestpassworduser', {user_email});
+
+    return response?.data
+}
