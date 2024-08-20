@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {TableChallenge, UnvalidChallenge, ValidChallenge} from './FreeActions';
 import {getRole} from '../../../services/requests';
-import AnimSection from "../AnimSection";
+import BaseAnimSection from "../BaseAnimSection";
 import {AdminAction} from "../../admin/AdminSection";
 import {ChallType} from "../../../services/interfaces";
 
@@ -43,7 +43,7 @@ const ChallFreeSection: React.FC = () => {
     ];
 
     return (
-        <AnimSection actions={actions} />
+        <BaseAnimSection actions={actions} />
     );
 };
 

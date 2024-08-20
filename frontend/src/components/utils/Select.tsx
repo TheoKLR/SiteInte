@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import {Role, Faction, User, Team, Event, newStudent, Perm, Challenge, ChallType} from '../../services/interfaces'
-import { getAllFactions, getAllTeams, getAllUsers } from '../../services/requests'
+import {getAllCe, getAllFactions, getAllTeams, getAllUsers} from '../../services/requests'
 import { getAllRoles } from "../../services/requests/roles"
 import { getActiveEvents, getInactiveEvents } from "../../services/requests/events"
 import { getAllNewStudent } from "../../services/requests/newstudent"
@@ -101,13 +101,19 @@ export const Teams = () => {
   return options
 }
 
-export const Challenges = (challType: ChallType) => {
+export enum Choice {
+  ALL = "all",
+  AVAILABLE = "available",
+  COMPLETED = "completed"
+}
+
+export const Challenges = (challType: ChallType, filter: Choice, associateId: number | undefined) => {
   const [options, setOptions] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getChallenges(challType)
+        const response = await getChallenges(challType, filter, associateId)
         const challOptions = response.map((chall: Challenge) => {
           return {
             value: chall.id,
@@ -123,7 +129,7 @@ export const Challenges = (challType: ChallType) => {
     }
 
     fetchData()
-  }, [])
+  }, [associateId])
 
   return options
 }
@@ -149,22 +155,20 @@ export const getFreeChallengeText = async (factionId: number): Promise<{value: s
 
 }
 
-export const ValidedChallenge = (challType: ChallType) => {
+
+export const Users = () => {
   const [options, setOptions] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getChallenges(challType)
-        const challOptions = response.map((chall: Challenge) => {
-          return {
-            value: chall.id,
-            label: chall.name,
-            description: chall.description,
-            points: chall.points
-          }
-        })
-        setOptions(challOptions)
+        const response = await getAllUsers()
+        const usersOptions = response.map((user: User) => ({
+          value: user.id,
+          label: `${user.first_name} ${user.last_name}`,
+          email : user.email,
+        }))
+        setOptions(usersOptions)
       } catch (error) {
         console.error('Error fetching data:', error)
       }
@@ -176,14 +180,13 @@ export const ValidedChallenge = (challType: ChallType) => {
   return options
 }
 
-
-export const Users = () => {
+export const Ces = () => {
   const [options, setOptions] = useState([])
-
+  console.log("get ce")
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getAllUsers()
+        const response = await getAllCe()
         const usersOptions = response.map((user: User) => ({
           value: user.id,
           label: `${user.first_name} ${user.last_name}`,

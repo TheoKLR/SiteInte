@@ -14,6 +14,15 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
     }
 }
 
+export const getAllCe = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const data = await service.getAllCe();
+        Ok(res, { data });
+    } catch (error) {
+        Error(res, { error });
+    }
+}
+
 export const getAllByPermission= async (req: Request, res: Response, next: NextFunction) => {
 
         const {permission} = req.params;
@@ -128,6 +137,16 @@ export const addContact = async (req: Request, res: Response, next: NextFunction
         Error(res, { error });
     }
 };
+
+export const getInfo = async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.body
+    try {
+        const data = await service.getInfo(email)
+        Ok(res, {data: data, msg: "Ok"})
+    } catch (error) {
+        Error(res, { error })
+    }
+}
 
 export const changePermission = async (req: Request, res: Response, next: NextFunction) => {
     const { id, perm } = req.body;

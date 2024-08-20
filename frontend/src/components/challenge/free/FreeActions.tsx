@@ -1,26 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Select from 'react-select'
-import {
-    createTeam,
-    addToFaction,
-    deleteTeam,
-    getAllTeams,
-    renameTeam,
-    validateTeam,
-} from '../../../services/requests/teams';
-import { ToastContainer, toast } from 'react-toastify';
+import {ToastContainer} from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import {Challenge, ChallType} from "../../../services/interfaces";
 import {toTable} from "../../utils/Tables";
-import {
-    getChallenges,
-    unvalidFreeChallenge,
-    validChallenge,
-    validFreeChallenge
-} from "../../../services/requests/challenges";
+import {getChallenges, unvalidFreeChallenge, validFreeChallenge} from "../../../services/requests/challenges";
 import {handleError, toId} from "../../utils/Submit";
-import {changePermission} from "../../../services/requests/users";
-import {Challenges, Factions, getFreeChallengeText, Teams, Users} from "../../utils/Select";
+import {Choice, Factions, getFreeChallengeText} from "../../utils/Select";
 
 interface TableChallengeType {
     type: ChallType
@@ -33,7 +19,7 @@ export const TableChallenge: React.FC<TableChallengeType> = ({ type }) => {
     useEffect(() => {
         const fetchChallenges = async () => {
             try {
-                const teams = await getChallenges(type);
+                const teams = await getChallenges(type, Choice.ALL, undefined);
                 setChallenges(teams)
             } catch (error) {
                 console.error('Error fetching challenges:', error);

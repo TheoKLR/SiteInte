@@ -53,6 +53,11 @@ export const getAllTeams = async () => {
 };
 
 
+export const getAllTeamsWithPoints = async () => {
+  const response = await api.get("team/allWithPoints");
+  return response.data.data;
+};
+
 export const getAllMembersTeam = async (id : number) => {
   const response = await api.get("team/getallmembers/"+id);
   return response.data.data;

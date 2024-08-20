@@ -9,7 +9,7 @@ export interface SectionProps {
     actions: AnimAction[];
 }
 
-const AnimSection: React.FC<SectionProps> = ({ actions }) => {
+const BaseAnimSection: React.FC<SectionProps> = ({ actions }) => {
     const [selectedAction, setSelectedAction] = useState<AnimAction | null>(null);
 
     const handleActionClick = (action: AnimAction) => {
@@ -36,4 +36,4 @@ const AnimSection: React.FC<SectionProps> = ({ actions }) => {
     );
 };
 
-export default AnimSection;
+export default BaseAnimSection;

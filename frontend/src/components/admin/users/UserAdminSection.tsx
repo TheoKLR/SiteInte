@@ -55,6 +55,11 @@ const UserAdminSection: React.FC = () => {
       title: 'Affichage des nouveaux',
       form: <TableNewStudents/>,
     },
+      {
+          title: 'Récupération données WEI',
+          form: <GetDatas/>,
+      },
+
   ];
 
   const filteredActions = actions.filter(action => {
