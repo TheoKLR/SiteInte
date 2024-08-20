@@ -1,20 +1,28 @@
 import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/challenge.service';
 import { Error, Created, Ok } from '../utils/responses';
+import {getAllChallenges, getChallengeFromIds} from "../utils/challenge";
+import {NoUser} from "../error/user";
+import {getCompletedChallengesForCe, getCompletedChallengesForFaction} from "../services/challenge.service";
 
-export const getAllChallenges = async (req: Request, res: Response, next: NextFunction) => {
+export const getAllChallengesInDb = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await service.getAllChallenges();
+    const data = await getAllChallenges();
     Ok(res, { data });
   } catch (error) {
     Error(res, { error });
   }
 }
 
-export const getAllStudentOrCeChallenges = async (req: Request, res: Response, next: NextFunction) => {
+export const getAllCeChallenges = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await service.getAllStudentOrCeChallenges();
-    Ok(res, { data });
+    const {filter, associatedId} = req.body
+    switch (filter) {
+      case "available": return Ok(res, { data: await service.getAvailableChallengeForCe(associatedId) } )
+      case "completed": return Ok(res, { data: await getChallengeFromIds(await service.getCompletedChallengesForStudent(associatedId)) } )
+      case "all": return Ok(res, { data: await service.getAllCeChallenges() } )
+      default: Error(res, {msg: "filter '" + filter + "' do not exist."})
+    }
   } catch (error) {
     Error(res, { error });
   }
@@ -82,8 +90,13 @@ export const unvalidFreeChallenge = async (req: Request, res: Response, next: Ne
 
 export const getAllStudentChallenges = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await service.getAllStudentChallenges();
-    Ok(res, { data });
+    const {filter, associatedId} = req.body
+    switch (filter) {
+      case "available": return Ok(res, { data: await service.getAvailableChallengeForStudent(associatedId) } )
+      case "completed": return Ok(res, { data: await getChallengeFromIds(await service.getCompletedChallengesForStudent(associatedId)) } )
+      case "all": return Ok(res, { data: await service.getAllStudentChallenges() } )
+      default: Error(res, {msg: "filter '" + filter + "' do not exist."})
+    }
   } catch (error) {
     Error(res, { error });
   }
@@ -91,8 +104,14 @@ export const getAllStudentChallenges = async (req: Request, res: Response, next:
 
 export const getAllFactionChallenges = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await service.getAllFactionChallenges();
-    Ok(res, { data });
+    const {filter, associatedId} = req.body
+    console.log("filter: " + filter + " id: " + associatedId)
+    switch (filter) {
+      case "available": return Ok(res, { data: await service.getAvailableChallengeForFaction(associatedId) } )
+      case "completed": return Ok(res, { data: await getChallengeFromIds(await service.getCompletedChallengesForFaction(associatedId)) } )
+      case "all": return Ok(res, { data: await service.getAllFactionChallenges() } )
+      default: Error(res, {msg: "filter '" + filter + "' do not exist."})
+    }
   } catch (error) {
     Error(res, { error });
   }
@@ -100,8 +119,13 @@ export const getAllFactionChallenges = async (req: Request, res: Response, next:
 
 export const getAllTeamChallenges = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await service.getAllTeamChallenges();
-    Ok(res, { data });
+    const {filter, associatedId} = req.body
+    switch (filter) {
+      case "available": return Ok(res, { data: await service.getAvailableChallengeForTeam(associatedId) } )
+      case "completed": return Ok(res, { data: await getChallengeFromIds(await service.getCompletedChallengesForTeam(associatedId)) } )
+      case "all": return Ok(res, { data: await service.getAllTeamChallenges() } )
+      default: Error(res, {msg: "filter '" + filter + "' do not exist."})
+    }
   } catch (error) {
     Error(res, { error });
   }
@@ -139,6 +163,78 @@ export const validateChallenge = async (req: Request, res: Response, next: NextF
   try {
     await service.validateChallenge(challengeId, associatedId, points, text);
     Ok(res, { msg: "challenge validated" });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
+export const getAvailableChallengeForTeam = async (req: Request, res: Response, next: NextFunction) => {
+  const { associatedId } = req.body;
+  try {
+    const data = await service.getAvailableChallengeForTeam(associatedId);
+    Ok(res, { data: data, msg: "OK" });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
+export const getAvailableChallengeForFaction = async (req: Request, res: Response, next: NextFunction) => {
+  const { associatedId } = req.body;
+  try {
+    const data = await service.getAvailableChallengeForFaction(associatedId);
+    Ok(res, { data: data, msg: "OK" });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
+export const getAvailableChallengeForStudent = async (req: Request, res: Response, next: NextFunction) => {
+  const { associatedId } = req.body;
+  try {
+    const data = await service.getAvailableChallengeForStudent(associatedId);
+    Ok(res, { data: data, msg: "OK" });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
+export const getCompletedChallengeForTeam = async (req: Request, res: Response, next: NextFunction) => {
+  const { associatedId } = req.body;
+  try {
+    const data = await getChallengeFromIds(await service.getCompletedChallengesForTeam(associatedId));
+    Ok(res, { data: data, msg: "OK" });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
+export const getCompletedChallengeForFaction = async (req: Request, res: Response, next: NextFunction) => {
+  const { associatedId } = req.body;
+  console.log("yoooo")
+  try {
+    const data = await getChallengeFromIds(await service.getCompletedChallengesForFaction(associatedId));
+    console.log(data)
+    Ok(res, { data: data, msg: "OK" });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
+export const getCompletedChallengeForStudent = async (req: Request, res: Response, next: NextFunction) => {
+  const { associatedId } = req.body;
+  try {
+    const data = await getChallengeFromIds(await service.getCompletedChallengesForStudent(associatedId));
+    Ok(res, { data: data, msg: "OK" });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
+export const countPointsForTeam = async (req: Request, res: Response, next: NextFunction) => {
+  const { associatedId } = req.body;
+  try {
+    const data = await service.countPointsForTeam(associatedId);
+    Ok(res, { data: data, msg: "OK" });
   } catch (error) {
     Error(res, { error });
   }

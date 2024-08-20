@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {TableChallenge, ValidChallenge} from './Actions';
 import {getRole} from '../../../services/requests';
-import AnimSection from "../AnimSection";
+import BaseAnimSection from "../BaseAnimSection";
 import {AdminAction} from "../../admin/AdminSection";
 import {ChallType} from "../../../services/interfaces";
-import {UnvalidChallenge} from "../student/Actions";
+import {TableChallenge, UnvalidChallenge, ValidChallenge} from "../AnimAction";
 
 
 const ChallStudentCeSection: React.FC = () => {
@@ -45,7 +44,7 @@ const ChallStudentCeSection: React.FC = () => {
     ];
 
     return (
-        <AnimSection actions={actions} />
+        <BaseAnimSection actions={actions} />
     );
 };
 

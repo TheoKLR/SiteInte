@@ -6,6 +6,8 @@ const teamRouter = express.Router();
 
 teamRouter.post('/register',isTokenValid, tc.registerTeam);
 teamRouter.post('', isAdminCE, tc.createTeam);
+teamRouter.get('/all', tc.getAllTeams);
+teamRouter.get('/allWithPoints', tc.getAllTeamsWithPoints);
 teamRouter.get('/all',isTokenValid, tc.getAllTeams);
 teamRouter.get('/:id',isTokenValid, tc.getTeam);
 teamRouter.delete('/:id', isAdminCE, tc.deleteTeam);

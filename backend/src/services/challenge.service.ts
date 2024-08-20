@@ -1,28 +1,27 @@
 import {
-    challengeSchema,
     challenge,
+    challengeSchema,
+    ChallengeType,
     factionTochallengeSchema,
-    factionTochallenge,
-    ChallengeType, StudentTochallengeSchema, TeamTochallengeSchema, freeToChallenge, FreeToChallengeSchema
+    FreeToChallengeSchema,
+    StudentTochallengeSchema,
+    TeamTochallengeSchema
 } from "../schemas/challenge.schema"
 import {addPoints, removePoints} from "./faction.service"
-import { db } from "../database/db"
-import {and, eq, TableConfig} from 'drizzle-orm'
+import {db} from "../database/db"
+import {and, eq} from 'drizzle-orm'
 import {PermType, userSchema} from "../schemas/user.schema";
 import {teamSchema} from "../schemas/team.schema";
 import {factionSchema} from "../schemas/faction.schema";
-import assert from "node:assert";
-import {getFactionFromUserId, getFactionFromUserTeam} from "../utils/challenge";
-import {PgTableWithColumns} from "drizzle-orm/pg-core";
-
-
-export const getAllChallenges = async () => {
-    try {
-        return await db.select().from(challengeSchema);
-    } catch (error) {
-        throw new Error("Failed to fetch challenges. Please try again later.");
-    }
-}
+import {
+    getAllChallenges,
+    getAllChallengesExcept,
+    getChallengeFromIds, getChallengesOf,
+    getFactionFromTeam,
+    getFactionFromUserId,
+    getTeamAndFactionFromUserId
+} from "../utils/challenge";
+import {NoFaction} from "../error/user";
 
 export const getAllFactionChallenges = async () => {
     try {
@@ -51,6 +50,14 @@ export const getAllTeamChallenges = async () => {
 export const getAllStudentChallenges = async () => {
     try {
         return await db.select().from(challengeSchema).where(eq(challengeSchema.challType, ChallengeType.Student));
+    } catch (error) {
+        throw new Error("Failed to fetch challenges. Please try again later.");
+    }
+}
+
+export const getAllCeChallenges = async () => {
+    try {
+        return await db.select().from(challengeSchema).where(eq(challengeSchema.challType, ChallengeType.StudentOrCe));
     } catch (error) {
         throw new Error("Failed to fetch challenges. Please try again later.");
     }
@@ -91,12 +98,99 @@ export const getFactionChallenges = async (factionId: number) => {
     }
 }
 
+export const getCompletedChallengesForFaction = async (factionId: number): Promise<number[]> => {
+    const factionChallenges = await db.select().from(factionTochallengeSchema).where(eq(factionTochallengeSchema.factionId, factionId))
+    return factionChallenges.map(chall => chall.challengeId)
+}
+
+export const getCompletedChallengesForTeam = async (teamId: number): Promise<number[]> => {
+    const factionId = await getFactionFromTeam(teamId)
+    const teamChallenges = await db.select().from(TeamTochallengeSchema).where(eq(TeamTochallengeSchema.teamId, teamId))
+    const teamChallengeIds = teamChallenges.map(chall => chall.challengeId);
+    const factionChallenges = await getCompletedChallengesForFaction(factionId)
+    return [...factionChallenges, ...teamChallengeIds]
+}
+
+export const getCompletedChallengesForStudent = async (studentId: number): Promise<number[]> => {
+    const ids = await getTeamAndFactionFromUserId(studentId)
+    //get regular studentToChallenge
+    const studentChallenges = await db.select().from(StudentTochallengeSchema).where(eq(StudentTochallengeSchema.studentId, studentId))
+    const studentChallengesIds = studentChallenges.map(chall => chall.challengeId)
+    const teamChallenges = await getCompletedChallengesForTeam(ids.teamId)
+    const factionChallenges = await getCompletedChallengesForFaction(ids.factionId)
+    return [...studentChallengesIds, ...teamChallenges, ...factionChallenges]
+}
+
+export const getCompletedChallengesForCe = async (studentId: number): Promise<number[]> => {
+    const ids = await getTeamAndFactionFromUserId(studentId)
+    //get regular studentToChallenge
+    const studentChallenges = await db.select().from(StudentTochallengeSchema).where(eq(StudentTochallengeSchema.studentId, studentId))
+    const studentChallengesIds = studentChallenges.map(chall => chall.challengeId)
+    const teamChallenges = await getCompletedChallengesForTeam(ids.teamId)
+    const factionChallenges = await getCompletedChallengesForFaction(ids.factionId)
+    return [...studentChallengesIds, ...teamChallenges, ...factionChallenges]
+}
+
+export const getAvailableChallengeForStudent = async (studentId: number): Promise<challenge[]> => {
+    const ids = await getTeamAndFactionFromUserId(studentId)
+    const completedChallengesIds =
+        [
+            ...await getCompletedChallengesForStudent(studentId),
+            ...await getCompletedChallengesForTeam(ids.teamId),
+            ...await getCompletedChallengesForFaction(ids.factionId)
+        ]
+    const allChallenges = await getAllChallenges()
+    const allChallengesIds = allChallenges.map(chall => chall.id as number)
+    const availableChallengeIds = allChallengesIds.filter(id => !completedChallengesIds.includes(id));
+    return getChallengeFromIds(availableChallengeIds)
+}
+
+export const getAvailableChallengeForCe = async (studentId: number): Promise<challenge[]> => {
+    const ids = await getTeamAndFactionFromUserId(studentId)
+    const completedChallengesIds =
+        [
+            ...await getCompletedChallengesForCe(studentId),
+            ...await getCompletedChallengesForTeam(ids.teamId),
+            ...await getCompletedChallengesForFaction(ids.factionId)
+        ]
+    const allChallenges = await getAllCeChallenges()
+    const allChallengesIds = allChallenges.map(chall => chall.id as number)
+    const availableChallengeIds = allChallengesIds.filter(id => !completedChallengesIds.includes(id));
+    return getChallengeFromIds(availableChallengeIds)
+}
+
+export const getAvailableChallengeForTeam = async (teamId: number): Promise<challenge[]> => {
+    const factionId = await getFactionFromTeam(teamId)
+    const completedChallengesIds = [
+        ...await getCompletedChallengesForTeam(teamId),
+        ...await getCompletedChallengesForFaction(factionId)
+    ]
+    const allChallenges = await getAllChallengesExcept(ChallengeType.Student)
+    const allChallengesIds = allChallenges.map(chall => chall.id as number)
+    const availableChallengeIds = allChallengesIds.filter(id => !completedChallengesIds.includes(id));
+    return getChallengeFromIds(availableChallengeIds)
+}
+
+export const getAvailableChallengeForFaction = async (factionId: number): Promise<challenge[]> => {
+    const completedChallengesIds = await getCompletedChallengesForFaction(factionId)
+    console.log("completed: " + completedChallengesIds)
+    const allChallenges = await getChallengesOf(ChallengeType.Faction)
+    const allChallengesIds = allChallenges.map(chall => chall.id as number)
+    const availableChallengeIds = allChallengesIds.filter(id => !completedChallengesIds.includes(id));
+    console.log("available: " + availableChallengeIds)
+    return getChallengeFromIds(availableChallengeIds)
+}
+
 export const countPoints = async (factionId: number): Promise<number> => {
     //checking faction exist
     const faction = await db.select().from(factionSchema).where(eq(factionSchema.id, factionId));
-    if(!faction || faction.length === 0) throw new Error("No faction with id '" + faction + "'")
+    if(!faction || faction.length === 0) throw NoFaction(factionId)
 
     let points = 0;
+
+    //getting free challenges
+    const freeChallenges = await db.select().from(FreeToChallengeSchema).where(eq(FreeToChallengeSchema.factionId, factionId))
+    freeChallenges.forEach(chall => points += chall.attributedPoints)
 
     //getting every challenge associated with faction
     const factionChallenges = await db.select().from(factionTochallengeSchema).where(eq(factionTochallengeSchema.factionId, factionId))
@@ -108,6 +202,29 @@ export const countPoints = async (factionId: number): Promise<number> => {
 
     //getting every challenge associated with every teams and add points
     //also getting every user associated with teamId
+    for (const teamId of teamsId) {
+        const challenges = await db.select().from(TeamTochallengeSchema).where(eq(TeamTochallengeSchema.teamId, teamId));
+        challenges.forEach(challenge => points += challenge.attributedPoints)
+        //-----//
+        const users = await db.select().from(userSchema).where(eq(userSchema.team, teamId));
+        //getting challenges associated to users
+        for(let user of users) {
+            const userChallenges = await db.select().from(StudentTochallengeSchema).where(eq(StudentTochallengeSchema.studentId, user.id))
+            userChallenges.forEach(challenge => points += challenge.attributedPoints)
+        }
+    }
+
+    return points
+}
+
+export const countPointsForTeam = async (teamId: number): Promise<number> => {
+    let points = 0;
+
+    //getting every teamId who is associated with factionId
+    const factionTeams = await db.select().from(teamSchema).where(eq(teamSchema.id, teamId))
+    const teamsId = factionTeams.map(team => team.id)
+
+    //getting every challenge associated with every teams and add points
     for (const teamId of teamsId) {
         const challenges = await db.select().from(TeamTochallengeSchema).where(eq(TeamTochallengeSchema.teamId, teamId));
         challenges.forEach(challenge => points += challenge.attributedPoints)
@@ -313,7 +430,7 @@ async function completeChallengeToUser(challengeId: number, associatedId: number
 
     //get associated faction
     try {
-        const faction = await getFactionFromUserTeam(user[0].team as number)
+        const faction = await getFactionFromTeam(user[0].team as number)
         await addPoints(faction, attributedPoints)
         //associating the event
         await db.insert(StudentTochallengeSchema).values({
