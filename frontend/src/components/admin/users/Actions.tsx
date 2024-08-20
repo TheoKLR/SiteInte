@@ -10,7 +10,6 @@ import { getAllUsers } from '../../../services/requests'
 import { toTable } from '../../utils/Tables'
 import { deleteNewStudent, getAllNewStudent, syncNewStudent } from '../../../services/requests/newstudent';
 import { resetPasswordAdmin } from '../../../services/requests/auth';
-import { deleteUUID, getAllUUID, syncUUID } from '../../../services/requests/newstudent';
 import {api} from "../../../services/api";
 
 export const AddToTeam = () => {

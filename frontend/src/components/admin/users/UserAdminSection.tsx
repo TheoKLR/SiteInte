@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import AdminSection from '../AdminSection';
-import { AddToTeam, ChangePermission, DeleteUser, ManageNewStudents, PasswordReset, TableNewStudents, TableUser } from './Actions';
+import {
+    AddToTeam,
+    ChangePermission,
+    DeleteUser,
+    GetDatas,
+    ManageNewStudents,
+    PasswordReset,
+    TableNewStudents,
+    TableUser
+} from './Actions';
 import { AdminAction } from '../AdminSection';
 import { getRole } from '../../../services/requests';
 
