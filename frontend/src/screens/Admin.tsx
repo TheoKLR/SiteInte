@@ -45,7 +45,7 @@ export const Admin = () => {
             {(permission === 'Admin') &&<Section titre="Rôles" contenu={DesireAdminSection} />}
             {(permission === 'Admin') && <Section titre="Events" contenu={EventsAdminSection} />}
             {(permission === 'Admin') && <Section titre="Exports" contenu={ExportAdminSection} />}
-            {(permission === 'Admin') && <Section titre="Perms" contenu={PermsAdminSection} />}
+            {(permission === 'Admin' || permission === 'RespoCE') && <Section titre="Perms" contenu={PermsAdminSection} />}
             {(permission === 'Admin') && <Section titre="Emails" contenu={EmailAdminSection} />}
         </div>
     )
