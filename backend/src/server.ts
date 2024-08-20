@@ -12,6 +12,7 @@ import { init } from "./database/init";
 import { api_prefix } from "./utils/secret";
 import { log } from "./middlewares/log";
 import emailRouter from "./routes/email.routes";
+import challengeRouter from "./routes/challenge.routes";
 
 async function startServer() {
   const app = express();
@@ -26,6 +27,7 @@ async function startServer() {
   router.use("/user", userRouter);
   router.use("/team", teamRouter);
   router.use("/permanence", permanenceRouter);
+  router.use("/challenge", challengeRouter);
   router.use("/faction", factionRouter);
   router.use("/role", roleRouter);
   router.use("/event", eventRouter);

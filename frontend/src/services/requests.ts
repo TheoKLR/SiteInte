@@ -1,8 +1,15 @@
 import { api } from './api';
 
 // Obtention de la liste des Utilisateurs enregistrés dans la db
+//NE RETOURNE PAS LES CE
 export const getAllUsers = async () => {
     const response = await api.get('user/all')
+    return response?.data.data
+}
+
+// Obtention de la liste des Ce enregistrés dans la db
+export const getAllCe = async () => {
+    const response = await api.get('user/ce/all')
     return response?.data.data
 }
 
@@ -83,5 +90,12 @@ export const getUserWishes = async (userId: string) => {
 // Obtention de tous les utilisateurs ayant demandé un role précis
 export const getWishUsers = async (roleId: string) => {
     const response = await api.get('/wish/' + roleId + '/users');
+    return response?.data.data;
+}
+
+// Compte les points d'une faction
+export const countPoints = async () => {
+    const response = await api.get('/challenge/countPoints/');
+    console.log(response?.data.data)
     return response?.data.data;
 }

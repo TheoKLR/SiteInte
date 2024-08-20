@@ -1,4 +1,5 @@
 import { api } from "../api";
+import {ChallType} from "../interfaces";
 
 export const createTeam = async (name: string) => {
   return await api.post("team", { name });
@@ -48,6 +49,11 @@ export const setTimestamp = async (timestamp: number, id: number) =>{
 // Obtention de la liste des équipes enregistrées dans la db
 export const getAllTeams = async () => {
   const response = await api.get("team/all");
+  return response.data.data;
+};
+
+export const getAllTeamsWithPoints = async () => {
+  const response = await api.get("team/allWithPoints");
   return response.data.data;
 };
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AdminSection from '../AdminSection';
-import { AddToTeam, ChangePermission, DeleteUser, ManageNewStudents, PasswordReset, TableNewStudents, TableUser } from './Actions';
+import { GetDatas, AddToTeam, ChangePermission, DeleteUser, ManageNewStudents, PasswordReset, TableNewStudents, TableUser } from './Actions';
 import { AdminAction } from '../AdminSection';
 import { getRole } from '../../../services/requests';
 
@@ -55,6 +55,11 @@ const UserAdminSection: React.FC = () => {
       title: 'Affichage des nouveaux',
       form: <TableNewStudents/>,
     },
+      {
+          title: 'Récupération données WEI',
+          form: <GetDatas/>,
+      },
+
   ];
 
   const filteredActions = actions.filter(action => {

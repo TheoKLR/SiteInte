@@ -92,16 +92,18 @@ const LoginForm = () => {
   };
 
   const TryLogin = async () => {
-    localStorage.setItem("tryLogin", "false");
     try {
     
     //CAS CONNEXTION  
     const urlParams = new URLSearchParams(window.location.search);
     const ticket = urlParams.get("ticket");
-
+    console.log("coucou")
     if(ticket){
       const {token} = await handleCASTicket(ticket);
+      console.log(token)
+      localStorage.setItem("tryLogin", "false");
       localStorage.setItem("authToken", token);
+      console.log("redirect /Home")
       window.location.href = "/Home";
     }
 
@@ -141,7 +143,6 @@ const LoginForm = () => {
     localStorage.setItem("tryLogin", "true");
 
   }
-
 
   const getContainerClass = () => {
     if (stateNewLogin) return "active login";

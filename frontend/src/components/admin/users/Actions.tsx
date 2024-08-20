@@ -10,6 +10,8 @@ import { getAllUsers } from '../../../services/requests'
 import { toTable } from '../../utils/Tables'
 import { deleteNewStudent, getAllNewStudent, syncNewStudent } from '../../../services/requests/newstudent';
 import { resetPasswordAdmin } from '../../../services/requests/auth';
+import { deleteUUID, getAllUUID, syncUUID } from '../../../services/requests/newstudent';
+import {api} from "../../../services/api";
 
 export const AddToTeam = () => {
   const [users, setUsers] = useState([] as any)
@@ -44,6 +46,59 @@ export const AddToTeam = () => {
     </div>
   )
 }
+
+//to get data for wei bus distribution
+export const GetDatas = () => {
+  const [users, setUsers] = useState([] as any[]);
+  const [team, setTeam] = useState({} as any);
+
+  // Fonction pour gérer le chargement du fichier
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const content = e.target?.result as string;
+      console.log(content)
+      const lines = content.split('\n').map(line => line.trim()).filter(line => line);
+      setUsers(lines);
+    };
+    reader.readAsText(file);
+  };
+
+  const Submit = async () => {
+    const t = await api.post("user/getInfo", {email: users})
+    const data = t.data.data
+    let stringContent = ""
+    for (const line of data) {
+      stringContent += (line.toString() + "\n")
+    }
+    const blob = new Blob([stringContent], { type: 'text/plain' }); // Utilisation de 'text/plain' pour du texte brut
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'user_info.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Réinitialisation des états après soumission
+    setUsers([]);
+    setTeam({});
+  };
+
+  return (
+      <div>
+        <div className="file-upload-container">
+          <input type="file" accept=".txt" onChange={handleFileUpload} />
+        </div>
+        <button className="submit-button" onClick={Submit}>Soumettre</button>
+        <ToastContainer position="bottom-right" />
+      </div>
+  );
+};
 
 export const ChangePermission = () => {
   const [user, setUser] = useState({} as any)

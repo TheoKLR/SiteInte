@@ -8,6 +8,8 @@ teamRouter.post('/register',isTokenValid, tc.registerTeam);
 teamRouter.post('', isAdminCE, tc.createTeam);
 teamRouter.get('/all',isTokenValid, tc.getAllTeams);
 teamRouter.get('/:id',isTokenValid, tc.getTeam);
+teamRouter.get('/allWithPoints', tc.getAllTeamsWithPoints);
+teamRouter.get('/:id', isAdminCE, tc.getTeam);
 teamRouter.delete('/:id', isAdminCE, tc.deleteTeam);
 teamRouter.put('/addtofaction', isAdminCE, tc.addToFaction);
 teamRouter.put('/timestamp',isTokenValid, tc.addTimestamp);
