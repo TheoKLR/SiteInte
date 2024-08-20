@@ -23,7 +23,7 @@ export const getAllTeamsWithPoints = async () => {
         }
         return result
     } catch (error) {
-        throw new Error("Failed to fetch teams. Please try again later.");
+        throw new Error("Failed to fetch teams. Please try again later: " + error);
     }
 }
 
