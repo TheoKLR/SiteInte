@@ -8,10 +8,10 @@ import { ToastContainer } from 'react-toastify'
 import { User, newStudent } from '../../../services/interfaces'
 import { getAllUsers } from '../../../services/requests'
 import { toTable } from '../../utils/Tables'
-import { deleteUUID, getAllUUID, syncUUID } from '../../../services/requests/newstudent';
-import {api} from "../../../services/api";
 import { deleteNewStudent, getAllNewStudent, syncNewStudent } from '../../../services/requests/newstudent';
 import { resetPasswordAdmin } from '../../../services/requests/auth';
+import { deleteUUID, getAllUUID, syncUUID } from '../../../services/requests/newstudent';
+import {api} from "../../../services/api";
 
 export const AddToTeam = () => {
   const [users, setUsers] = useState([] as any)
