@@ -1,4 +1,5 @@
 import { api } from "../api";
+import {ChallType} from "../interfaces";
 
 export const createTeam = async (name: string) => {
   return await api.post("team", { name });
@@ -51,6 +52,10 @@ export const getAllTeams = async () => {
   return response.data.data;
 };
 
+export const getAllTeamsWithPoints = async () => {
+  const response = await api.get("team/teamsWithPoints");
+  return response.data.data;
+};
 
 export const getAllMembersTeam = async (id : number) => {
   const response = await api.get("team/getallmembers/"+id);

@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react"
-import { Role, Faction, User, Team, Event, newStudent, Perm } from '../../services/interfaces'
-import { getAllFactions, getAllTeams, getAllUsers } from '../../services/requests'
+import React, { useState, useEffect } from "react"
+import {Role, Faction, User, Team, Event, newStudent, Perm, Challenge, ChallType} from '../../services/interfaces'
+import {getAllCe, getAllFactions, getAllTeams, getAllUsers} from '../../services/requests'
 import { getAllRoles } from "../../services/requests/roles"
 import { getActiveEvents, getInactiveEvents } from "../../services/requests/events"
 import { getAllNewStudent } from "../../services/requests/newstudent"
 import { getAllPerms } from "../../services/requests/perms"
 import { getAllByPermission } from "../../services/requests/users"
+import {getAllChallenges, getAllFreeChallengesTexts, getChallenges} from "../../services/requests/challenges";
 
 export const Roles = () => {
   const [options, setOptions] = useState([])
@@ -100,6 +101,61 @@ export const Teams = () => {
   return options
 }
 
+export enum Choice {
+  ALL = "all",
+  AVAILABLE = "available",
+  COMPLETED = "completed"
+}
+
+export const Challenges = (challType: ChallType, filter: Choice, associateId: number | undefined) => {
+  const [options, setOptions] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getChallenges(challType, filter, associateId)
+        const challOptions = response.map((chall: Challenge) => {
+          return {
+            value: chall.id,
+            label: chall.name,
+            description: chall.description,
+            points: chall.points
+          }
+        })
+        setOptions(challOptions)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+
+    fetchData()
+  }, [associateId])
+
+  return options
+}
+
+export const getFreeChallengeText = async (factionId: number): Promise<{value: string, label: string}[]> => {
+
+  return await getAllFreeChallengesTexts(factionId)
+      .then(data => {
+        if(!data || data.length === 0) return []
+        const response = data.map((chall: Challenge) => {
+          if(!chall) return {value: "", label: "undefined"}
+          console.log(chall)
+          return {
+            value: chall,
+            label: chall,
+          }
+        })
+        return response
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+}
+
+
 export const Users = () => {
   const [options, setOptions] = useState([])
 
@@ -107,6 +163,30 @@ export const Users = () => {
     const fetchData = async () => {
       try {
         const response = await getAllUsers()
+        const usersOptions = response.map((user: User) => ({
+          value: user.id,
+          label: `${user.first_name} ${user.last_name}`,
+          email : user.email,
+        }))
+        setOptions(usersOptions)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return options
+}
+
+export const Ces = () => {
+  const [options, setOptions] = useState([])
+  console.log("get ce")
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getAllCe()
         const usersOptions = response.map((user: User) => ({
           value: user.id,
           label: `${user.first_name} ${user.last_name}`,

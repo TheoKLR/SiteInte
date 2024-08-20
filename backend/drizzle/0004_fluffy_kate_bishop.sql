@@ -1,1 +1,0 @@
-ALTER TABLE "team" ALTER COLUMN "timeCode" SET DATA TYPE bigint;
