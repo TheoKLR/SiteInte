@@ -210,7 +210,6 @@ export const getCompletedChallengeForTeam = async (req: Request, res: Response, 
 
 export const getCompletedChallengeForFaction = async (req: Request, res: Response, next: NextFunction) => {
   const { associatedId } = req.body;
-  console.log("yoooo")
   try {
     const data = await getChallengeFromIds(await service.getCompletedChallengesForFaction(associatedId));
     console.log(data)
