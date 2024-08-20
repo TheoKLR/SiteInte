@@ -1,5 +1,6 @@
-import { api } from "../api";
+import {api} from "../api";
 import {ChallType} from "../interfaces";
+import {Choice} from "../../components/utils/Select";
 
 // Obtention de la liste des challenges enregistrées dans la db
 export const getAllChallenges = async () => {
@@ -7,8 +8,9 @@ export const getAllChallenges = async () => {
   return response.data.data;
 };
 
-export const getChallenges = async (type: ChallType) => {
-  const response = await api.get("challenge/all" + type);
+export const getChallenges = async (type: ChallType, filter: Choice, associatedId: number | undefined) => {
+  if(filter !== Choice.ALL && associatedId === undefined) return []
+  const response = await api.post("challenge/all" + type, {filter: filter, associatedId: associatedId});
   return response.data.data;
 };
 
@@ -20,7 +22,6 @@ export const getAllFreeChallengesTexts = async (factionId: number) => {
 };
 
 export const validChallenge = async (associatedId: number, challId: number, attributedPoints: number, text: string|null) => {
-  console.log("ratio")
   return await api.post('challenge/valid', {
     associatedId,
     challId,
