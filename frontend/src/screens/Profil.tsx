@@ -1,6 +1,6 @@
 import { Navbar } from "../components/shared/Navbar"
 import { Section } from "../components/shared/Section"
-import { ProfilForm, TeamDisplay } from "../components/profil/Profil"
+import {PossibleChallengeDisplay, ProfilForm, TeamDisplay} from "../components/profil/Profil"
 import { useEffect } from "react";
 import { getRole } from "../services/requests";
 import { getCurrentUser } from "../services/requests/users";
@@ -29,6 +29,7 @@ export const Profil = () => {
             <Navbar />
             <Section titre="Voici ton profil !" contenu={ProfilForm} />
             <Section titre="Ton équipe !" contenu={TeamDisplay} />
+            <Section titre="Tes challenges !" contenu={PossibleChallengeDisplay} />
         </div>
     )
 }

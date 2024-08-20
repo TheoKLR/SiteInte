@@ -14,6 +14,11 @@ export const getChallenges = async (type: ChallType, filter: Choice, associatedI
   return response.data.data;
 };
 
+export const getAvailableChallengeForUser = async (studentId: number) => {
+  const response = await api.post("challenge/getAvailableForStudent", { associatedId: studentId});
+  return response.data.data;
+};
+
 export const getAllFreeChallengesTexts = async (factionId: number) => {
   const response = await api.post("challenge/allFreeText", {
     factionId

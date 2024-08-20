@@ -57,13 +57,11 @@ export const createTeam = async (req: Request, res: Response, next: NextFunction
 export const deleteTeam = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const idNumber = parseInt(id, 10);
-  console.log("pas censé 2")
   if (isNaN(idNumber)) return Error(res, { msg : 'could not parse Id' });
 
   try {
     await user_service.removeUsersFromTeam(idNumber);
     await service.deleteTeam(idNumber);
-    Ok(res, { msg: "Team deleted" });
   } catch (error) {
     Error(res, { error });
   }
