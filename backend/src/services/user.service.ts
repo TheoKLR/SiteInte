@@ -388,7 +388,7 @@ export async function getInfo(emails: string[]): Promise<any[]> {
         })
  */
 
-function isCe(user: User) {
+export function isCe(user: User) {
     return user.permission === PermType.Student && user.team !== undefined
 }
 

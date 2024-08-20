@@ -1,6 +1,6 @@
 import express from 'express';
 import  * as fc  from '../controllers/challenge.controller';
-import {isAdmin, isAdminAnim, isAdminCE} from '../middlewares/permissions';
+import {isAdmin, isAdminAnim, isAdminCE, isTokenValid} from '../middlewares/permissions';
 
 const challengeRouter = express.Router();
 
@@ -13,7 +13,7 @@ challengeRouter.post('/getCompletedForTeam', isAdminAnim, fc.getCompletedChallen
 challengeRouter.post('/getCompletedForFaction', isAdminAnim, fc.getCompletedChallengeForFaction);
 challengeRouter.post('/getCompletedForStudent', isAdminAnim, fc.getCompletedChallengeForStudent);
 challengeRouter.post('/getAvailableForTeam', isAdminAnim, fc.getAvailableChallengeForTeam);
-challengeRouter.post('/getAvailableForStudent', isAdminAnim, fc.getAvailableChallengeForStudent);
+challengeRouter.post('/getAvailableForStudent', isTokenValid, fc.getAvailableChallengeForStudent);
 challengeRouter.post('/getAvailableForFaction', isAdminAnim, fc.getAvailableChallengeForFaction);
 challengeRouter.post('/unvalid', isAdminAnim, fc.unvalidChallenge);
 challengeRouter.post('/unvalidFree', isAdminAnim, fc.unvalidFreeChallenge);
