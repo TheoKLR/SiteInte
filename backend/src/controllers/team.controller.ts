@@ -30,7 +30,6 @@ export const getAllTeamsWithPoints = async (req: Request, res: Response, next: N
 export const getTeam = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const idNumber = parseInt(id, 10);
-  console.log("pas censé 1")
   if (isNaN(idNumber)) return Error(res, { msg : 'Could not parse Id' });
 
   try {
@@ -57,7 +56,6 @@ export const createTeam = async (req: Request, res: Response, next: NextFunction
 export const deleteTeam = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const idNumber = parseInt(id, 10);
-  console.log("pas censé 2")
   if (isNaN(idNumber)) return Error(res, { msg : 'could not parse Id' });
 
   try {

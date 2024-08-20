@@ -19,7 +19,7 @@ import {
     getChallengeFromIds, getChallengesOf,
     getFactionFromTeam,
     getFactionFromUserId,
-    getTeamAndFactionFromUserId
+    getTeamAndFactionFromUserId, isCE
 } from "../utils/challenge";
 import {NoFaction} from "../error/user";
 
@@ -133,12 +133,23 @@ export const getCompletedChallengesForCe = async (studentId: number): Promise<nu
 
 export const getAvailableChallengeForStudent = async (studentId: number): Promise<challenge[]> => {
     const ids = await getTeamAndFactionFromUserId(studentId)
-    const completedChallengesIds =
-        [
-            ...await getCompletedChallengesForStudent(studentId),
-            ...await getCompletedChallengesForTeam(ids.teamId),
-            ...await getCompletedChallengesForFaction(ids.factionId)
-        ]
+    //test if he is CE
+    let completedChallengesIds = []
+    if(await isCE(studentId)) {
+        completedChallengesIds =
+            [
+                ...await getCompletedChallengesForCe(studentId),
+                ...await getCompletedChallengesForTeam(ids.teamId),
+                ...await getCompletedChallengesForFaction(ids.factionId)
+            ]
+    } else {
+        completedChallengesIds =
+            [
+                ...await getCompletedChallengesForStudent(studentId),
+                ...await getCompletedChallengesForTeam(ids.teamId),
+                ...await getCompletedChallengesForFaction(ids.factionId)
+            ]
+    }
     const allChallenges = await getAllChallenges()
     const allChallengesIds = allChallenges.map(chall => chall.id as number)
     const availableChallengeIds = allChallengesIds.filter(id => !completedChallengesIds.includes(id));
