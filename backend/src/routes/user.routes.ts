@@ -5,6 +5,7 @@ import { isAdmin, isAdminCE } from '../middlewares/permissions';
 const userRouter = express.Router();
 
 userRouter.get('/all', isAdminCE, sc.getAllUsers);
+userRouter.get('/ce/all', isAdminCE, sc.getAllCe);
 userRouter.get('/user/:id', isAdminCE, sc.getUser);
 userRouter.delete('/delete/:id', isAdmin, sc.deleteUser);
 userRouter.put('/addtoteam', isAdminCE, sc.addToTeam);
@@ -16,6 +17,7 @@ userRouter.get('/all/light', sc.getUserLight);
 userRouter.get('/getbyteam/:teamId',isAdmin ,sc.getUserbyTeam);
 userRouter.post('/modifyteam', isAdmin, sc.modifyTeam);
 userRouter.get('/allbypermission/:permission', isAdmin, sc.getAllByPermission);
+userRouter.post('/getInfo', isAdmin, sc.getInfo);
 
 
 export default userRouter;

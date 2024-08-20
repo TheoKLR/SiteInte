@@ -3,7 +3,7 @@ import { userSchema, User, PermType } from '../schemas/user.schema';
 import { newstudentSchema } from '../schemas/newstudent.schema';
 import { roleSchema, userToRoleSchema } from '../schemas/role.schema';
 import { db } from "../database/db"
-import { eq, and, is } from 'drizzle-orm'
+import {eq, and, is, ne, isNotNull} from 'drizzle-orm'
 import { uuid } from 'drizzle-orm/pg-core';
 
 export const getAllUsers = async () => {
@@ -20,7 +20,30 @@ export const getAllUsers = async () => {
             discord_id: userSchema.discord_id,
             connection_number: userSchema.connection_number,
             team_id: userSchema.team,
-        }).from(userSchema);
+        }).from(userSchema).where(eq(userSchema.permission, PermType.NewStudent));
+    } catch (error) {
+        throw new Error("Failed to fetch users. Please try again later.");
+    }
+}
+
+export const getAllCe = async () => {
+    try {
+        return await db.select({
+            id: userSchema.id,
+            first_name: userSchema.first_name,
+            last_name: userSchema.last_name,
+            email: userSchema.email,
+            branch: userSchema.branch,
+            permission: userSchema.permission,
+            birthday: userSchema.birthday,
+            contact: userSchema.contact,
+            discord_id: userSchema.discord_id,
+            connection_number: userSchema.connection_number,
+            team_id: userSchema.team,
+        }).from(userSchema).where(and(
+            eq(userSchema.permission, PermType.Student),
+            isNotNull(userSchema.team)
+        ));
     } catch (error) {
         throw new Error("Failed to fetch users. Please try again later.");
     }
@@ -279,4 +302,86 @@ export const getAllMembersTeam = async (team_id: number) => {
     } catch (error) {
         throw new Error("Failed to get the team's timecode. Please try again later.");
     }
+}
+
+type UserData = {
+    etu_number: string
+    first_name: string,
+    last_name: string,
+    email: string,
+    phone: string,
+    new: boolean,
+    ce: boolean,
+    team_number: number | null,
+    orga: boolean,
+    mission: string,
+    major: boolean
+}
+
+export async function getInfo(emails: string[]): Promise<any[]> {
+    //checking faction exist
+    let list = []
+    for (let email of emails) {
+        const user = await db.select().from(userSchema).where(eq(userSchema.email, email));
+        if(!user || user.length === 0) throw new Error("No user with mail '" + email + "'")
+        list.push([
+            "",
+            user[0].first_name,
+            user[0].last_name,
+            email,
+            "",
+            isNew(user[0]),
+            isCe(user[0]),
+            user[0].team,
+            isOrga(user[0]),
+            "",
+            isMajor(user[0])
+        ])
+        console.log(list)
+    }
+    return list
+}
+
+/*
+        list.push({
+            etu_number: "",
+            first_name: user[0].first_name,
+            last_name: user[0].last_name,
+            email: email,
+            phone: "",
+            new: isNew(user[0]),
+            ce: isCe(user[0]),
+            team_number: user[0].team,
+            orga: isOrga(user[0]),
+            mission: "",
+            major: isMajor(user[0])
+        })
+ */
+
+function isCe(user: User) {
+    return user.permission === PermType.Student && user.team !== undefined
+}
+
+function isMajor(user: User): boolean {
+    if(!user.birthday) return false
+    const birthDate = new Date(user.birthday);
+    const today = new Date();
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+
+    // Si l'anniversaire n'est pas encore passé cette année, on soustrait 1
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+
+    return age >= 18;
+}
+
+function isOrga(user: User) {
+    return user.permission !== PermType.NewStudent
+}
+
+function isNew(user: User) {
+    return user.permission === PermType.NewStudent
 }

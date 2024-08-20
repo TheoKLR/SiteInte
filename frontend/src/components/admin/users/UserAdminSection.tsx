@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AdminSection from '../AdminSection';
-import { AddToTeam, ChangePermission, DeleteUser, ManageUUIDs, TableUUIDs, TableUser } from './Actions';
+import {AddToTeam, ChangePermission, DeleteUser, ManageUUIDs, TableUUIDs, TableUser, GetDatas} from './Actions';
 import { AdminAction } from '../AdminSection';
 import { getRole } from '../../../services/requests';
 
@@ -51,6 +51,11 @@ const UserAdminSection: React.FC = () => {
       title: 'Affichage cléfs de connexions unique',
       form: <TableUUIDs/>,
     },
+      {
+          title: 'Récupération données WEI',
+          form: <GetDatas/>,
+      },
+
   ];
 
   const filteredActions = actions.filter(action => {

@@ -14,6 +14,15 @@ export const getAllTeams = async (req: Request, res: Response, next: NextFunctio
   }
 }
 
+export const getAllTeamsWithPoints = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = await service.getAllTeamsWithPoints();
+    Ok(res, { data });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
 export const getTeam = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const idNumber = parseInt(id, 10);

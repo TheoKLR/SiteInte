@@ -1,8 +1,15 @@
 import { api } from './api';
 
 // Obtention de la liste des Utilisateurs enregistrés dans la db
+//NE RETOURNE PAS LES CE
 export const getAllUsers = async () => {
     const response = await api.get('user/all')
+    return response?.data.data
+}
+
+// Obtention de la liste des Ce enregistrés dans la db
+export const getAllCe = async () => {
+    const response = await api.get('user/ce/all')
     return response?.data.data
 }
 

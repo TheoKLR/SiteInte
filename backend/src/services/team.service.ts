@@ -2,10 +2,26 @@ import { teamSchema, Team } from "../schemas/team.schema"
 import { db } from "../database/db"
 import { eq } from 'drizzle-orm'
 import { timeEnd, timeStamp } from "console";
+import {countPointsForTeam} from "./challenge.service";
 
 export const getAllTeams = async () => {
     try {
         return await db.select().from(teamSchema);
+    } catch (error) {
+        throw new Error("Failed to fetch teams. Please try again later.");
+    }
+}
+
+export const getAllTeamsWithPoints = async () => {
+    try {
+        let result = []
+        const teams = await db.select().from(teamSchema);
+        const ids = teams.map(team => team.id)
+        for (let i = 0; i < ids.length; i++) {
+            const points = await countPointsForTeam(ids[i])
+            result.push({team: teams[i], points: points})
+        }
+        return result
     } catch (error) {
         throw new Error("Failed to fetch teams. Please try again later.");
     }
