@@ -7,7 +7,7 @@ import { RI_list } from '../utils/RI_list';
 
 export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const data = await service.getAllUsers();
+        const data = await service.GetAllStudent();
         Ok(res, { data });
     } catch (error) {
         Error(res, { error });
