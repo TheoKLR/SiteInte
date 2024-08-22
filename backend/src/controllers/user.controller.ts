@@ -34,7 +34,7 @@ export const getAllCe = async (req: Request, res: Response, next: NextFunction) 
 
 export const getAllCe = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const data = await service.getAllCe();
+        const data = await service.GetAllStudent();
         Ok(res, { data });
     } catch (error) {
         Error(res, { error });
