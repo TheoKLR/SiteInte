@@ -47,6 +47,29 @@ export const GetAllStudent = async () => {
     }
 }
 
+export const getAllCe = async () => {
+    try {
+        return await db.select({
+            id: userSchema.id,
+            first_name: userSchema.first_name,
+            last_name: userSchema.last_name,
+            email: userSchema.email,
+            branch: userSchema.branch,
+            permission: userSchema.permission,
+            birthday: userSchema.birthday,
+            contact: userSchema.contact,
+            discord_id: userSchema.discord_id,
+            connection_number: userSchema.connection_number,
+            team_id: userSchema.team,
+        }).from(userSchema).where(and(
+            eq(userSchema.permission, PermType.Student),
+            isNotNull(userSchema.team)
+        ));
+    } catch (error) {
+        throw new Error("Failed to fetch users. Please try again later.");
+    }
+}
+
 export const getAllByPermission = async (permission : PermType) => {
 
     try {
