@@ -32,15 +32,6 @@ export const getAllCe = async (req: Request, res: Response, next: NextFunction) 
     }
 }
 
-export const getAllCe = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const data = await service.GetAllStudent();
-        Ok(res, { data });
-    } catch (error) {
-        Error(res, { error });
-    }
-}
-
 export const getAllByPermission= async (req: Request, res: Response, next: NextFunction) => {
 
         const {permission} = req.params;
