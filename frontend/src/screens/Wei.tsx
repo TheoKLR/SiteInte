@@ -4,6 +4,7 @@ import { getRole } from "../services/requests";
 import { Section } from "../components/shared/Section";
 import { Default } from "../components/shared/Default";
 import { getCurrentUser } from "../services/requests/users";
+import { WeiComponent } from "../components/WEI/Wei";
 
 export const Wei = () => {
     useEffect(() => {
@@ -26,7 +27,7 @@ export const Wei = () => {
     return (
         <div className="Wei">
             <Navbar />
-            <Section titre="Prochainement !" contenu={Default} />
+            <Section titre="Inscris toi au WEI !" contenu={WeiComponent} />
         </div>
     )
 }
