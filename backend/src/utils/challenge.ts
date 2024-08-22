@@ -11,6 +11,7 @@ import {
     StudentTochallengeSchema,
     teamTochallenge, TeamTochallengeSchema
 } from "../schemas/challenge.schema";
+
 import {isCe} from "../services/user.service";
 
 export async function getFactionFromTeam(userTeam: number): Promise<number> {
