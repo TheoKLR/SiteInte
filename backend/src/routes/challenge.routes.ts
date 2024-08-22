@@ -2,7 +2,6 @@ import express from 'express';
 import  * as fc  from '../controllers/challenge.controller';
 
 import {isAdmin, isAdminAnim, isAdminCE, isTokenValid} from '../middlewares/permissions';
-import {isAdmin, isAdminAnim, isAdminCE} from '../middlewares/permissions';
 
 const challengeRouter = express.Router();
 
