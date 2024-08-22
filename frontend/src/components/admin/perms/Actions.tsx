@@ -108,7 +108,7 @@ export const PermanenceList = () => {
             <li key={permanence.id}>
               <h3>{permanence.title}</h3>
               <p>{permanence.description}</p>
-              <p>{new Date(permanence.startTime).toLocaleString()} - {new Date(permanence.endTime).toLocaleString()}</p>
+              <p>{new Date(permanence.startTime.replace('Z', '')).toLocaleString()} - {new Date(permanence.endTime.replace('Z', '')).toLocaleString()}</p>
               <p>Lieu : {permanence.location}</p>
               <p>Nb de personne max : {permanence.maxRegistrations}</p>
               <button onClick={() => handleDelete(permanence.id)}>Supprimer</button>

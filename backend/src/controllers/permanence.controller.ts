@@ -35,7 +35,6 @@ export const createPermanence = async (req: Request, res: Response, next: NextFu
   try{
 
     const {start_time_str, end_time_str} = await timeToStr(startTime, endTime);
-  
     const updatedPermanence = await service.createPermanence(title, description, start_time_str, end_time_str, location, maxRegistrations)
     Created(res, {})
   }catch(error){
