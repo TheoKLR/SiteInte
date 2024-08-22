@@ -107,7 +107,7 @@ export const PublicDashboard: React.FC = () => {
                         <li key={permanence.id}>
                             <h2>{permanence.title}</h2>
                             <p>{permanence.description}</p>
-                            <p>{new Date(permanence.startTime).toLocaleString()} - {new Date(permanence.endTime).toLocaleString()}</p>
+                            <p> {permanence.startTime} - {permanence.endTime}</p>
                             <p>Lieu : {permanence.location}</p>
                             <p>Nombre de place : {permanence.maxRegistrations}</p>
 
