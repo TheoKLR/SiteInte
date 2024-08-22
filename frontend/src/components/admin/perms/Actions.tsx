@@ -108,7 +108,7 @@ export const PermanenceList = () => {
             <li key={permanence.id}>
               <h3>{permanence.title}</h3>
               <p>{permanence.description}</p>
-              <p>{new Date(permanence.startTime.replace('Z', '')).toLocaleString()} - {new Date(permanence.endTime.replace('Z', '')).toLocaleString()}</p>
+              <p>{permanence.startTime} - {permanence.endTime}</p>
               <p>Lieu : {permanence.location}</p>
               <p>Nb de personne max : {permanence.maxRegistrations}</p>
               <button onClick={() => handleDelete(permanence.id)}>Supprimer</button>
@@ -144,13 +144,13 @@ export const PermanenceList = () => {
             <label>Date de début :</label>
             <input
               type="datetime-local"
-              value={new Date(selectedPerm.startTime).toISOString().slice(0, 16)}
+              value={new Date(selectedPerm.startTime).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}
               onChange={(e) => setSelectedPerm({ ...selectedPerm, startTime: e.target.value })}
             />
             <label>Date de fin :</label>
             <input
               type="datetime-local"
-              value={new Date(selectedPerm.endTime).toISOString().slice(0, 16)}
+              value={new Date(selectedPerm.endTime).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}
               onChange={(e) => setSelectedPerm({ ...selectedPerm, endTime: e.target.value })}
             />
             <label>Lieu :</label>
