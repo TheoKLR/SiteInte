@@ -12,6 +12,8 @@ import {
     teamTochallenge, TeamTochallengeSchema
 } from "../schemas/challenge.schema";
 
+import {isCe} from "../services/user.service";
+
 export async function getFactionFromTeam(userTeam: number): Promise<number> {
     //get associated faction
     const team = await db.select().from(teamSchema).where(eq(teamSchema.id, userTeam))
@@ -70,4 +72,11 @@ export async function getTeamAndFactionFromUserId(user: number): Promise<{teamId
     const userdb = await db.select().from(userSchema).where(eq(userSchema.id, user))
     if(!userdb || userdb.length === 0) throw NoUser(user)
     return await getTeamAndFactionFromUser(userdb[0])
+}
+
+export async function isCE(studentId: number): Promise<boolean> {
+    //get user
+    const userdb = await db.select().from(userSchema).where(eq(userSchema.id, studentId))
+    if(!userdb || userdb.length === 0) throw NoUser(studentId)
+    return isCe(userdb[0])
 }

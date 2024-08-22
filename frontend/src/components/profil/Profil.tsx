@@ -3,11 +3,12 @@ import { getCurrentUser, updateUser } from '../../services/requests/users';
 import { handleError } from '../utils/Submit';
 import { ToastContainer, toast } from 'react-toastify';
 import './Profil.css';
-import { Faction, Team, User } from '../../services/interfaces';
+import {ChallType, Faction, Team, User} from '../../services/interfaces';
 import { getAllMembersTeam, getTeam } from '../../services/requests/teams';
 import { getFaction } from '../../services/requests/factions';
 import Select from "react-select";
 import { Option } from "../../services/interfaces";
+import {getAvailableChallengeForUser} from "../../services/requests/challenges";
 
 export const ProfilForm: React.FC = () => {
     const [firstName, setFirstName] = useState('');
@@ -207,6 +208,139 @@ export const TeamDisplay: React.FC = () => {
                     <h3 id='msgFaction'>Ta faction</h3>
                     <p id='nameFaction'>{userFaction?.name}</p>
                 </div>
+            </div>
+        </>
+    );
+};
+
+export const PossibleChallengeDisplay: React.FC = () => {
+    const [userTeam, setTeam] = useState<Team>();
+    const [teamMembers, setTeamMembers] = useState([]);
+    const [userFaction, setFaction] = useState<Faction>();
+    const [permission, setPermission] = useState("");
+    const [challenges, setChallenges] = useState([])
+    const [challengesTeam, setChallengesTeam] = useState([])
+    const [challengesFaction, setChallengesFaction] = useState([])
+
+    useEffect(() => {
+        const fetchUserTeamData = async () => {
+            try {
+                const currentUser = await getCurrentUser();
+                const permission = currentUser.permission;
+                const team = await getTeam(currentUser.team_id);
+                setTeam(team);
+                if (team) {
+                    setFaction(await getFaction(team.faction));
+                    setTeamMembers(await getAllMembersTeam(team.id));
+                }
+                if(permission){
+                    setPermission(permission);
+                }
+                //get challenge
+                const challenges = await getAvailableChallengeForUser(currentUser.id as number)
+                console.log(challenges)
+                setChallenges(challenges.filter((chall: any) => chall.challType === ChallType.Student))
+                setChallengesTeam(challenges.filter((chall: any) => chall.challType === ChallType.Team))
+                setChallengesFaction(challenges.filter((chall: any) => chall.challType === ChallType.Faction))
+                console.log(challenges)
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchUserTeamData();
+    }, []);
+
+    return (
+        <>
+            <div className='containerTeam'>
+                <h3>Challenges Individuels</h3>
+                <div className='affichageTeam'>
+                    <table className="teamTable">
+                        <thead>
+                        <tr>
+                            <th>NOM</th>
+                            <th>DESCRIPTION</th>
+                            <th>POINTS</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {challenges?.length !== 0 ? (
+                            challenges?.map((chall: any) => (
+                                <tr key={chall.id}>
+                                    <td>{chall.name}</td>
+                                    <td>{chall.description}</td>
+                                    <td>{chall.points}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={2}>Chargement...</td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div className='containerTeam'>
+                <h3>Challenges d'équipes</h3>
+                <div className='affichageTeam'>
+                    <table className="teamTable">
+                        <thead>
+                        <tr>
+                            <th>NOM</th>
+                            <th>DESCRIPTION</th>
+                            <th>POINTS</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {challengesTeam?.length !== 0 ? (
+                            challengesTeam?.map((chall: any) => (
+                                <tr key={chall.id}>
+                                    <td>{chall.name}</td>
+                                    <td>{chall.description}</td>
+                                    <td>{chall.points}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={2}>Chargement...</td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div className='containerTeam'>
+                <h3>Challenges de factions</h3>
+                <div className='affichageTeam'>
+                    <table className="teamTable">
+                        <thead>
+                        <tr>
+                            <th>NOM</th>
+                            <th>DESCRIPTION</th>
+                            <th>POINTS</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {challengesFaction?.length !== 0 ? (
+                            challengesFaction?.map((chall: any) => (
+                                <tr key={chall.id}>
+                                    <td>{chall.name}</td>
+                                    <td>{chall.description}</td>
+                                    <td>{chall.points}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={2}>Chargement...</td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </>
     );

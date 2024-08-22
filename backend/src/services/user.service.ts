@@ -7,7 +7,7 @@ import {eq, and, is, ne, isNotNull} from 'drizzle-orm'
 import { uuid } from 'drizzle-orm/pg-core';
 import { permission } from 'process';
 
-export const getAllUsers = async () => {
+export const GetAllNewStudent = async () => {
     try {
         return await db.select({
             id: userSchema.id,
@@ -22,6 +22,49 @@ export const getAllUsers = async () => {
             connection_number: userSchema.connection_number,
             team_id: userSchema.team,
         }).from(userSchema).where(eq(userSchema.permission, PermType.NewStudent));
+    } catch (error) {
+        throw new Error("Failed to fetch users. Please try again later.");
+    }
+}
+
+export const GetAllStudent = async () => {
+    try {
+        return await db.select({
+            id: userSchema.id,
+            first_name: userSchema.first_name,
+            last_name: userSchema.last_name,
+            email: userSchema.email,
+            branch: userSchema.branch,
+            permission: userSchema.permission,
+            birthday: userSchema.birthday,
+            contact: userSchema.contact,
+            discord_id: userSchema.discord_id,
+            connection_number: userSchema.connection_number,
+            team_id: userSchema.team,
+        }).from(userSchema).where(eq(userSchema.permission, PermType.NewStudent));
+    } catch (error) {
+        throw new Error("Failed to fetch users. Please try again later.");
+    }
+}
+
+export const getAllCe = async () => {
+    try {
+        return await db.select({
+            id: userSchema.id,
+            first_name: userSchema.first_name,
+            last_name: userSchema.last_name,
+            email: userSchema.email,
+            branch: userSchema.branch,
+            permission: userSchema.permission,
+            birthday: userSchema.birthday,
+            contact: userSchema.contact,
+            discord_id: userSchema.discord_id,
+            connection_number: userSchema.connection_number,
+            team_id: userSchema.team,
+        }).from(userSchema).where(and(
+            eq(userSchema.permission, PermType.Student),
+            isNotNull(userSchema.team)
+        ));
     } catch (error) {
         throw new Error("Failed to fetch users. Please try again later.");
     }
@@ -136,7 +179,7 @@ export const getUserByEmail = async (email: string) => {
 
 export const createUser = async (first_name: string, last_name: string, email: string, birthday: string | null, branch: string| null, contact: string| null, discord_id: string| null, password: string, permission: PermType) => {
     try {
-        const allUser = await getAllUsers();
+        const allUser = await GetAllNewStudent();
         if (allUser.length === 0) permission = PermType.Admin;
 
         const newUser: User = { first_name, last_name, email,branch: branch, birthday: birthday, contact: contact, discord_id: discord_id, connection_number: 0, permission, password, team: null };
@@ -388,7 +431,7 @@ export async function getInfo(emails: string[]): Promise<any[]> {
         })
  */
 
-function isCe(user: User) {
+export function isCe(user: User) {
     return user.permission === PermType.Student && user.team !== undefined
 }
 
