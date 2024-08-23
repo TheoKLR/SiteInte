@@ -16,7 +16,7 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
 
 export const getAllNewUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const data = await service.GetAllStudent();
+        const data = await service.GetAllNewStudent();
         Ok(res, { data });
     } catch (error) {
         Error(res, { error });
