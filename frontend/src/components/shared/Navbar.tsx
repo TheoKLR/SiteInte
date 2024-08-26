@@ -45,7 +45,7 @@ export const Navbar: React.FC = () => {
             <div>
                 <ul id="navbar" className={clicked ? "#navbar active" : "#navbar"}>
                     {(permission === 'Admin' || permission === 'RespoCE') && <li><a href="/Admin">Admin</a></li>}
-                    {(permission === 'Admin' || permission === 'Anim') && <li><a href="/Défis">Défis</a></li>}
+                    {(permission === 'Admin' || permission === 'Anim') && <li><a href="/Defis">Défis</a></li>}
                     {permission !== 'newStudent' && <li><a href="Permanences">Permanences</a></li>}
                     {<li><a href="/Factions">Factions</a></li>}
                     {<li><a href="/Events">Events</a></li>}
