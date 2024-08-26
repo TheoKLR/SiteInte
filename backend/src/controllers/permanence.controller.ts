@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/permanence.service';
 import { Error, Created, Ok } from '../utils/responses';
 import { Permanence } from '../schemas/permanence.schema';
-import { timeToStr } from '../utils/time_utils';
+import { parseDateString, timeToStr } from '../utils/time_utils';
 import { parse } from 'date-fns';
 
 export const getAllPermanences = async (req: Request, res: Response, next: NextFunction) => {
@@ -76,11 +76,6 @@ export const deletePermanence = async (req: Request, res: Response, next: NextFu
 export const openOrclosePermanenceJ7 = async(req: Request, res: Response, next: NextFunction) => {
   const { state } = req.body;
 
-  // Fonction pour parser une date au format "dd/MM/yyyy HH:mm:ss"
-  const parseDateString = (dateString: string): Date => {
-    const [day, month, year, hour, minute, second] = dateString.split(/[\s/:]+/).map(Number);
-    return new Date(Date.UTC(year, month - 1, day, hour, minute, second));
-  };
 
   try {
     const fetchedPermanences = await service.getAllPermanences();
@@ -89,7 +84,6 @@ export const openOrclosePermanenceJ7 = async(req: Request, res: Response, next: 
     const j7Permanences = fetchedPermanences.filter(perm => {
       const startTime = parseDateString(perm.startTime); // Conversion correcte
       const daysDifference = Math.floor((startTime.getTime() - now.getTime()) / (1000 * 3600 * 24))+1;
-      console.log(daysDifference);
       return daysDifference <= 7;
     });
 
@@ -148,7 +142,6 @@ export const registerPermanence = async( req: Request, res: Response, next: Next
     if (registrations.length >= permanence.maxRegistrations) {
       return Error(res, { msg: 'Nombre maximum d\'inscriptions atteint.' });
     }
-
     const result = await service.registerUser(idNumber, useridNumber);
 
     Ok(res, {msg:"User Registered !", data: result});
@@ -169,8 +162,11 @@ export const unRegisterPermanence = async( req: Request, res: Response, next: Ne
   try{
     const permanence : any = await service.getPermanence(idNumber);
 
+    const startTime = parseDateString(permanence.startTime); // Conversion correcte
+
+
     const now = new Date();
-    const twentyFourHoursBefore = new Date(new Date(permanence.startTime).getTime() - 24 * 60 * 60 * 1000);
+    const twentyFourHoursBefore = new Date(new Date(startTime).getTime() - 24 * 60 * 60 * 1000);
 
     if (now > twentyFourHoursBefore) {
       return Error(res, { msg: 'Vous ne pouvez plus vous désinscrire à moins de 24h de la permanence.' });
