@@ -52,7 +52,7 @@ export const isAdminAnim = async (req: Request, res: Response, next: NextFunctio
             return Error(res, { msg: "user doesn't exists" });
         }
 
-        if (user.permission === PermType.Admin || user.permission === PermType.RespoCE) {
+        if (user.permission === PermType.Admin || user.permission === PermType.Anim) {
             next();
         } else {
             Error(res, { msg: 'Forbidden: Insufficient permissions' });
