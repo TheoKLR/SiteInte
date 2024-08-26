@@ -8,7 +8,7 @@ import {
     ManageNewStudents,
     PasswordReset,
     TableNewStudents,
-    TableUser
+    TableUser, TestNewStudentInDb
 } from './Actions';
 import { AdminAction } from '../AdminSection';
 import { getRole } from '../../../services/requests';
@@ -67,6 +67,10 @@ const UserAdminSection: React.FC = () => {
       {
           title: 'Récupération données WEI',
           form: <GetDatas/>,
+      },
+      {
+          title: 'Tester présence des nouveaux',
+          form: <TestNewStudentInDb/>,
       },
 
   ];

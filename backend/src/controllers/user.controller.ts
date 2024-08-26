@@ -157,6 +157,16 @@ export const getInfo = async (req: Request, res: Response, next: NextFunction) =
     }
 }
 
+export const getMissing = async (req: Request, res: Response, next: NextFunction) => {
+    const { data } = req.body
+    try {
+        const result = await service.getMissing(data)
+        Ok(res, {data: result, msg: "Ok"})
+    } catch (error) {
+        Error(res, { error })
+    }
+}
+
 export const changePermission = async (req: Request, res: Response, next: NextFunction) => {
     const { id, perm } = req.body;
 
