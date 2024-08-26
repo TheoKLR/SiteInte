@@ -59,7 +59,6 @@ export const GetDatas = () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const content = e.target?.result as string;
-      console.log(content)
       const lines = content.split('\n').map(line => line.trim()).filter(line => line);
       setUsers(lines);
     };
@@ -76,6 +75,60 @@ export const GetDatas = () => {
     const blob = new Blob([stringContent], { type: 'text/plain' }); // Utilisation de 'text/plain' pour du texte brut
     const url = URL.createObjectURL(blob);
 
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'user_info.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Réinitialisation des états après soumission
+    setUsers([]);
+    setTeam({});
+  };
+
+  return (
+      <div>
+        <div className="file-upload-container">
+          <input type="file" accept=".txt" onChange={handleFileUpload} />
+        </div>
+        <button className="submit-button" onClick={Submit}>Soumettre</button>
+        <ToastContainer position="bottom-right" />
+      </div>
+  );
+};
+
+//to get data for wei bus distribution
+export const TestNewStudentInDb = () => {
+  const [users, setUsers] = useState([] as any[]);
+  const [team, setTeam] = useState({} as any);
+
+  // Fonction pour gérer le chargement du fichier
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const decoder = new TextDecoder('utf-8');
+      const content = decoder.decode(e.target?.result as ArrayBuffer);
+      let lines: {first_name: string, last_name: string}[] = []
+      content.split("\n").forEach(line => {
+        const data = line.split(";")
+        lines.push({last_name: data[1], first_name: data[2]})
+      })
+      setUsers(lines);
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
+  const Submit = async () => {
+    const missingUsers = await api.post("user/getMissing", {data: users})
+    const data = missingUsers.data.data
+    const stringContent = JSON.stringify(data);
+
+    const blob = new Blob([stringContent], { type: 'application/json' }); // Utilisation de 'application/json' pour JSON
+    const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
     link.download = 'user_info.txt';
