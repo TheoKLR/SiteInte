@@ -3,7 +3,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { Perm } from '../../../services/interfaces';
 import { handleError } from '../../utils/Submit';
 import './Permanences.css'
-import { getAllPerms, deletePerm, updatePermanence, createPerm, openOrclosePermanenceJ7 } from '../../../services/requests/perms';
+import { getAllPerms, deletePerm, updatePermanence, createPerm, openOrclosePermanenceJ7, openClosePermanence } from '../../../services/requests/perms';
 
 export const PermanenceList = () => {
   const [permanences, setPermanences] = useState<Perm[]>([]);
@@ -36,14 +36,8 @@ export const PermanenceList = () => {
   const handleOpen = async (permanence: Perm) => {
     try {
       const updatedPerm = { ...permanence, isRegistrationOpen: true };
-      await handleError("Permanence ouverte !", "Erreur lors de l'ouverture", updatePermanence, 
+      await handleError("Permanence ouverte !", "Erreur lors de l'ouverture", openClosePermanence, 
         permanence.id,
-        permanence.title,
-        permanence.description,
-        permanence.startTime,
-        permanence.endTime,
-        permanence.location,
-        permanence.maxRegistrations,
         true
       );
       const updatedPermanences = await getAllPerms();
@@ -55,14 +49,8 @@ export const PermanenceList = () => {
 
   const handleClose = async (permanence: Perm) => {
     try {
-      await handleError("Permanence fermée !", "Erreur lors de la fermeture", updatePermanence, 
+      await handleError("Permanence fermée !", "Erreur lors de la fermeture", openClosePermanence, 
         permanence.id,
-        permanence.title,
-        permanence.description,
-        permanence.startTime,
-        permanence.endTime,
-        permanence.location,
-        permanence.maxRegistrations,
         false
       );
       const updatedPermanences = await getAllPerms();
@@ -301,7 +289,7 @@ export const OpenPermsAtJ7 = () => {
             <li key={permanence.id}>
               <h3>{permanence.title}</h3>
               <p>{permanence.description}</p>
-              <p>{new Date(permanence.startTime).toLocaleString()} - {new Date(permanence.endTime).toLocaleString()}</p>
+              <p>{permanence.startTime} - {permanence.endTime}</p>
               <p>Lieu : {permanence.location}</p>
             </li>
           ))

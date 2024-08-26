@@ -88,9 +88,9 @@ export const openOrclosePermanenceJ7 = async(req: Request, res: Response, next: 
 
     const j7Permanences = fetchedPermanences.filter(perm => {
       const startTime = parseDateString(perm.startTime); // Conversion correcte
-      const daysDifference = Math.floor((startTime.getTime() - now.getTime()) / (1000 * 3600 * 24));
-
-      return daysDifference === 7;
+      const daysDifference = Math.floor((startTime.getTime() - now.getTime()) / (1000 * 3600 * 24))+1;
+      console.log(daysDifference);
+      return daysDifference <= 7;
     });
 
     for (const perm of j7Permanences) {
@@ -221,3 +221,18 @@ export const getUserPermanences = async( req: Request, res: Response, next: Next
     Error(res, { error });
   }
 };
+
+export const openClosePermanence = async( req: Request, res: Response, next: NextFunction) => {
+
+  const { id } = req.params;
+  const idNumber = parseInt(id, 10);
+  const {isRegistrationOpen } = req.body;
+
+  try{
+    
+    const updatedPermanence = await service.openClosePermanence(idNumber, isRegistrationOpen);
+    Ok(res, {msg: 'Permanence opened or closed !'})
+  }catch(error){
+    Error(res, { error });
+  }
+}
