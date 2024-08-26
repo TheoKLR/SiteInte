@@ -394,16 +394,24 @@ export async function getInfo(emails: string[]): Promise<any[]> {
 export async function getMissing(datas: {first_name: string, last_name: string}[]): Promise<any[]> {
     //checking faction exist
     let list = []
+    let i = 1
     for (let data of datas) {
         const first_name = data.first_name
         const last_name = data.last_name
-        const user = await db.select().from(userSchema).where(
-            and(
-                eq(userSchema.first_name, first_name),
-                eq(sql`UPPER(${userSchema.last_name})`, last_name.toUpperCase())
-            )
-        );
-        if(!user || user.length === 0) list.push(data)
+        try {
+            const user = await db.select().from(userSchema).where(
+                and(
+                    eq(sql`LOWER(${userSchema.first_name})`, first_name.toLowerCase()),
+                    eq(sql`UPPER(${userSchema.last_name})`, last_name.toUpperCase())
+                )
+            );
+            if(!user || user.length === 0) list.push(data)
+            i++
+        } catch (e) {
+            console.error(e)
+            console.log(i)
+            console.log(first_name + " : " + last_name)
+        }
     }
     return list
 }
