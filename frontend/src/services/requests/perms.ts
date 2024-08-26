@@ -30,13 +30,22 @@ export const updatePermanence = async (
     id: number, 
     title: string, 
     description: string, 
-    startTime: Date, 
-    endTime: Date, 
+    startTime: string, 
+    endTime: string, 
     location: string, 
     maxRegistrations: number,
     isRegistrationOpen: boolean) => {
 
-    const response = await api.put('permanence/'+ id, {title, description, startTime, endTime, location, maxRegistrations, isRegistrationOpen});
+    const response = await api.post('permanence/update/'+ id, {title, description, startTime, endTime, location, maxRegistrations, isRegistrationOpen});
+    return response.data;
+
+}
+
+export const openClosePermanence = async (
+    id: number, 
+    isRegistrationOpen: boolean) => {
+
+    const response = await api.post('permanence/openorclose/'+ id, {isRegistrationOpen});
     return response.data;
 
 }

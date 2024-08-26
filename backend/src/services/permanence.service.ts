@@ -184,3 +184,18 @@ export const getUserRegistrations = async (userId : number) => {
         throw new Error("Failed to get Registrations. Please try again later."); 
     }
 }
+
+export const openClosePermanence = async (id : number, isRegistrationOpen: boolean) => {
+
+    try{
+
+        const permanence = await db.update(permanenceSchema)
+            .set({ isRegistrationOpen: isRegistrationOpen })
+            .where(eq( permanenceSchema.id, id));
+
+        return permanence;
+
+    }catch(error){
+        throw new Error("Failed to delete Permanence. Please try again later."); 
+    }
+}

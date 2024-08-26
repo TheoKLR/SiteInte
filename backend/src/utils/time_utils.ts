@@ -23,7 +23,6 @@ export const timeToStr = async (startTime: any, endTime: any) => {
     const utc2Start = toUTCPlus2(start);
     const utc2End = toUTCPlus2(end);
 
-    console.log("UTC Start"+utc2Start);
 
     // Do not adjust the time manually, just format it
     const start_time_str = formatToISO(utc2Start);
