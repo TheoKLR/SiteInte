@@ -18,6 +18,7 @@ userRouter.get('/getbyteam/:teamId',isAdminCE, sc.getUserbyTeam);
 userRouter.post('/modifyteam', isAdminCE, sc.modifyTeam);
 userRouter.get('/allbypermission/:permission', isAdmin, sc.getAllByPermission);
 userRouter.post('/getInfo', isAdmin, sc.getInfo);
+userRouter.post('/getMissing', isAdmin, sc.getMissing);
 userRouter.get('/isinrilist/:email', sc.isInRILIst);
 
 

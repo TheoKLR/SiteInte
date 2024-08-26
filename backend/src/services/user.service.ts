@@ -3,7 +3,7 @@ import { userSchema, User, PermType } from '../schemas/user.schema';
 import { newstudentSchema } from '../schemas/newstudent.schema';
 import { roleSchema, userToRoleSchema } from '../schemas/role.schema';
 import { db } from "../database/db"
-import {eq, and, is, ne, isNotNull} from 'drizzle-orm'
+import {eq, and, is, ne, isNotNull, sql} from 'drizzle-orm'
 import { uuid } from 'drizzle-orm/pg-core';
 import { permission } from 'process';
 
@@ -387,7 +387,23 @@ export async function getInfo(emails: string[]): Promise<any[]> {
             "",
             isMajor(user[0])
         ])
-        console.log(list)
+    }
+    return list
+}
+
+export async function getMissing(datas: {first_name: string, last_name: string}[]): Promise<any[]> {
+    //checking faction exist
+    let list = []
+    for (let data of datas) {
+        const first_name = data.first_name
+        const last_name = data.last_name
+        const user = await db.select().from(userSchema).where(
+            and(
+                eq(userSchema.first_name, first_name),
+                eq(sql`UPPER(${userSchema.last_name})`, last_name.toUpperCase())
+            )
+        );
+        if(!user || user.length === 0) list.push(data)
     }
     return list
 }
