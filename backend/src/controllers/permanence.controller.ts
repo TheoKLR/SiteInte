@@ -3,7 +3,7 @@ import * as service from '../services/permanence.service';
 import { Error, Created, Ok } from '../utils/responses';
 import { Permanence } from '../schemas/permanence.schema';
 import { timeToStr } from '../utils/time_utils';
-
+import { parse } from 'date-fns';
 
 export const getAllPermanences = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -73,45 +73,45 @@ export const deletePermanence = async (req: Request, res: Response, next: NextFu
   }
 };
 
-export const openOrclosePermanenceJ7 = async( req: Request, res: Response, next: NextFunction) => {
-
+export const openOrclosePermanenceJ7 = async(req: Request, res: Response, next: NextFunction) => {
   const { state } = req.body;
-  try{
-    const fetchedPermanences = await service.getAllPermanences();
 
+  // Fonction pour parser une date au format "dd/MM/yyyy HH:mm:ss"
+  const parseDateString = (dateString: string): Date => {
+    const [day, month, year, hour, minute, second] = dateString.split(/[\s/:]+/).map(Number);
+    return new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+  };
+
+  try {
+    const fetchedPermanences = await service.getAllPermanences();
     const now = new Date();
 
-    // Réinitialiser l'heure de la date actuelle
-    now.setHours(0, 0, 0, 0);
     const j7Permanences = fetchedPermanences.filter(perm => {
-      const startTime = new Date(perm.startTime);
-    
-      // Réinitialiser l'heure de la date de début de la permanence
-      startTime.setHours(0, 0, 0, 0);
-    
-      const timeDifference = startTime.getTime() - now.getTime();
-      const daysDifference = timeDifference / (1000 * 3600 * 24);
+      const startTime = parseDateString(perm.startTime); // Conversion correcte
+      const daysDifference = Math.floor((startTime.getTime() - now.getTime()) / (1000 * 3600 * 24));
+
       return daysDifference === 7;
     });
 
-        for (const perm of j7Permanences) {
-          await service.updatePermanence(
-            perm.id, 
-            perm.title, 
-            perm.description ?? "No desc", 
-            perm.startTime, 
-            perm.endTime, 
-            perm.location, 
-            perm.maxRegistrations, 
-            state)
-        }
+    for (const perm of j7Permanences) {
+      await service.updatePermanence(
+        perm.id, 
+        perm.title, 
+        perm.description ?? "No desc", 
+        perm.startTime, 
+        perm.endTime, 
+        perm.location, 
+        perm.maxRegistrations, 
+        state
+      );
+    }
 
-    Ok(res, {msg:"All J+7 perms updated !", data: j7Permanences});
-  }catch(error){
+    Ok(res, { msg: "All J+7 perms updated!", data: j7Permanences });
+  } catch (error) {
     Error(res, { error });
   }
-  
 }
+
 
 export const registerPermanence = async( req: Request, res: Response, next: NextFunction) => {
 

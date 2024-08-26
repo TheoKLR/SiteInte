@@ -31,8 +31,8 @@ export const Permanences = () => {
     return (
         <div className="Perms">
             <Navbar/>
-            <Section titre="Permances !" contenu={PublicDashboard} />
-            <Section titre="Mes Permances !" contenu={UserPermanenceSummary} />
+            <Section titre="Permanences !" contenu={PublicDashboard} />
+            <Section titre="Mes Permanences !" contenu={UserPermanenceSummary} />
         </div>
     )
 }
