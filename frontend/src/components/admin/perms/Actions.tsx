@@ -144,13 +144,13 @@ export const PermanenceList = () => {
             <label>Date de début :</label>
             <input
               type="datetime-local"
-              value={new Date(selectedPerm.startTime).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}
+              value={selectedPerm.startTime}
               onChange={(e) => setSelectedPerm({ ...selectedPerm, startTime: e.target.value })}
             />
             <label>Date de fin :</label>
             <input
               type="datetime-local"
-              value={new Date(selectedPerm.endTime).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}
+              value={selectedPerm.endTime}
               onChange={(e) => setSelectedPerm({ ...selectedPerm, endTime: e.target.value })}
             />
             <label>Lieu :</label>
