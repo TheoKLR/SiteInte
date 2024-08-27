@@ -84,3 +84,11 @@ export const getUserPermanences = async (userid: number ) => {
     return response.data.data;
 
 }
+
+export const isRegister = async ( id: number,  userId: number) => {
+
+    const response = await api.post('permanence/isregister/'+ id, {userId});
+
+    return response.data.data;
+
+}
