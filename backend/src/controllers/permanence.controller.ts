@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/permanence.service';
 import { Error, Created, Ok } from '../utils/responses';
 import { Permanence } from '../schemas/permanence.schema';
-import { timeToStr } from '../utils/time_utils';
+import { parseDateString, resetTimeToMidnight, timeToStr } from '../utils/time_utils';
 import { parse } from 'date-fns';
 
 export const getAllPermanences = async (req: Request, res: Response, next: NextFunction) => {
@@ -76,34 +76,20 @@ export const deletePermanence = async (req: Request, res: Response, next: NextFu
 export const openOrclosePermanenceJ7 = async(req: Request, res: Response, next: NextFunction) => {
   const { state } = req.body;
 
-  // Fonction pour parser une date au format "dd/MM/yyyy HH:mm:ss"
-  const parseDateString = (dateString: string): Date => {
-    const [day, month, year, hour, minute, second] = dateString.split(/[\s/:]+/).map(Number);
-    return new Date(Date.UTC(year, month - 1, day, hour, minute, second));
-  };
-
   try {
     const fetchedPermanences = await service.getAllPermanences();
-    const now = new Date();
+    const now = resetTimeToMidnight(new Date());
 
     const j7Permanences = fetchedPermanences.filter(perm => {
-      const startTime = parseDateString(perm.startTime); // Conversion correcte
+      const startTime = resetTimeToMidnight(parseDateString(perm.startTime)); // Conversion correcte
+      
       const daysDifference = Math.floor((startTime.getTime() - now.getTime()) / (1000 * 3600 * 24));
-
-      return daysDifference === 7;
+      console.log(daysDifference);
+      return daysDifference <= 7;
     });
 
     for (const perm of j7Permanences) {
-      await service.updatePermanence(
-        perm.id, 
-        perm.title, 
-        perm.description ?? "No desc", 
-        perm.startTime, 
-        perm.endTime, 
-        perm.location, 
-        perm.maxRegistrations, 
-        state
-      );
+      await service.openClosePermanence(perm.id, state);
     }
 
     Ok(res, { msg: "All J+7 perms updated!", data: j7Permanences });
@@ -148,7 +134,6 @@ export const registerPermanence = async( req: Request, res: Response, next: Next
     if (registrations.length >= permanence.maxRegistrations) {
       return Error(res, { msg: 'Nombre maximum d\'inscriptions atteint.' });
     }
-
     const result = await service.registerUser(idNumber, useridNumber);
 
     Ok(res, {msg:"User Registered !", data: result});
@@ -169,8 +154,11 @@ export const unRegisterPermanence = async( req: Request, res: Response, next: Ne
   try{
     const permanence : any = await service.getPermanence(idNumber);
 
+    const startTime = parseDateString(permanence.startTime); // Conversion correcte
+
+
     const now = new Date();
-    const twentyFourHoursBefore = new Date(new Date(permanence.startTime).getTime() - 24 * 60 * 60 * 1000);
+    const twentyFourHoursBefore = new Date(new Date(startTime).getTime() - 24 * 60 * 60 * 1000);
 
     if (now > twentyFourHoursBefore) {
       return Error(res, { msg: 'Vous ne pouvez plus vous désinscrire à moins de 24h de la permanence.' });
@@ -221,3 +209,35 @@ export const getUserPermanences = async( req: Request, res: Response, next: Next
     Error(res, { error });
   }
 };
+
+export const openClosePermanence = async( req: Request, res: Response, next: NextFunction) => {
+
+  const { id } = req.params;
+  const idNumber = parseInt(id, 10);
+  const {isRegistrationOpen } = req.body;
+
+  try{
+    
+    const updatedPermanence = await service.openClosePermanence(idNumber, isRegistrationOpen);
+    Ok(res, {msg: 'Permanence opened or closed !'})
+  }catch(error){
+    Error(res, { error });
+  }
+}
+
+export const isRegister = async(req: Request, res:Response)=>{
+
+  const { id } = req.params;
+  const idNumber = parseInt(id, 10);
+  const { userId } = req.body;
+  const useridNumber = parseInt(userId, 10);
+
+  // Vérifier si l'utilisateur est déjà inscrit
+  const existingRegistration = await service.getUserRegistration(idNumber, useridNumber);
+  if (existingRegistration) {
+    return  Ok(res, { data: true });
+  }
+  else{
+    return Ok(res, {data : false})
+  }
+}

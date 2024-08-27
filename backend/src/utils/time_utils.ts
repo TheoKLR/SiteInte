@@ -23,7 +23,6 @@ export const timeToStr = async (startTime: any, endTime: any) => {
     const utc2Start = toUTCPlus2(start);
     const utc2End = toUTCPlus2(end);
 
-    console.log("UTC Start"+utc2Start);
 
     // Do not adjust the time manually, just format it
     const start_time_str = formatToISO(utc2Start);
@@ -31,3 +30,14 @@ export const timeToStr = async (startTime: any, endTime: any) => {
 
     return { start_time_str, end_time_str };
 };
+
+  // Fonction pour parser une date au format "dd/MM/yyyy HH:mm:ss"
+export const parseDateString = (dateString: string): Date => {
+    const [day, month, year, hour, minute, second] = dateString.split(/[\s/:]+/).map(Number);
+    return new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+  };
+
+  // Fonction pour réinitialiser l'heure d'une date à minuit (00:00:00
+export  const resetTimeToMidnight = (date: Date): Date => {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
+  };
