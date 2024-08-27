@@ -41,7 +41,7 @@ export const GetAllStudent = async () => {
             discord_id: userSchema.discord_id,
             connection_number: userSchema.connection_number,
             team_id: userSchema.team,
-        }).from(userSchema).where(eq(userSchema.permission, PermType.NewStudent));
+        }).from(userSchema);
     } catch (error) {
         throw new Error("Failed to fetch users. Please try again later.");
     }
