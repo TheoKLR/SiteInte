@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Perm, User } from '../../services/interfaces';
 import { handleError } from '../utils/Submit';
-import { deletePerm, getAllPerms, getRegistration, getUserPermanences, registerPermanence, unRegisterPermanence } from '../../services/requests/perms';
+import { deletePerm, getAllPerms, getRegistration, getUserPermanences, isRegister, registerPermanence, unRegisterPermanence } from '../../services/requests/perms';
 import { toast, ToastContainer } from 'react-toastify';
 import { getCurrentUser } from '../../services/requests/users';
 import './PermAffichage.css';
@@ -10,7 +10,7 @@ export const PublicDashboard: React.FC = () => {
     const [permanences, setPermanences] = useState<Perm[]>([]);
     const [registrations, setRegistrations] = useState<Record<number, any[]>>({});
     const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
-    const [displayList, setDisplayList] = useState<Record<number, boolean>>({});  // Utilisation d'un état par permanence
+    const [displayList, setDisplayList] = useState<Record<number, boolean>>({});
 
     useEffect(() => {
         const fetchPerms = async () => {
@@ -18,7 +18,7 @@ export const PublicDashboard: React.FC = () => {
                 const permanencesData = await getAllPerms();
                 setPermanences(permanencesData);
                 permanencesData.forEach((perm : Perm)  => {
-                    fetchRegistrations(perm.id)
+                    fetchRegistrations(perm.id);
                 });
             } catch (error) {
                 console.error('Error fetching permanences:', error);
@@ -41,14 +41,25 @@ export const PublicDashboard: React.FC = () => {
 
     const handleRegister = async (permanenceId: number) => {
         try {
-            await handleError(
-                "Permanence enregistrée !",
-                "Impossible de s'inscrire à la permanence",
-                registerPermanence,
-                permanenceId,
-                currentUser?.id
-            );
-            await fetchRegistrations(permanenceId);
+            if(currentUser){
+
+                const alreadyRegister = await isRegister(permanenceId, currentUser.id);
+                console.log(alreadyRegister);
+                if(alreadyRegister === false){
+                    
+                    await handleError(
+                        "Permanence enregistrée !",
+                        "Impossible de s'inscrire à la permanence",
+                        registerPermanence,
+                        permanenceId,
+                        currentUser.id
+                    );
+                }
+                else{
+                    toast.error("Vous êtes déjà inscrits !")
+                }
+                await fetchRegistrations(permanenceId);
+            }
         } catch (error) {
             console.error('Error while registering user:', error);
         }
@@ -72,9 +83,9 @@ export const PublicDashboard: React.FC = () => {
     const handleList = (permanenceId: number) => {
         setDisplayList((prev) => ({
             ...prev,
-            [permanenceId]: !prev[permanenceId],  // Toggle uniquement pour cette permanence
+            [permanenceId]: !prev[permanenceId],  
         }));
-    }
+    };
 
     const fetchRegistrations = async (permanenceId: number) => {
         try {
@@ -99,6 +110,12 @@ export const PublicDashboard: React.FC = () => {
         return registrations[permanenceId]?.some((reg) => reg.user.id === currentUser?.id);
     };
 
+    const getRemainingPlaces = (permanenceId: number) => {
+        const totalRegistrations = registrations[permanenceId]?.length || 0;
+        const permanence = permanences.find((p) => p.id === permanenceId);
+        return permanence ? permanence.maxRegistrations - totalRegistrations : 0;
+    };
+
     return (
         <div className="dashboard-container">
             <ul className="perm-list">
@@ -109,7 +126,8 @@ export const PublicDashboard: React.FC = () => {
                             <p>{permanence.description}</p>
                             <p> {permanence.startTime} - {permanence.endTime}</p>
                             <p>Lieu : {permanence.location}</p>
-                            <p>Nombre de place : {permanence.maxRegistrations}</p>
+                            <p>Nombre de places : {permanence.maxRegistrations}</p>
+                            <p>Places restantes : {getRemainingPlaces(permanence.id)}</p> {/* Nouvel élément */}
 
                             {isUserRegistered(permanence.id) ? (
                                 <button
@@ -131,19 +149,17 @@ export const PublicDashboard: React.FC = () => {
                             <button onClick={() => handleList(permanence.id)}>
                                 Voir les inscrits
                             </button>
-                            {displayList[permanence.id] && (  // Conditionnel pour chaque permanence
+                            {displayList[permanence.id] && (
                                 <ul className="registered-users-list">
-                                    {registrations[permanence.id].length > 0 ? (
-                                        
+                                    {registrations[permanence.id]?.length > 0 ? (
                                         registrations[permanence.id].map((reg) => (
-                                        <li key={reg.Registration.id}>
-                                            {reg.user.first_name} {reg.user.last_name}
-                                        </li>
-                                    ))
-
-                                ) : (
-
-                                    <p>Aucune personne dans la permanences.</p>) }
+                                            <li key={reg.Registration.id}>
+                                                {reg.user.first_name} {reg.user.last_name}
+                                            </li>
+                                        ))
+                                    ) : (
+                                        <p>Aucune personne dans la permanence.</p>
+                                    )}
                                 </ul>
                             )}
                         </li>
@@ -156,6 +172,7 @@ export const PublicDashboard: React.FC = () => {
         </div>
     );
 };
+
 
 
 

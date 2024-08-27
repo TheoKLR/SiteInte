@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/permanence.service';
 import { Error, Created, Ok } from '../utils/responses';
 import { Permanence } from '../schemas/permanence.schema';
-import { parseDateString, timeToStr } from '../utils/time_utils';
+import { parseDateString, resetTimeToMidnight, timeToStr } from '../utils/time_utils';
 import { parse } from 'date-fns';
 
 export const getAllPermanences = async (req: Request, res: Response, next: NextFunction) => {
@@ -79,25 +79,18 @@ export const openOrclosePermanenceJ7 = async(req: Request, res: Response, next: 
 
   try {
     const fetchedPermanences = await service.getAllPermanences();
-    const now = new Date();
+    const now = resetTimeToMidnight(new Date());
 
     const j7Permanences = fetchedPermanences.filter(perm => {
-      const startTime = parseDateString(perm.startTime); // Conversion correcte
-      const daysDifference = Math.floor((startTime.getTime() - now.getTime()) / (1000 * 3600 * 24))+1;
+      const startTime = resetTimeToMidnight(parseDateString(perm.startTime)); // Conversion correcte
+      
+      const daysDifference = Math.floor((startTime.getTime() - now.getTime()) / (1000 * 3600 * 24));
+      console.log(daysDifference);
       return daysDifference <= 7;
     });
 
     for (const perm of j7Permanences) {
-      await service.updatePermanence(
-        perm.id, 
-        perm.title, 
-        perm.description ?? "No desc", 
-        perm.startTime, 
-        perm.endTime, 
-        perm.location, 
-        perm.maxRegistrations, 
-        state
-      );
+      await service.openClosePermanence(perm.id, state);
     }
 
     Ok(res, { msg: "All J+7 perms updated!", data: j7Permanences });
@@ -230,5 +223,22 @@ export const openClosePermanence = async( req: Request, res: Response, next: Nex
     Ok(res, {msg: 'Permanence opened or closed !'})
   }catch(error){
     Error(res, { error });
+  }
+}
+
+export const isRegister = async(req: Request, res:Response)=>{
+
+  const { id } = req.params;
+  const idNumber = parseInt(id, 10);
+  const { userId } = req.body;
+  const useridNumber = parseInt(userId, 10);
+
+  // Vérifier si l'utilisateur est déjà inscrit
+  const existingRegistration = await service.getUserRegistration(idNumber, useridNumber);
+  if (existingRegistration) {
+    return  Ok(res, { data: true });
+  }
+  else{
+    return Ok(res, {data : false})
   }
 }

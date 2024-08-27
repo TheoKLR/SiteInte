@@ -32,7 +32,12 @@ export const timeToStr = async (startTime: any, endTime: any) => {
 };
 
   // Fonction pour parser une date au format "dd/MM/yyyy HH:mm:ss"
- export const parseDateString = (dateString: string): Date => {
+export const parseDateString = (dateString: string): Date => {
     const [day, month, year, hour, minute, second] = dateString.split(/[\s/:]+/).map(Number);
     return new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+  };
+
+  // Fonction pour réinitialiser l'heure d'une date à minuit (00:00:00
+export  const resetTimeToMidnight = (date: Date): Date => {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
   };
