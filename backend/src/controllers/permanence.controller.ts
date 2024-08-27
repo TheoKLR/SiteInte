@@ -76,7 +76,6 @@ export const deletePermanence = async (req: Request, res: Response, next: NextFu
 export const openOrclosePermanenceJ7 = async(req: Request, res: Response, next: NextFunction) => {
   const { state } = req.body;
 
-
   try {
     const fetchedPermanences = await service.getAllPermanences();
     const now = resetTimeToMidnight(new Date());
