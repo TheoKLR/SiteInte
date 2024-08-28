@@ -77,3 +77,32 @@ export const isTokenValid = async (req: Request, res: Response, next: NextFuncti
         return Error(res, { msg: 'Unauthorized: Invalid token' });
     }
 };
+
+export const isCurrentUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const token = req.headers['authorization']?.split(' ')[1];
+        const {userId} = req.body
+
+        if (!token) {
+            return Error(res, { msg: 'Unauthorized: Invalid token' });
+        }
+        const decodedToken = decodeToken(req);
+
+        if (!decodedToken) {
+            return Unauthorized(res, { msg: 'Unauthorized: Token has expired' });
+        }
+
+        const decodedUser = await getUserByEmail(decodedToken);
+
+        if(decodedUser){
+            if(userId !== decodedUser.id){
+                return Unauthorized(res, { msg: 'Unauthorized: Invalid user' });
+            }
+        }
+
+
+        next();
+    } catch (error) {
+        return Error(res, { msg: 'Unauthorized: Invalid token' });
+    }
+};
