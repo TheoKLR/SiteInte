@@ -10,12 +10,12 @@ challengeRouter.get('/countPointsForTeam', isAdminAnim, fc.countPointsForTeam);
 challengeRouter.get('/all', fc.getAllChallengesInDb);
 challengeRouter.post('/valid', isAdminAnim, fc.validChallenge);
 challengeRouter.post('/validFree', isAdminAnim, fc.validFreeChallenge);
-challengeRouter.post('/getCompletedForTeam', isTokenValid, fc.getCompletedChallengeForTeam);
-challengeRouter.post('/getCompletedForFaction', isTokenValid, fc.getCompletedChallengeForFaction);
-challengeRouter.post('/getCompletedForStudent', isTokenValid, fc.getCompletedChallengeForStudent);
-challengeRouter.post('/getAvailableForTeam', isTokenValid, fc.getAvailableChallengeForTeam);
-challengeRouter.post('/getAvailableForStudent', isTokenValid, fc.getAvailableChallengeForStudent);
-challengeRouter.post('/getAvailableForFaction', isTokenValid, fc.getAvailableChallengeForFaction);
+challengeRouter.post('/getCompletedForTeam', fc.getCompletedChallengeForTeam);
+challengeRouter.post('/getCompletedForFaction', fc.getCompletedChallengeForFaction);
+challengeRouter.post('/getCompletedForStudent', fc.getCompletedChallengeForStudent);
+challengeRouter.post('/getAvailableForTeam', fc.getAvailableChallengeForTeam);
+challengeRouter.post('/getAvailableForStudent', fc.getAvailableChallengeForStudent);
+challengeRouter.post('/getAvailableForFaction', fc.getAvailableChallengeForFaction);
 challengeRouter.post('/unvalid', isAdminAnim, fc.unvalidChallenge);
 challengeRouter.post('/unvalidFree', isAdminAnim, fc.unvalidFreeChallenge);
 challengeRouter.post('/allFreeText', isAdminAnim, fc.getAllFreeText)
