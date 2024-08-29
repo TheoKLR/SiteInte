@@ -43,7 +43,6 @@ export const PermanenceList = () => {
       try {
         const response = await getMemberOfPerm(selectedPerm.id)
         const allMembers = await getAllUsers()
-        console.log(allMembers)
         const usersOptions = response.map((user: any) => ({
           value: user.userId,
           label: `${user.firstName} ${user.lastName}`,
