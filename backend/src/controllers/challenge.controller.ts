@@ -105,7 +105,6 @@ export const getAllStudentChallenges = async (req: Request, res: Response, next:
 export const getAllFactionChallenges = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const {filter, associatedId} = req.body
-    console.log("filter: " + filter + " id: " + associatedId)
     switch (filter) {
       case "available": return Ok(res, { data: await service.getAvailableChallengeForFaction(associatedId) } )
       case "completed": return Ok(res, { data: await getChallengeFromIds(await service.getCompletedChallengesForFaction(associatedId)) } )
@@ -212,7 +211,6 @@ export const getCompletedChallengeForFaction = async (req: Request, res: Respons
   const { associatedId } = req.body;
   try {
     const data = await getChallengeFromIds(await service.getCompletedChallengesForFaction(associatedId));
-    console.log(data)
     Ok(res, { data: data, msg: "OK" });
   } catch (error) {
     Error(res, { error });

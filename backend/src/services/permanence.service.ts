@@ -172,6 +172,43 @@ export const getRegistrations = async (id : number) => {
     }
 }
 
+export const getMemberOfPerm = async (id : number) => {
+    try{
+        const registrationsWithUsers = await db
+            .select({
+                userId: userSchema.id,
+                firstName: userSchema.first_name,
+                lastName: userSchema.last_name,
+                email: userSchema.email,
+            })
+            .from(registrationSchema)
+            .innerJoin(userSchema, eq(registrationSchema.userId, userSchema.id))
+            .where(eq(registrationSchema.permanenceId, id));
+        return registrationsWithUsers;
+    }catch(error){
+        throw new Error("Failed to get Registrations. Please try again later.");
+    }
+}
+
+export const setMembersOfPerm = async (permId : number, usersId: number[]) => {
+    try{
+        await db
+            .delete(registrationSchema)
+            .where(eq(registrationSchema.permanenceId, permId));
+
+        if (usersId.length > 0) {
+            const newRegistrations = usersId.map(userId => ({
+                permanenceId: permId,
+                userId: userId
+            }));
+            await db.insert(registrationSchema).values(newRegistrations);
+        }
+    }catch(error){
+        console.error(error)
+        throw new Error("Failed to get Registrations. Please try again later.");
+    }
+}
+
 export const getUserRegistrations = async (userId : number) => {
 
     try{

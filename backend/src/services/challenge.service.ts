@@ -184,11 +184,9 @@ export const getAvailableChallengeForTeam = async (teamId: number): Promise<chal
 
 export const getAvailableChallengeForFaction = async (factionId: number): Promise<challenge[]> => {
     const completedChallengesIds = await getCompletedChallengesForFaction(factionId)
-    console.log("completed: " + completedChallengesIds)
     const allChallenges = await getChallengesOf(ChallengeType.Faction)
     const allChallengesIds = allChallenges.map(chall => chall.id as number)
     const availableChallengeIds = allChallengesIds.filter(id => !completedChallengesIds.includes(id));
-    console.log("available: " + availableChallengeIds)
     return getChallengeFromIds(availableChallengeIds)
 }
 
