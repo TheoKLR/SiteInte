@@ -4,7 +4,7 @@ import {getAllCe, getAllFactions, getAllTeams, getAllUsers} from '../../services
 import { getAllRoles } from "../../services/requests/roles"
 import { getActiveEvents, getInactiveEvents } from "../../services/requests/events"
 import { getAllNewStudent } from "../../services/requests/newstudent"
-import { getAllPerms } from "../../services/requests/perms"
+import {getAllPerms, getRegistration} from "../../services/requests/perms"
 import { getAllByPermission } from "../../services/requests/users"
 import {getAllChallenges, getAllFreeChallengesTexts, getChallenges} from "../../services/requests/challenges";
 
@@ -153,6 +153,27 @@ export const getFreeChallengeText = async (factionId: number): Promise<{value: s
         console.log(error)
       })
 
+}
+
+export const PermUsers = (permId: number) => {
+  const [options, setOptions] = useState([])
+
+  const fetchData = async () => {
+    try {
+      const response = await getRegistration(permId)
+      const usersOptions = response.map((user: User) => ({
+        value: user.id,
+        label: `${user.first_name} ${user.last_name}`,
+        email : user.email,
+      }))
+      setOptions(usersOptions)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    }
+  }
+  fetchData()
+
+  return options
 }
 
 

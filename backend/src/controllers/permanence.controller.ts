@@ -84,7 +84,6 @@ export const openOrclosePermanenceJ7 = async(req: Request, res: Response, next: 
       const startTime = resetTimeToMidnight(parseDateString(perm.startTime)); // Conversion correcte
       
       const daysDifference = Math.floor((startTime.getTime() - now.getTime()) / (1000 * 3600 * 24));
-      console.log(daysDifference);
       return daysDifference <= 7;
     });
 
@@ -182,6 +181,38 @@ export const getRegistrations = async( req: Request, res: Response, next: NextFu
     const registrations = await service.getRegistrations(idNumber);
 
     Ok(res, {data:registrations})
+  }catch(error){
+    Error(res, { error });
+  }
+};
+
+export const getMemberOfPerm = async( req: Request, res: Response, next: NextFunction) => {
+
+  const { id } = req.params;
+  const idNumber = parseInt(id, 10);
+
+  try{
+
+    const users = await service.getMemberOfPerm(idNumber);
+
+    Ok(res, {data:users})
+  }catch(error){
+    Error(res, { error });
+  }
+};
+
+export const setMembersOfPerm = async( req: Request, res: Response, next: NextFunction) => {
+
+  const { id } = req.params;
+  const idNumber = parseInt(id, 10);
+
+  const { users } = req.body;
+
+  try{
+
+    await service.setMembersOfPerm(idNumber, users);
+
+    Ok(res, {data:users})
   }catch(error){
     Error(res, { error });
   }

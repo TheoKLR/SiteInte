@@ -1,14 +1,27 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
-import { Perm } from '../../../services/interfaces';
+import {Perm, User} from '../../../services/interfaces';
 import { handleError } from '../../utils/Submit';
 import './Permanences.css'
-import { getAllPerms, deletePerm, updatePermanence, createPerm, openOrclosePermanenceJ7, openClosePermanence } from '../../../services/requests/perms';
-
+import {
+  getAllPerms,
+  deletePerm,
+  updatePermanence,
+  createPerm,
+  openOrclosePermanenceJ7,
+  openClosePermanence,
+  getRegistration, getMemberOfPerm, setMembersOfPerm
+} from '../../../services/requests/perms';
+import Select from "react-select";
+import {Challenges, Choice, PermUsers} from "../../utils/Select";
+import {getAllUsers} from "../../../services/requests";
 export const PermanenceList = () => {
   const [permanences, setPermanences] = useState<Perm[]>([]);
   const [selectedPerm, setSelectedPerm] = useState<Perm | null>(null);
+  const [allMembers, setAllMembers] = useState<User[]>([])
+  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [registeredMembers, setRegisteredMembers] = useState<User[] | undefined>()
 
   useEffect(() => {
     const fetchPerms = async () => {
@@ -22,6 +35,34 @@ export const PermanenceList = () => {
 
     fetchPerms();
   }, []);
+
+  useEffect(() => {
+    if(!selectedPerm) return
+
+    const fetchData = async () => {
+      try {
+        const response = await getMemberOfPerm(selectedPerm.id)
+        const allMembers = await getAllUsers()
+        console.log(allMembers)
+        const usersOptions = response.map((user: any) => ({
+          value: user.userId,
+          label: `${user.firstName} ${user.lastName}`,
+          email : user.email,
+        }))
+        const allMembersOptions = allMembers.map((user: any) => ({
+          value: user.id,
+          label: `${user.first_name} ${user.last_name}`,
+          email : user.email,
+        }))
+        setSelectedUsers(usersOptions)
+        setAllMembers(allMembersOptions)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+    fetchData()
+
+  }, [selectedPerm]);
 
   const handleDelete = async (id: number) => {
     try {
@@ -65,6 +106,16 @@ export const PermanenceList = () => {
     setShowModal(true); // Afficher le formulaire modal
   };
 
+  const handleRemoveUser = (permanence: Perm) => {
+    setSelectedPerm(permanence);
+    setShowModal(true); // Afficher le formulaire modal
+  };
+
+  const handleAddUser = (permanence: Perm) => {
+    setSelectedPerm(permanence);
+    setShowModal(true); // Afficher le formulaire modal
+  };
+
   const handleUpdate = async () => {
     if (selectedPerm) {
       try {
@@ -77,6 +128,11 @@ export const PermanenceList = () => {
           selectedPerm.location,
           selectedPerm.maxRegistrations,
           selectedPerm.isRegistrationOpen
+        );
+        await handleError("Permanence mise à jour !", "Erreur lors de la mise à jour", setMembersOfPerm
+            ,
+            selectedPerm.id,
+            selectedUsers.map((value: any) => value.value)
         );
         const updatedPermanences = await getAllPerms();
         setPermanences(updatedPermanences);
@@ -93,23 +149,24 @@ export const PermanenceList = () => {
       <ul className="perm-list">
         {permanences.length > 0 ? (
           permanences.map((permanence: Perm) => (
-            <li key={permanence.id}>
-              <h3>{permanence.title}</h3>
-              <p>{permanence.description}</p>
-              <p>{permanence.startTime} - {permanence.endTime}</p>
-              <p>Lieu : {permanence.location}</p>
-              <p>Nb de personne max : {permanence.maxRegistrations}</p>
-              <button onClick={() => handleDelete(permanence.id)}>Supprimer</button>
-              <button onClick={() => handleEdit(permanence)}>Modifier</button>
-              {!permanence.isRegistrationOpen ? (
-                <button onClick={() => handleOpen(permanence)}>Ouvrir la permanence</button>
-              ) : (
-                <button className="close-button" onClick={() => handleClose(permanence)}>Fermer la permanence</button>
-              )}
-            </li>
+              <li key={permanence.id}>
+                <h3>{permanence.title}</h3>
+                <p>{permanence.description}</p>
+                <p>{permanence.startTime} - {permanence.endTime}</p>
+                <p>Lieu : {permanence.location}</p>
+                <p>Nb de personne max : {permanence.maxRegistrations}</p>
+                <button onClick={() => handleDelete(permanence.id)}>Supprimer</button>
+                <button onClick={() => handleEdit(permanence)}>Modifier</button>
+                {!permanence.isRegistrationOpen ? (
+                    <button onClick={() => handleOpen(permanence)}>Ouvrir la permanence</button>
+                ) : (
+                    <button className="close-button" onClick={() => handleClose(permanence)}>Fermer la
+                      permanence</button>
+                )}
+              </li>
           ))
         ) : (
-          <p>Aucune permanence trouvée.</p>
+            <p>Aucune permanence trouvée.</p>
         )}
       </ul>
 
@@ -120,38 +177,47 @@ export const PermanenceList = () => {
           <form className="admin-form">
             <label>Titre :</label>
             <input
-              type="text"
-              value={selectedPerm.title}
-              onChange={(e) => setSelectedPerm({ ...selectedPerm, title: e.target.value })}
+                type="text"
+                value={selectedPerm.title}
+                onChange={(e) => setSelectedPerm({...selectedPerm, title: e.target.value})}
             />
             <label>Description :</label>
             <textarea
-              value={selectedPerm.description}
-              onChange={(e) => setSelectedPerm({ ...selectedPerm, description: e.target.value })}
+                value={selectedPerm.description}
+                onChange={(e) => setSelectedPerm({...selectedPerm, description: e.target.value})}
             />
             <label>Date de début :</label>
             <input
-              type="datetime-local"
-              value={selectedPerm.startTime}
-              onChange={(e) => setSelectedPerm({ ...selectedPerm, startTime: e.target.value })}
+                type="datetime-local"
+                value={selectedPerm.startTime}
+                onChange={(e) => setSelectedPerm({...selectedPerm, startTime: e.target.value})}
             />
             <label>Date de fin :</label>
             <input
-              type="datetime-local"
-              value={selectedPerm.endTime}
-              onChange={(e) => setSelectedPerm({ ...selectedPerm, endTime: e.target.value })}
+                type="datetime-local"
+                value={selectedPerm.endTime}
+                onChange={(e) => setSelectedPerm({...selectedPerm, endTime: e.target.value})}
             />
             <label>Lieu :</label>
             <input
-              type="text"
-              value={selectedPerm.location}
-              onChange={(e) => setSelectedPerm({ ...selectedPerm, location: e.target.value })}
+                type="text"
+                value={selectedPerm.location}
+                onChange={(e) => setSelectedPerm({...selectedPerm, location: e.target.value})}
             />
             <label>Nombre max d'inscriptions :</label>
             <input
-              type="number"
-              value={selectedPerm.maxRegistrations}
-              onChange={(e) => setSelectedPerm({ ...selectedPerm, maxRegistrations: parseInt(e.target.value) })}
+                type="number"
+                value={selectedPerm.maxRegistrations}
+                onChange={(e) => setSelectedPerm({...selectedPerm, maxRegistrations: parseInt(e.target.value)})}
+            />
+            <label>Membres</label>
+            <Select
+                options={allMembers}
+                onChange={users => {
+                  setSelectedUsers(users.map(t => t))
+                }}
+                isMulti={true}
+                value={selectedUsers}
             />
             <div className="j7-actions">
               <button type="button" className="submit-button" onClick={handleUpdate}>
@@ -165,7 +231,7 @@ export const PermanenceList = () => {
         </div>
       )}
 
-      <ToastContainer position="bottom-right" />
+      <ToastContainer position="bottom-right"/>
     </div>
   );
 };

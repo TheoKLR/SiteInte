@@ -41,6 +41,14 @@ export const updatePermanence = async (
 
 }
 
+export const setMembersOfPerm = async (
+    id: number,
+    users: number[]) => {
+    const response = await api.post('permanence/setMember/'+ id, {users});
+    return response.data;
+
+}
+
 export const openClosePermanence = async (
     id: number, 
     isRegistrationOpen: boolean) => {
@@ -72,10 +80,13 @@ export const unRegisterPermanence = async (id: number, userId: number) => {
 }
 
 export const getRegistration = async (id: number ) => {
-
         const response = await api.get('permanence/registrations/'+ id);
         return response.data.data;
+}
 
+export const getMemberOfPerm = async (id: number ) => {
+    const response = await api.get('permanence/getRegisteredUser/'+ id);
+    return response.data.data;
 }
 
 export const getUserPermanences = async (userid: number ) => {

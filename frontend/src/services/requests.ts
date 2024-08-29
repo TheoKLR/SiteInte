@@ -95,6 +95,5 @@ export const getWishUsers = async (roleId: string) => {
 // Compte les points d'une faction
 export const countPoints = async () => {
     const response = await api.get('/challenge/countPoints/');
-    console.log(response?.data.data)
     return response?.data.data;
 }
