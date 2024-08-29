@@ -63,7 +63,7 @@ export async function getTeamAndFactionFromUser(user: User): Promise<{teamId: nu
     if(!team || team.length === 0) throw NoTeam(team[0].id)
     //get faction
     const faction = await db.select().from(factionSchema).where(eq(factionSchema.id, team[0].faction as number))
-    if(!faction || faction.length === 0) throw NoFaction(team[0].id)
+    if(!faction || faction.length === 0) throw NoFaction(team[0].faction)
     return {teamId: team[0].id, factionId: faction[0].id}
 }
 
