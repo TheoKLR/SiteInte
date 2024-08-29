@@ -5,17 +5,19 @@ import {getAllTeams, getAllTeamsWithPoints} from '../../services/requests/teams'
 
 interface FactionsAffichageProps {
     faction: Faction;
+    win: boolean;
 }
 
-const FactionsAffichage: React.FC<FactionsAffichageProps> = ({ faction }) => {
+const FactionsAffichage: React.FC<FactionsAffichageProps> = ({ faction, win }) => {
     
-    const [allTeams, setAllTeams] = useState<{team: Team, points: number}[]>();
+    const [allTeams, setAllTeams] = useState<{team: Team, points: number, img: string}[]>();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await getAllTeamsWithPoints();
                 const filteredTeams = response.filter((team:{team: Team, points: number}) => team.team.faction === faction.id);
+
                 setAllTeams(filteredTeams);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -23,6 +25,8 @@ const FactionsAffichage: React.FC<FactionsAffichageProps> = ({ faction }) => {
         };
         fetchData().then();
     }, []);
+
+    if(!allTeams) return <p>Chargement...</p>
 
     return (
         <>
@@ -40,6 +44,8 @@ const FactionsAffichage: React.FC<FactionsAffichageProps> = ({ faction }) => {
                 <div className='affichagePoints'>
                     <h3 id='msgPoints'>Points</h3>
                     <p id='nbPoints'>{faction.points}</p>
+                    <img style={{ width: '512px', maxWidth: "100%", height: "auto" }}
+                        src={`${process.env.PUBLIC_URL}/ressources/${faction.name.toLowerCase()}_${win ? 'winner': 'looser'}.png`}/>
                 </div>
             </div>
         </>
