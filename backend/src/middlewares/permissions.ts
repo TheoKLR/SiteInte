@@ -42,6 +42,25 @@ export const isAdminCE = async (req: Request, res: Response, next: NextFunction)
     }
 };
 
+export const isAdminCEAnim = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const decodedToken = decodeToken(req);
+        const user = await getUserByEmail(decodedToken.email);
+
+        if (user === null) {
+            return Error(res, { msg: "user doesn't exists" });
+        }
+
+        if (user.permission === PermType.Admin || user.permission === PermType.RespoCE || user.permission === PermType.Anim) {
+            next();
+        } else {
+            Error(res, { msg: 'Forbidden: Insufficient permissions' });
+        }
+    } catch (error) {
+        return Error(res, { msg: 'Unauthorized: Invalid token' });
+    }
+};
+
 //TODO: create anim perm
 export const isAdminAnim = async (req: Request, res: Response, next: NextFunction) => {
     try {

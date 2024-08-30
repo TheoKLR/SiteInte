@@ -1,12 +1,12 @@
 import express from 'express';
 import  * as sc  from '../controllers/user.controller';
-import { isAdmin, isAdminCE, isTokenValid } from '../middlewares/permissions';
+import {isAdmin, isAdminCE, isAdminCEAnim, isTokenValid} from '../middlewares/permissions';
 
 const userRouter = express.Router();
 
-userRouter.get('/all', isAdminCE, sc.getAllUsers);
-userRouter.get('/ce/all', isAdminCE, sc.getAllCe);
-userRouter.get('/user/:id', isAdminCE, sc.getUser);
+userRouter.get('/all', isAdminCEAnim, sc.getAllUsers);
+userRouter.get('/ce/all', isAdminCEAnim, sc.getAllCe);
+userRouter.get('/user/:id', isAdminCEAnim, sc.getUser);
 userRouter.delete('/delete/:id', isAdmin, sc.deleteUser);
 userRouter.put('/addtoteam', isAdminCE, sc.addToTeam);
 userRouter.put('/updateuser',isTokenValid, sc.updateUser);
