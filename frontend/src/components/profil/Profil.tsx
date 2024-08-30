@@ -238,7 +238,6 @@ export const PossibleChallengeDisplay: React.FC = () => {
                 }
                 //get challenge
                 const challenges = await getAvailableChallengeForUser(currentUser.id as number)
-                console.log(challenges)
                 setChallenges(challenges.filter((chall: any) => chall.challType === ChallType.Student))
                 setChallengesTeam(challenges.filter((chall: any) => chall.challType === ChallType.Team))
                 setChallengesFaction(challenges.filter((chall: any) => chall.challType === ChallType.Faction))
@@ -253,6 +252,11 @@ export const PossibleChallengeDisplay: React.FC = () => {
     return (
         <>
             <div className='containerTeam'>
+                <h2>
+                    Pour valider tes challenges, ça se passe <a
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSebaniKF4rFT2HDRmAhud5zJ-tqz9NUk7UXNg71pu8jM94j7Q/viewform"
+                    target="_blank" rel="noopener noreferrer">ici</a>
+                </h2>
                 <h3>Challenges Individuels</h3>
                 <div className='affichageTeam'>
                     <table className="teamTable">
