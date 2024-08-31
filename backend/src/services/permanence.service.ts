@@ -31,10 +31,11 @@ export const getAllAvailablePermanences = async () => {
 
 export const getPermanence = async (id: number) => {
   try {
-    return await db
+    const perm = await db
       .select()
       .from(permanenceSchema)
       .where(eq(permanenceSchema.id, id));
+    return perm[0]
   } catch (error) {
     throw new Error("Failed to fetch Permanence");
   }
@@ -78,11 +79,12 @@ export const deletePermanence = async (id: number) => {
 
 export const addUserToPermanence = async (userId: number, permId: number) => {
   try {
-    const perm = (await getPermanence(permId))[0]
+    const perm = await getPermanence(permId)
 
     if (perm.maxStudentNumber > perm.studentNumber) {
       const newUserToPermanence: UserToPermanence = { userId, permId };
       await db.insert(userToPermanenceSchema).values(newUserToPermanence);
+      await increaseStudentNumber(permId, perm.studentNumber)
       return true;
     }
     return false;
@@ -90,6 +92,17 @@ export const addUserToPermanence = async (userId: number, permId: number) => {
     throw new Error("Failed to add user to permanence");
   }
 };
+
+export const increaseStudentNumber = async ( permId: number, studentNumber: number) => {
+    try {
+      await db
+        .update(permanenceSchema)
+        .set({ studentNumber: studentNumber + 1})
+        .where(eq(permanenceSchema.id, permId));
+    } catch (error) {
+      throw new Error("Failed to increase Student Number");
+    }
+}
 
 export const removeUsersToPermanence = async (id: number) => {
   try {
