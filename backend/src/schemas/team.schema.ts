@@ -6,7 +6,8 @@ export const teamSchema = pgTable('team', {
     isOfficial: boolean('isOfficial').notNull(),
     timeCode: bigint('timeCode', { mode: 'number' }),
     name: text('team_name').notNull().unique(),
-    faction: integer('city_id').references(() => factionSchema.id),
+    faction: integer('faction_id').references(() => factionSchema.id),
+    gi_id: text('gi_id'),
     type: text('type')
 });
 

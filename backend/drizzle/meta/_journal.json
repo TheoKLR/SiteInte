@@ -155,6 +155,13 @@
       "when": 1725264997032,
       "tag": "0021_black_vanisher",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "5",
+      "when": 1725285958666,
+      "tag": "0022_free_prodigy",
+      "breakpoints": true
     }
   ]
 }
