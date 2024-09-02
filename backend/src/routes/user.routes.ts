@@ -1,10 +1,12 @@
 import express from 'express';
 import  * as sc  from '../controllers/user.controller';
+import  * as scBlacklist  from '../controllers/blacklist.controller';
 import {isAdmin, isAdminCE, isAdminCEAnim, isTokenValid} from '../middlewares/permissions';
 
 const userRouter = express.Router();
 
 userRouter.get('/all', isAdminCEAnim, sc.getAllUsers);
+userRouter.get('/blacklisted', isAdminCE, scBlacklist.getAllBlacklistedUsers);
 userRouter.get('/ce/all', isAdminCEAnim, sc.getAllCe);
 userRouter.get('/user/:id', isAdminCEAnim, sc.getUser);
 userRouter.delete('/delete/:id', isAdmin, sc.deleteUser);

@@ -10,6 +10,7 @@ import { jwtSecret, service_url } from '../utils/secret'
 import { decodeToken } from '../utils/token'
 import { getToken, getUserData } from '../utils/api_etu'
 import { validateCASTicket } from '../services/auth.service'
+import {Blacklist, GetAllBlacklistedStudent} from "../services/blacklist.service";
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
     
@@ -120,6 +121,7 @@ export const isTokenValid = async (req: Request, res: Response) => {
             return Unauthorized(res, { msg: 'Unauthorized: Missing or malformed token', data: { isValid: false } });
         }
 
+
         const token = authHeader.split(' ')[1];
 
         // Decode the token and validate it
@@ -131,6 +133,11 @@ export const isTokenValid = async (req: Request, res: Response) => {
         // Check for email presence in the decoded token
         if (!decodedToken.email) {
             return Unauthorized(res, { msg: 'Unauthorized: Invalid token content', data: { isValid: false } });
+        }
+        //get emails blacklist
+        const blacklisted = await GetAllBlacklistedStudent()
+        if(blacklisted.map(elem => elem.email).includes(decodedToken.email)) {
+            return Unauthorized(res, { msg: 'Unauthorized: Invalid account ', data: { isValid: false } });
         }
 
         // If everything is fine, return a positive response
