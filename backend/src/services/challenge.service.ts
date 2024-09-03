@@ -14,12 +14,13 @@ import {PermType, userSchema} from "../schemas/user.schema";
 import {teamSchema} from "../schemas/team.schema";
 import {factionSchema} from "../schemas/faction.schema";
 import {
-    getAllChallenges,
     getAllChallengesExcept,
-    getChallengeFromIds, getChallengesOf,
+    getChallengeFromIds,
+    getChallengesOf,
     getFactionFromTeam,
     getFactionFromUserId,
-    getTeamAndFactionFromUserId, isCE
+    getTeamAndFactionFromUserId,
+    isCE
 } from "../utils/challenge";
 import {NoFaction} from "../error/user";
 
@@ -104,11 +105,9 @@ export const getCompletedChallengesForFaction = async (factionId: number): Promi
 }
 
 export const getCompletedChallengesForTeam = async (teamId: number): Promise<number[]> => {
-    const factionId = await getFactionFromTeam(teamId)
     const teamChallenges = await db.select().from(TeamTochallengeSchema).where(eq(TeamTochallengeSchema.teamId, teamId))
     const teamChallengeIds = teamChallenges.map(chall => chall.challengeId);
-    const factionChallenges = await getCompletedChallengesForFaction(factionId)
-    return [...factionChallenges, ...teamChallengeIds]
+    return [...teamChallengeIds]
 }
 
 export const getCompletedChallengesForStudent = async (studentId: number): Promise<number[]> => {
@@ -116,53 +115,42 @@ export const getCompletedChallengesForStudent = async (studentId: number): Promi
     //get regular studentToChallenge
     const studentChallenges = await db.select().from(StudentTochallengeSchema).where(eq(StudentTochallengeSchema.studentId, studentId))
     const studentChallengesIds = studentChallenges.map(chall => chall.challengeId)
-    const teamChallenges = await getCompletedChallengesForTeam(ids.teamId)
-    const factionChallenges = await getCompletedChallengesForFaction(ids.factionId)
-    return [...studentChallengesIds, ...teamChallenges, ...factionChallenges]
+    return [...studentChallengesIds]
 }
 
 export const getCompletedChallengesForCe = async (studentId: number): Promise<number[]> => {
-    const ids = await getTeamAndFactionFromUserId(studentId)
     //get regular studentToChallenge
     const studentChallenges = await db.select().from(StudentTochallengeSchema).where(eq(StudentTochallengeSchema.studentId, studentId))
     const studentChallengesIds = studentChallenges.map(chall => chall.challengeId)
-    const teamChallenges = await getCompletedChallengesForTeam(ids.teamId)
-    const factionChallenges = await getCompletedChallengesForFaction(ids.factionId)
-    return [...studentChallengesIds, ...teamChallenges, ...factionChallenges]
+    return [...studentChallengesIds]
 }
 
 export const getAvailableChallengeForStudent = async (studentId: number): Promise<challenge[]> => {
-    const ids = await getTeamAndFactionFromUserId(studentId)
     //test if he is CE
     let completedChallengesIds = []
+    let allChallenges = []
     if(await isCE(studentId)) {
         completedChallengesIds =
             [
-                ...await getCompletedChallengesForCe(studentId),
-                ...await getCompletedChallengesForTeam(ids.teamId),
-                ...await getCompletedChallengesForFaction(ids.factionId)
+                ...await getCompletedChallengesForCe(studentId)
             ]
+        allChallenges = await getChallengesOf(ChallengeType.StudentOrCe)
     } else {
         completedChallengesIds =
             [
-                ...await getCompletedChallengesForStudent(studentId),
-                ...await getCompletedChallengesForTeam(ids.teamId),
-                ...await getCompletedChallengesForFaction(ids.factionId)
+                ...await getCompletedChallengesForStudent(studentId)
             ]
+        allChallenges = await getChallengesOf(ChallengeType.Student)
     }
-    const allChallenges = await getAllChallenges()
     const allChallengesIds = allChallenges.map(chall => chall.id as number)
     const availableChallengeIds = allChallengesIds.filter(id => !completedChallengesIds.includes(id));
     return getChallengeFromIds(availableChallengeIds)
 }
 
 export const getAvailableChallengeForCe = async (studentId: number): Promise<challenge[]> => {
-    const ids = await getTeamAndFactionFromUserId(studentId)
     const completedChallengesIds =
         [
             ...await getCompletedChallengesForCe(studentId),
-            ...await getCompletedChallengesForTeam(ids.teamId),
-            ...await getCompletedChallengesForFaction(ids.factionId)
         ]
     const allChallenges = await getAllCeChallenges()
     const allChallengesIds = allChallenges.map(chall => chall.id as number)
@@ -171,12 +159,10 @@ export const getAvailableChallengeForCe = async (studentId: number): Promise<cha
 }
 
 export const getAvailableChallengeForTeam = async (teamId: number): Promise<challenge[]> => {
-    const factionId = await getFactionFromTeam(teamId)
     const completedChallengesIds = [
-        ...await getCompletedChallengesForTeam(teamId),
-        ...await getCompletedChallengesForFaction(factionId)
+        ...await getCompletedChallengesForTeam(teamId)
     ]
-    const allChallenges = await getAllChallengesExcept(ChallengeType.Student)
+    const allChallenges = await getChallengesOf(ChallengeType.Team)
     const allChallengesIds = allChallenges.map(chall => chall.id as number)
     const availableChallengeIds = allChallengesIds.filter(id => !completedChallengesIds.includes(id));
     return getChallengeFromIds(availableChallengeIds)

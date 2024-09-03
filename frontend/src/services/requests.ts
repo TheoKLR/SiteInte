@@ -3,6 +3,7 @@ import { api } from './api';
 // Obtention de la liste des Utilisateurs enregistrés dans la db
 export const getAllUsers = async () => {
     const response = await api.get('user/all')
+    console.log(response)
     return response?.data.data
 }
 

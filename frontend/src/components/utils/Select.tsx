@@ -203,7 +203,6 @@ export const Users = () => {
 
 export const Ces = () => {
   const [options, setOptions] = useState([])
-  console.log("get ce")
   useEffect(() => {
     const fetchData = async () => {
       try {
