@@ -15,6 +15,7 @@ challengeRouter.post('/getCompletedForFaction', fc.getCompletedChallengeForFacti
 challengeRouter.post('/getCompletedForStudent', fc.getCompletedChallengeForStudent);
 challengeRouter.post('/getAvailableForTeam', fc.getAvailableChallengeForTeam);
 challengeRouter.post('/getAvailableForStudent', fc.getAvailableChallengeForStudent);
+challengeRouter.post('/getAllAvailableForStudent', fc.getAllAvailableChallengeForStudent);
 challengeRouter.post('/getAvailableForFaction', fc.getAvailableChallengeForFaction);
 challengeRouter.post('/unvalid', isAdminAnim, fc.unvalidChallenge);
 challengeRouter.post('/unvalidFree', isAdminAnim, fc.unvalidFreeChallenge);

@@ -14,6 +14,7 @@ import {PermType, userSchema} from "../schemas/user.schema";
 import {teamSchema} from "../schemas/team.schema";
 import {factionSchema} from "../schemas/faction.schema";
 import {
+    getAllChallenges,
     getAllChallengesExcept,
     getChallengeFromIds,
     getChallengesOf,
@@ -142,6 +143,31 @@ export const getAvailableChallengeForStudent = async (studentId: number): Promis
             ]
         allChallenges = await getChallengesOf(ChallengeType.Student)
     }
+    const allChallengesIds = allChallenges.map(chall => chall.id as number)
+    const availableChallengeIds = allChallengesIds.filter(id => !completedChallengesIds.includes(id));
+    return getChallengeFromIds(availableChallengeIds)
+}
+
+export const getAllAvailableChallengeForStudent = async (studentId: number): Promise<challenge[]> => {
+    const ids = await getTeamAndFactionFromUserId(studentId)
+    //test if he is CE
+    let completedChallengesIds = []
+    if(await isCE(studentId)) {
+        completedChallengesIds =
+            [
+                ...await getCompletedChallengesForCe(studentId),
+                ...await getCompletedChallengesForTeam(ids.teamId),
+                ...await getCompletedChallengesForFaction(ids.factionId)
+            ]
+    } else {
+        completedChallengesIds =
+            [
+                ...await getCompletedChallengesForStudent(studentId),
+                ...await getCompletedChallengesForTeam(ids.teamId),
+                ...await getCompletedChallengesForFaction(ids.factionId)
+            ]
+    }
+    const allChallenges = await getAllChallenges()
     const allChallengesIds = allChallenges.map(chall => chall.id as number)
     const availableChallengeIds = allChallengesIds.filter(id => !completedChallengesIds.includes(id));
     return getChallengeFromIds(availableChallengeIds)

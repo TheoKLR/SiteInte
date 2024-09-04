@@ -15,7 +15,7 @@ export const getChallenges = async (type: ChallType, filter: Choice, associatedI
 };
 
 export const getAvailableChallengeForUser = async (studentId: number) => {
-  const response = await api.post("challenge/getAvailableForStudent", { associatedId: studentId});
+  const response = await api.post("challenge/getAllAvailableForStudent", { associatedId: studentId});
   return response.data.data;
 };
 

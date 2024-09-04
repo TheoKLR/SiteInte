@@ -197,6 +197,16 @@ export const getAvailableChallengeForStudent = async (req: Request, res: Respons
   }
 }
 
+export const getAllAvailableChallengeForStudent = async (req: Request, res: Response, next: NextFunction) => {
+  const { associatedId } = req.body;
+  try {
+    const data = await service.getAllAvailableChallengeForStudent(associatedId);
+    Ok(res, { data: data, msg: "OK" });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+
 export const getCompletedChallengeForTeam = async (req: Request, res: Response, next: NextFunction) => {
   const { associatedId } = req.body;
   try {

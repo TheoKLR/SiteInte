@@ -241,7 +241,6 @@ export const PossibleChallengeDisplay: React.FC = () => {
                 setChallenges(challenges.filter((chall: any) => chall.challType === ChallType.Student))
                 setChallengesTeam(challenges.filter((chall: any) => chall.challType === ChallType.Team))
                 setChallengesFaction(challenges.filter((chall: any) => chall.challType === ChallType.Faction))
-                console.log(challenges)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
