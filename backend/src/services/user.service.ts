@@ -6,6 +6,7 @@ import { db } from "../database/db"
 import {eq, and, is, ne, isNotNull, sql} from 'drizzle-orm'
 import { uuid } from 'drizzle-orm/pg-core';
 import { permission } from 'process';
+import {getGiIdFromUser} from "../utils/challenge";
 
 export const GetAllNewStudent = async () => {
     try {
@@ -368,27 +369,23 @@ type UserData = {
     major: boolean
 }
 
-export async function getInfo(emails: string[]): Promise<any[]> {
+export async function getInfo(emails: string[]): Promise<{ids: (string | null)[], missing: string[]}> {
     //checking faction exist
-    let list = []
+    let list: (string | null)[] = []
+    let missingEmails: string[] = []
     for (let email of emails) {
-        const user = await db.select().from(userSchema).where(eq(userSchema.email, email));
-        if(!user || user.length === 0) throw new Error("No user with mail '" + email + "'")
-        list.push([
-            "",
-            user[0].first_name,
-            user[0].last_name,
-            email,
-            "",
-            isNew(user[0]),
-            isCe(user[0]),
-            user[0].team,
-            isOrga(user[0]),
-            "",
-            isMajor(user[0])
-        ])
+        const users = await db.select().from(userSchema).where(eq(userSchema.email, email));
+        if(!users || users.length === 0) {
+            list.push(null)
+            missingEmails.push(email)
+            console.error("No user with mail '" + email + "'")
+            continue
+        }
+        //get team of user
+        const gi_id = await getGiIdFromUser(users[0])
+        list.push(gi_id)
     }
-    return list
+    return {ids: list, missing: missingEmails}
 }
 
 export async function getMissing(datas: {first_name: string, last_name: string}[]): Promise<any[]> {

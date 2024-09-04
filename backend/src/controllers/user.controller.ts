@@ -148,9 +148,9 @@ export const addContact = async (req: Request, res: Response, next: NextFunction
 };
 
 export const getInfo = async (req: Request, res: Response, next: NextFunction) => {
-    const { email } = req.body
+    const { emails } = req.body
     try {
-        const data = await service.getInfo(email)
+        const data = await service.getInfo(emails)
         Ok(res, {data: data, msg: "Ok"})
     } catch (error) {
         Error(res, { error })

@@ -11,6 +11,20 @@ import { toTable } from '../../utils/Tables'
 import { deleteNewStudent, getAllNewStudent, syncNewStudent } from '../../../services/requests/newstudent';
 import { resetPasswordAdmin } from '../../../services/requests/auth';
 import {api} from "../../../services/api";
+import Papa from "papaparse";
+
+interface CsvRow {
+  Billet: string;
+  'Codes-barre': string;
+  Tarif: string;
+  Prénom: string;
+  Nom: string;
+  'E-mail': string;
+  Nouveau: string;
+  CE: string;
+  'num Equipe': string;
+  'num Bus': string;
+}
 
 export const AddToTeam = () => {
   const [users, setUsers] = useState([] as any)
@@ -50,47 +64,66 @@ export const AddToTeam = () => {
 export const GetDatas = () => {
   const [users, setUsers] = useState([] as any[]);
   const [team, setTeam] = useState({} as any);
+  const [data, setData] = useState({} as any)
+
 
   // Fonction pour gérer le chargement du fichier
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const content = e.target?.result as string;
-      const lines = content.split('\n').map(line => line.trim()).filter(line => line);
-      setUsers(lines);
-    };
-    reader.readAsText(file);
+    Papa.parse<CsvRow>(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        setData(results.data)
+      },
+      error: (error) => {
+        console.error("Erreur lors de l'analyse du fichier CSV:", error);
+      },
+    });
   };
 
   const Submit = async () => {
-    const t = await api.post("user/getInfo", {email: users})
-    const data = t.data.data
-    let stringContent = ""
-    for (const line of data) {
-      stringContent += (line.toString() + "\n")
-    }
-    const blob = new Blob([stringContent], { type: 'text/plain' }); // Utilisation de 'text/plain' pour du texte brut
-    const url = URL.createObjectURL(blob);
+    const lines = data.map((row: any) => row['E-mail']); // Assurez-vous que le nom de la colonne est correct
+    const t = await api.post("user/getInfo", {emails: lines})
+    const results: {ids: (string | null)[], missing: string[]} = t.data.data
+    results.ids.forEach((value, index) => {
+      data[index]['num Equipe'] = value
+    })
 
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'user_info.txt';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Création du fichier CSV modifié
+    const csv = Papa.unparse(data);
+    const csvBlob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const csvUrl = URL.createObjectURL(csvBlob);
+    const csvLink = document.createElement('a');
+    csvLink.href = csvUrl;
+    csvLink.download = 'updated_data.csv';
+    document.body.appendChild(csvLink);
+    csvLink.click();
+    document.body.removeChild(csvLink);
+
+    // Création du fichier texte avec les emails manquants
+    const missingEmails = results.missing.join('\n');
+    const txtBlob = new Blob([missingEmails], { type: 'text/plain;charset=utf-8;' });
+    const txtUrl = URL.createObjectURL(txtBlob);
+    const txtLink = document.createElement('a');
+    txtLink.href = txtUrl;
+    txtLink.download = 'missing_emails.txt';
+    document.body.appendChild(txtLink);
+    txtLink.click();
+    document.body.removeChild(txtLink);
 
     // Réinitialisation des états après soumission
     setUsers([]);
     setTeam({});
+    setData([]);
   };
 
   return (
       <div>
         <div className="file-upload-container">
-          <input type="file" accept=".txt" onChange={handleFileUpload} />
+          <input type="file" accept=".csv" onChange={handleFileUpload} />
         </div>
         <button className="submit-button" onClick={Submit}>Soumettre</button>
         <ToastContainer position="bottom-right" />

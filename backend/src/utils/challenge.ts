@@ -67,6 +67,15 @@ export async function getTeamAndFactionFromUser(user: User): Promise<{teamId: nu
     return {teamId: team[0].id, factionId: faction[0].id}
 }
 
+//for WEI attribution
+export async function getGiIdFromUser(user: User): Promise<string | null> {
+    //get associated faction
+    const team = await db.select().from(teamSchema).where(eq(teamSchema.id, user.team as number))
+    if(!team || team.length === 0) throw NoTeam(team[0].id)
+    //get faction
+    return team[0].gi_id
+}
+
 export async function getTeamAndFactionFromUserId(user: number): Promise<{teamId: number, factionId: number}> {
     //get user
     const userdb = await db.select().from(userSchema).where(eq(userSchema.id, user))
