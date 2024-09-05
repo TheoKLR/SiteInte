@@ -80,6 +80,92 @@ export const TemplateNotebook = `
 
 `;
 
+export const templateAttributionBus = `
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intégration UTT</title>
+    <style>
+        /* Style de la liste */
+        .custom-list {
+            list-style-type: none; /* Supprime les puces par défaut */
+            padding: 0;
+            margin: 0;
+            text-align: center; /* Centre la liste dans son conteneur */
+        }
+
+        .custom-list li {
+            position: relative;
+            padding-left: 30px; /* Espace pour le tiret */
+            text-align: left; /* Aligne le texte à gauche dans chaque élément */
+        }
+
+        .custom-list li::before {
+            content: "-"; /* Tiret avant chaque élément */
+            position: absolute;
+            left: 0; /* Place le tiret à gauche de chaque élément */
+            top: 0;
+            font-weight: bold; /* Optionnel : rend le tiret plus gras */
+        }
+    </style>
+</head>
+<body style="font-family: 'Comic Sans MS', 'Comic Sans', sans-serif; font-size: 11pt; margin: 0; padding: 0; background-color: #ffffff; text-align: center;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+        <tr>
+            <td align="center" style="padding: 20px;">
+                <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 100%; margin: 0 auto;">
+                    <tr>
+                        <td align="center" style="padding: 10px;">
+                            <img src="https://integration.utt.fr/ressources/logo_original.png" alt="Logo Comic" style="width: 18%; max-width: 104.4px; height: auto;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 21px; font-weight: bold; line-height: 240%; margin: 20px 0; text-align: center;">
+                            INTEGRATION UTT
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 15px; line-height: 140%; margin: 20px 0; text-align: center;">
+                            <p>Salut !</p>
+                            <p>Si tu reçois ce message c'est que tu pars au WEI (youhouu !), tu trouveras dans celui-ci le bus avec lequelle tu vas te rendre sur le lieu pour ce week-end</p>
+                            <p>Fais bien attention à ne <strong>pas être en retard</strong> sous peine de rater ton bus, ça serait embêtant à la fois pour toi et pour nous.</p>
+                            <p>Autre point très important, les essentiels pour le WEI, tu trouveras ci-dessous un rappel des objets obligatoire à ramener pour passer un bon week-end. Il risque de pleuvoir alors prévoyez bien en conséquences !</p>
+                            <ul style="list-style-type: disc; padding: 0; margin: 0; text-align: left; display: inline-block; padding-left: 20px;">
+                                <li>Un sac de couchage chaud</li>
+                                <li>Des vêtements qui ne craignent rien (dès le départ en bus vendredi matin)</li>
+                                <li>Des vêtements qui tiennent chaud</li>
+                                <li>Un matelas gonflable ou un tapis de sol (pour le confort du dodo)</li>
+                                <li>Un k-way</li>
+                                <li>Ta carte d'identité</li>
+                                <li>De l'argent (CB et/ou espèces) si tu veux pouvoir acheter à boire au WEI</li>
+                                <li>Une serviette et du savon (si tu veux être propre</li>
+                                <li>Une bombe anti-moustique (ton corps te remerciera)</li>
+                                <li>De la crème solaire (ton corps te remerciera aussi)</li>
+                                <li>Ton autorisation parentale si tu es mineur</li>
+                                <li>Des bouchons d'oreilles si tu en as</li>
+                                <li>Ton écocup, ton tupperware ainsi que des couverts (sinon, tu dis au revoir au miam miam)
+                                </li>
+                            </ul>
+                            <p>Pour rappel, voici la vidéo des indispensables du WEI <a
+                        href="https://drive.google.com/file/d/1IzeIgHVcoFB4Wk4ngky1HicoBbd08zHO/view?usp=drivesdk"
+                        target="_blank"
+                        rel="noopener noreferrer">ici</a></p>
+                            <p>Concernant ton bus, tu as été attribué au bus <strong>{{bus}}</strong></p>
+                            <p>Maintenant il faut que tu sois présent en amphi de verdure à l'UTT à <strong>{{time}}</strong></p>
+                            <p>Voilà, toute l'équipe de l'intégration te souhaite un excellent WEI ;)</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+
+`;
+
 export const templateWelcome = `
 <!DOCTYPE html>
 <html lang="fr">
@@ -154,5 +240,10 @@ export const compileTemplateWelcome = (data : any) => {
 
 export const compileTemplateNotebook = (data : any) => {
   const compiledTemplate = Handlebars.compile(TemplateNotebook);
+  return compiledTemplate(data);
+};
+
+export const compileTemplateBus = (data : any) => {
+  const compiledTemplate = Handlebars.compile(templateAttributionBus);
   return compiledTemplate(data);
 };

@@ -2,7 +2,7 @@ import { Users, Teams, UUIDs } from '../../utils/Select'
 import Select from 'react-select'
 import { useEffect, useState } from 'react'
 import { toArray, toId, tochainString } from '../../utils/Submit'
-import { addToTeam, changePermission, deleteUser } from '../../../services/requests/users';
+import {addToTeam, changePermission, deleteUser, setBusData} from '../../../services/requests/users';
 import { handleError } from '../../utils/Submit'
 import { ToastContainer } from 'react-toastify'
 import { User, newStudent } from '../../../services/interfaces'
@@ -117,6 +117,46 @@ export const GetDatas = () => {
     // Réinitialisation des états après soumission
     setUsers([]);
     setTeam({});
+    setData([]);
+  };
+
+  return (
+      <div>
+        <div className="file-upload-container">
+          <input type="file" accept=".csv" onChange={handleFileUpload} />
+        </div>
+        <button className="submit-button" onClick={Submit}>Soumettre</button>
+        <ToastContainer position="bottom-right" />
+      </div>
+  );
+};
+
+//take a csv with 2 columns, user_id and bus and assign the bus to the user in database
+export const AddWEIData = () => {
+  const [data, setData] = useState({} as any)
+
+  // Fonction pour gérer le chargement du fichier
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    Papa.parse<CsvRow>(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        setData(results.data)
+      },
+      error: (error) => {
+        console.error("Erreur lors de l'analyse du fichier CSV:", error);
+      },
+    });
+  };
+
+  const Submit = async () => {
+    const lines = data.map((row: any) => {
+      return {user_id: row["user_id"], bus: row["bus"]}
+    });
+    await handleError("data ajoutées !", "Une erreur est survenue", setBusData, lines)
     setData([]);
   };
 

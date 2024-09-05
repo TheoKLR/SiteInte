@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { PermType } from '../schemas/user.schema'
+import {PermType, User} from '../schemas/user.schema'
 import * as user_service from '../services/user.service'
 import * as auth_service from '../services/auth.service'
 import * as newstudentservice from '../services/newstudent.service'
@@ -46,7 +46,7 @@ export const newStudentLogin = async (req: Request, res: Response, next: NextFun
     const { email, password } = req.body
 
     try {
-        const user = await user_service.getUserByEmail(email.toLowerCase())
+        const user: User = await user_service.getUserByEmail(email.toLowerCase())
         if (!user) {
             return Error(res, { msg: "User doesn't exists" })
         }
@@ -57,7 +57,7 @@ export const newStudentLogin = async (req: Request, res: Response, next: NextFun
         }
         const id = user.id
         const token = sign({ id, email }, jwtSecret, { expiresIn: '1h' })
-        user_service.incrementConnection(id);
+        user_service.incrementConnection(id as number);
         Ok(res, { data: token })
     } catch (error) {
         Error(res, { error })

@@ -7,6 +7,8 @@ import {eq, and, is, ne, isNotNull, sql} from 'drizzle-orm'
 import { uuid } from 'drizzle-orm/pg-core';
 import { permission } from 'process';
 import {getGiIdFromUser} from "../utils/challenge";
+import {NoUser, NoUserMail} from "../error/user";
+import {busAttributionSchema} from "../schemas/bus_attribution.schema";
 
 export const GetAllNewStudent = async () => {
     try {
@@ -125,7 +127,7 @@ export const getUser = async (id: number) => {
 
         return user.length === 0 ? null : user[0];
     } catch (error) {
-        throw new Error("Failed to fetch user. Please try again later.");
+        throw NoUser(id)
     }
 }
 
@@ -145,14 +147,19 @@ export const getNewStudentByEmail = async (email: string) => {
     }
 }
 
-export const getUserByEmail = async (email: string) => {
-    try {
-        const user = await db.select().from(userSchema).where(eq(userSchema.email, email));
-        return user.length === 0 ? null : user[0];
-    } catch (error) {
-        console.log(error);
-        throw new Error("Failed to fetch user by email. Please try again later.");
+export const getUserByEmail = async (email: string): Promise<User> => {
+    const user = await db.select().from(userSchema).where(eq(userSchema.email, email));
+    if(!user || user.length === 0) throw NoUserMail(email)
+    return user[0]
+}
+
+export const getEmailsByUserIds = async (userIds: number[]): Promise<string[]> => {
+    let list: string[] = []
+    for (let userId of userIds) {
+        const user = await getUser(userId)
+        list.push(user?.email as string)
     }
+    return list
 }
 
 export const createUser = async (first_name: string, last_name: string, email: string, birthday: string | null, branch: string| null, contact: string| null, discord_id: string| null, password: string, permission: PermType) => {
@@ -178,7 +185,7 @@ export const updateUser = async (id: number, branch : string, contact: string, d
     }
 }
 
-export const registerUser = async (first_name: string, last_name: string, email: string, birthday: string | null, branch: string| null, contact: string| null, discord_id: string| null, password: string) => {
+export const registerUser = async (first_name: string, last_name: string, email: string, birthday: string | null | undefined, branch: string| null, contact: string| null | undefined, discord_id: string| null | undefined, password: string) => {
     try {
         await db.update(userSchema).set({
             first_name: first_name,
@@ -304,6 +311,41 @@ export const getUserWish = async (id: number) => {
     }
 }
 
+export const getBusAttribution = async (email: string): Promise<{ user_id: number; bus: number; } | null> => {
+    const user = await getUserByEmail(email)
+    const id = user.id
+    if(!id) throw new Error("Problème avec l'id de l'user.")
+    const attrib = await db.select().from(busAttributionSchema).where(eq(busAttributionSchema.user_id, id))
+    return attrib[0]
+}
+
+export const getBusAttributionByBus = async ():  Promise<{ bus: number; users: string[] }[]> => {
+    const attribs = await db.select().from(busAttributionSchema);
+
+    // Créer un Map où chaque clé est le bus et la valeur est une liste des user_ids associés
+    const busMap = new Map<number, number[]>();
+    for (let attrib of attribs) {
+        if (!busMap.has(attrib.bus)) {
+            busMap.set(attrib.bus, []);
+        }
+        const userList = busMap.get(attrib.bus) as number[];
+        userList.push(attrib.user_id);
+    }
+
+    // Transformer le Map avec des user_ids en emails
+    const result: { bus: number; users: string[] }[] = [];
+    for (let [bus, userIds] of busMap) {
+        const userEmails = await getEmailsByUserIds(userIds); // Récupère les emails à partir des user_ids
+        result.push({
+            bus,
+            users: userEmails
+        });
+    }
+
+    return result;
+}
+
+
 export async function getUserbyTeam(teamID: any) {
     try {
 
@@ -388,6 +430,17 @@ export async function getInfo(emails: string[]): Promise<{ids: (string | null)[]
     return {ids: list, missing: missingEmails}
 }
 
+export async function setBusData(lines: {user_id: number, bus: number}[]) {
+    //checking faction exist
+    for (let line of lines) {
+        //assert user exist
+        const user = await getUser(line.user_id)
+        //add in db
+        await db.insert(busAttributionSchema).values(line)
+    }
+}
+
+
 export async function getMissing(datas: {first_name: string, last_name: string}[]): Promise<any[]> {
     //checking faction exist
     let list = []
@@ -406,8 +459,6 @@ export async function getMissing(datas: {first_name: string, last_name: string}[
             i++
         } catch (e) {
             console.error(e)
-            console.log(i)
-            console.log(first_name + " : " + last_name)
         }
     }
     return list

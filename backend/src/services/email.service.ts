@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import { zimbra_user, zimbra_password, zimbra_host } from '../utils/secret';
+import {getBusAttributionByBus} from "./user.service";
 
 interface EmailOptions {
   from: string;
@@ -38,7 +39,7 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
 
     await transporter.sendMail(mailOptions);
   } catch (error) {
+    console.log(error)
     throw new Error('Erreur lors de l\'envoi de l\'email:');
   }
 };
-

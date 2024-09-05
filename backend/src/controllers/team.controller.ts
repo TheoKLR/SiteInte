@@ -16,9 +16,7 @@ export const getAllTeams = async (req: Request, res: Response, next: NextFunctio
 }
 
 export const getAllTeamsWithPoints = async (req: Request, res: Response, next: NextFunction) => {
-  console.log("fetch teamdezbyfuezvfuerfyzu")
   try {
-    console.log("fetch team")
     const data = await service.getAllTeamsWithPoints();
     Ok(res, { data });
   } catch (error) {
@@ -94,7 +92,6 @@ export const registerTeam = async (req: Request, res: Response, next: NextFuncti
 
 export const addTimestamp = async (req: Request, res: Response, next: NextFunction) => {
   const { timestamp, id } = req.body;
-  console.log('test2:' + timestamp + "   " +  id)
   try {
     await service.addTimestamp(timestamp, id);
     Ok(res, { msg: "Team modified" });

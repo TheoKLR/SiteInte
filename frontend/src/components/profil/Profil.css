@@ -6,6 +6,27 @@
     margin: 20px;
 }
 
+.custom-list {
+    list-style-type: none; /* Supprime les puces par défaut */
+    padding: 0;
+    margin: 0;
+    text-align: center; /* Centre la liste dans son conteneur */
+}
+
+.custom-list li {
+    position: relative;
+    padding-left: 30px; /* Espace pour le tiret */
+    text-align: left; /* Aligne le texte à gauche dans chaque élément */
+}
+
+.custom-list li::before {
+    content: "-"; /* Tiret avant chaque élément */
+    position: absolute;
+    left: 0; /* Place le tiret à gauche de chaque élément */
+    top: 0;
+    font-weight: bold; /* Optionnel : rend le tiret plus gras */
+}
+
 /* Styling for team and faction sections */
 .affichageTeam, .affichageFaction {
     width: 100%;

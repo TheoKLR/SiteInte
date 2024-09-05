@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getCurrentUser, updateUser } from '../../services/requests/users';
+import {getBusAttribution, getCurrentUser, setBusData, updateUser} from '../../services/requests/users';
 import { handleError } from '../utils/Submit';
 import { ToastContainer, toast } from 'react-toastify';
 import './Profil.css';
@@ -142,6 +142,65 @@ export const ProfilForm: React.FC = () => {
                 <button type="submit" className="button-36">Mettre à jour</button>
             </form>
             <ToastContainer position="bottom-right" />
+        </div>
+    );
+};
+
+export const InfoWEI: React.FC = () => {
+    const [bus, setBus] = useState<number | null>(null);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const busAttrib = await getBusAttribution()
+            busAttrib ? setBus(busAttrib.bus) : setBus(null)
+        };
+
+        fetchUserData();
+    }, []);
+
+    return (
+        <div className="profil-form-container">
+            <p style={{textAlign: "center"}}>Ici tu peux consulter la place qui t'a été attribuée pour le WEI !</p>
+            <p style={{textAlign: "center", marginTop: '40px'}}>
+                {bus ? (
+                    <>
+                        Tu es placé en bus <span style={{fontWeight: 'bold'}}>{bus}</span>
+                        <br></br>
+                        Tu es attendu à l'UTT à : <span style={{fontWeight: 'bold'}}>{(bus < 6) ? "11h" : "13h"}</span>
+                        <br></br>
+                        <br></br>
+                        Ne soit pas en retard et n'oublie pas les objets indispensables du WEI:
+                        <br></br>
+                        <br></br>
+                        <ul className="custom-list" style={{ listStyleType: 'none', padding: 0 }}>
+                            <li>Un sac de couchage chaud</li>
+                            <li>Des vêtements qui ne craignent rien (dès le départ en bus vendredi matin)</li>
+                            <li>Des vêtements qui tiennent chaud</li>
+                            <li>Un matelas gonflable ou un tapis de sol (pour le confort du dodo)</li>
+                            <li>Un k-way</li>
+                            <li>Ta carte d'identité</li>
+                            <li>De l'argent (CB et/ou espèces) si tu veux pouvoir acheter à boire au WEI</li>
+                            <li>Une serviette et du savon (si tu veux être propre</li>
+                            <li>Une bombe anti-moustique (ton corps te remerciera)</li>
+                            <li>De la crème solaire (ton corps te remerciera aussi)</li>
+                            <li>Ton autorisation parentale si tu es mineur</li>
+                            <li>Des bouchons d'oreilles si tu en as</li>
+                            <li>Ton écocup, ton tupperware ainsi que des couverts (sinon, tu dis au revoir au miam miam)
+                            </li>
+                        </ul>
+                        <br></br>
+                        <br></br>
+                        Pour rappel, voici la vidéo des indispensables du WEI <a
+                        href="https://drive.google.com/file/d/1IzeIgHVcoFB4Wk4ngky1HicoBbd08zHO/view?usp=drivesdk"
+                        target="_blank"
+                        rel="noopener noreferrer">ici</a>
+                    </>
+
+                ) : (
+                    "Tu n'as pas de place attribuée pour l'instant"
+                )}
+            </p>
+            <ToastContainer position="bottom-right"/>
         </div>
     );
 };

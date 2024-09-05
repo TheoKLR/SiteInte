@@ -4,6 +4,8 @@ import { Error, Ok } from '../utils/responses';
 import { decodeToken } from '../utils/token';
 import { parsePermType, PermType } from '../schemas/user.schema';
 import { RI_list } from '../utils/RI_list';
+import {CustomRequest} from "../middlewares/permissions";
+import {NoUserMail} from "../error/user";
 
 export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -157,6 +159,16 @@ export const getInfo = async (req: Request, res: Response, next: NextFunction) =
     }
 }
 
+export const setBusData = async (req: Request, res: Response, next: NextFunction) => {
+    const { lines } = req.body
+    try {
+        const data = await service.setBusData(lines)
+        Ok(res, {data: data, msg: "Ok"})
+    } catch (error) {
+        Error(res, { error })
+    }
+}
+
 export const getMissing = async (req: Request, res: Response, next: NextFunction) => {
     const { data } = req.body
     try {
@@ -208,6 +220,26 @@ export const getUserWish = async (req: Request, res: Response, next: NextFunctio
 
     try {
         const data = await service.getUserWish(idNumber);
+        Ok(res, { data });
+    } catch (error) {
+        Error(res, { error });
+    }
+}
+
+export const getBusAttribution = async (req: CustomRequest, res: Response, next: NextFunction) => {
+    try {
+        const data = await service.getBusAttribution(req.decoded_token?.email as string);
+        Ok(res, { data });
+    } catch (error) {
+        Error(res, { error });
+    }
+}
+
+export const getBusAttributionByBus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const data = await service.getBusAttributionByBus();
+
+        // Envoyer la réponse avec les données converties
         Ok(res, { data });
     } catch (error) {
         Error(res, { error });

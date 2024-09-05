@@ -18,11 +18,11 @@ export const WeiComponent = () => {
                 <h3>Alors inscrit toi sans plus attendre !</h3>
             </div>
             <div className="iframe-container-wei">
-                <iframe 
+                <iframe
                     title="Vente de billets en ligne"
-                    src="https://www.billetweb.fr/shop.php?event=billetterie-week-end-dintegration-2024"  
-                    className="shop_frame"  
-                    style={{ width: "100%", height: "600px", border: "none", overflow: "hidden" }} 
+                    src="https://www.billetweb.fr/shop.php?event=billetterie-week-end-dintegration-2024"
+                    className="shop_frame"
+                    style={{width: "100%", height: "600px", border: "none", overflow: "hidden"}}
                 />
             </div>
         </div>

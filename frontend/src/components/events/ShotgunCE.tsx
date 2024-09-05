@@ -25,8 +25,6 @@ export const ShotgunCE = () => {
     event.preventDefault();
     if (answer === "T'as les cramptés?") {
       const timestamp = Date.now();
-      console.log("test:" + timestamp);
-      console.log(typeof timestamp);
       if (
         await handleError(
           "Bien joué",

@@ -13,3 +13,14 @@ export const sendEmail = async (req: Request, res: Response, next: NextFunction)
   }
 }
 
+export const sendEmailForBus = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const {emailoptions} = req.body;
+
+    await service.sendEmail(emailoptions);
+    Ok(res, { });
+  } catch (error) {
+    Error(res, { error });
+  }
+}
+

@@ -2,7 +2,7 @@ import {db} from "../database/db";
 import {teamSchema} from "../schemas/team.schema";
 import {eq, inArray, ne} from "drizzle-orm";
 import {User, userSchema} from "../schemas/user.schema";
-import {NoFaction, NoTeam, NoUser} from "../error/user";
+import {NoFaction, NoTeam, NoTeamForUser, NoUser} from "../error/user";
 import {factionSchema} from "../schemas/faction.schema";
 import {
     challenge,
@@ -71,7 +71,10 @@ export async function getTeamAndFactionFromUser(user: User): Promise<{teamId: nu
 export async function getGiIdFromUser(user: User): Promise<string | null> {
     //get associated faction
     const team = await db.select().from(teamSchema).where(eq(teamSchema.id, user.team as number))
-    if(!team || team.length === 0) throw NoTeam(team[0].id)
+    if(!team || team.length === 0) {
+        console.log("No team for user '" + user.email + "'")
+        return null
+    }
     //get faction
     return team[0].gi_id
 }

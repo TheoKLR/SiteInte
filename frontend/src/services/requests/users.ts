@@ -19,6 +19,12 @@ export const changePermission = async (id: number, perm: string) => {
     })
 }
 
+export const setBusData = async (lines: any[]) => {
+    return await api.post('user/setBusData', {
+        lines
+    })
+}
+
 export const updateUser = async (branch: string, contact: string, discord_id: string) => {
     return await api.put('user/updateuser', {
         branch,
@@ -29,6 +35,11 @@ export const updateUser = async (branch: string, contact: string, discord_id: st
 
 export const getCurrentUser = async () => {
     const response = await api.get("user/current")
+    return response?.data.data ;
+};
+
+export const getBusAttribution = async () => {
+    const response = await api.get("user/busAttribution")
     return response?.data.data ;
 };
 
@@ -53,6 +64,11 @@ export const modifyUserTeam = async (members: [], teamId: number[]) => {
 export const getAllByPermission = async (permission : string) => {
     const response = await api.get(`user/allbypermission/${permission}`);
     return response?.data.data ;
+};
+
+export const getAllBusAttributionByBus = async () => {
+    const response = await api.get(`user/getBusAttributionByBus`);
+    return response.data.data;
 };
 
 export const isInRiList = async (email : string) => {

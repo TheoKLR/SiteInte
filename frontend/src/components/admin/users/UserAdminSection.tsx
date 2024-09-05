@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AdminSection from '../AdminSection';
 import {
-    AddToTeam,
+    AddToTeam, AddWEIData,
     ChangePermission,
     DeleteUser,
     GetDatas,
@@ -67,6 +67,10 @@ const UserAdminSection: React.FC = () => {
       {
           title: 'Récupération données WEI',
           form: <GetDatas/>,
+      },
+      {
+          title: 'Ajouter données bus WEI',
+          form: <AddWEIData/>,
       },
       {
           title: 'Tester présence des nouveaux',

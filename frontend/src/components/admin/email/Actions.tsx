@@ -6,9 +6,9 @@ import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import {sendEmail  } from '../../../services/requests/email';
 import { EmailOptions, User } from '../../../services/interfaces';
-import { getAllByPermission } from '../../../services/requests/users';
+import {getAllBusAttributionByBus, getAllByPermission} from '../../../services/requests/users';
 import { getAllNewStudent } from '../../../services/requests/newstudent';
-import { compileTemplateNotebook, compileTemplateWelcome } from './templates';
+import {compileTemplateBus, compileTemplateNotebook, compileTemplateWelcome} from './templates';
 
 
 export const SendEmailCustom = () => {
@@ -387,5 +387,85 @@ export const SendNoteBookEmail = () => {
       </form>
       <ToastContainer position="bottom-right" />
     </div>
+  );
+};
+
+export const SendBusAttribution = () => {
+  const [from, setFrom] = useState('');
+  const [subject, setSubject] = useState('');
+  const [link, setLink] = useState('');
+  const [cc, setCc] = useState([] as any);
+  const [bcc, setBcc] = useState([] as any);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+
+    e.preventDefault();
+
+    try {
+
+      const map: {bus: number, users: string[]}[] = await getAllBusAttributionByBus();
+      for (const value of map) {
+        const bus = value.bus
+        const users = value.users
+        const time = "11H"
+        const emailOptions = {
+          from,
+          cc: cc.map((option: any) => option.email ? option.email : option.value),
+          bcc: users,
+          subject,
+          html: compileTemplateBus({ bus: bus, time : time}), // Utiliser le template
+        };
+
+        await handleError('Mail envoyé !', 'Un problème est survenu', sendEmail, emailOptions);
+      }
+
+      return;
+
+
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+      <div className="App">
+        <h1>Attention ce bouton envoie un mail à toutes les personnes qui ont eu une place attribué dans un bus pour le WEI</h1>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>De:</label>
+            <input
+                type="email"
+                value={from}
+                onChange={(e) => setFrom(e.target.value)}
+                required
+            />
+          </div>
+          <div>
+            <label>CC:</label>
+            <Select
+                isMulti
+                value={cc}
+                onChange={cc => setCc(cc)}
+                options={Users()} // Vous pouvez préremplir les options ici
+                placeholder="Sélectionnez les destinataires ou ajoutez-en"
+                isValidNewOption={(inputValue, selectValue, selectOptions) =>
+                    inputValue.trim().length > 0 && !selectOptions.some(option => option.value === inputValue)
+                }
+            />
+          </div>
+          <div>
+            <label>Sujet:</label>
+            <input
+                type="text"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                required
+            />
+          </div>
+          <button className="submit-button">Envoyer</button>
+        </form>
+        <ToastContainer position="bottom-right" />
+      </div>
   );
 };

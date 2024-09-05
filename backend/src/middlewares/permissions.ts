@@ -4,6 +4,10 @@ import { Error, Unauthorized } from '../utils/responses';
 import { getUserByEmail } from '../services/user.service';
 import { decodeToken } from '../utils/token';
 
+export interface CustomRequest extends Request {
+    decoded_token?: {id: number, email: string};
+}
+
 export const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const decodedToken = decodeToken(req);
@@ -81,7 +85,7 @@ export const isAdminAnim = async (req: Request, res: Response, next: NextFunctio
     }
 };
 
-export const isTokenValid = async (req: Request, res: Response, next: NextFunction) => {
+export const isTokenValid = async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
         const token = req.headers['authorization']?.split(' ')[1];
         if (!token) {
@@ -91,6 +95,8 @@ export const isTokenValid = async (req: Request, res: Response, next: NextFuncti
         if (!decodedToken) {
             return Unauthorized(res, { msg: 'Unauthorized: Token has expired' });
         }
+        //put decoded token in request so services can access it easily.
+        req.decoded_token = decodedToken
         next();
     } catch (error) {
         return Error(res, { msg: 'Unauthorized: Invalid token' });
