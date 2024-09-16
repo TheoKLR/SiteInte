@@ -5,7 +5,7 @@ import {sendEmailForBus} from "../controllers/email.controller";
 
 const emailRouter = express.Router();
 
-emailRouter.post('/sendemail', fc.sendEmail);
-emailRouter.post('/sendEmailForBus', fc.sendEmailForBus);
+emailRouter.post('/sendemail', isAdmin, fc.sendEmail);
+emailRouter.post('/sendEmailForBus', isAdmin, fc.sendEmailForBus);
 
 export default emailRouter;
